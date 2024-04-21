@@ -1,0 +1,346 @@
+import {
+  Button,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  InputLabel,
+  MenuItem,
+  OutlinedInput,
+  Select,
+  SelectChangeEvent,
+} from "@mui/material";
+import {
+  sizeDictionary,
+  ageDictionary,
+  statusDictionary,
+} from "./filters/dictionaries";
+import React, { useEffect, useMemo, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import {
+  getPetTypesAsync,
+  getPetsAsync,
+} from "../../slices/pets/pets.api-actions";
+import { defaultDogFilters } from "../../../src/views/dogs/Dogs";
+import { getPetTypeInfoByTypeName } from "../../slices/pets/pets.slice";
+import { FilterDictionaries } from "./filters/filters.types";
+import { createDictionary } from "./filters/filters.helpers";
+
+export interface FormData {
+  gender: string | undefined;
+  size: string | undefined;
+  age: string | undefined;
+  coat: string | undefined;
+  status: string | undefined;
+  color: string | undefined;
+  good_with_children: true | undefined;
+  good_with_dogs: true | undefined;
+  good_with_cats: true | undefined;
+  house_trained: true | undefined;
+  declawed: true | undefined;
+  special_needs: true | undefined;
+}
+
+const FiltersAnimals: React.FC = () => {
+  const dispatch = useAppDispatch();
+
+  const [filterData, setFilterData] = useState<FormData>({
+    gender: undefined,
+    size: undefined,
+    age: undefined,
+    coat: undefined,
+    status: undefined,
+    color: undefined,
+    good_with_children: undefined,
+    good_with_dogs: undefined,
+    good_with_cats: undefined,
+    house_trained: undefined,
+    declawed: undefined,
+    special_needs: undefined,
+  });
+
+  useEffect(() => {
+    dispatch(getPetTypesAsync());
+  }, []);
+
+  const petTypes = useAppSelector(
+    getPetTypeInfoByTypeName(defaultDogFilters.type!)
+  );
+
+  const { genderDictionary, coatsDictionary, colorsDictionary } =
+    useMemo<FilterDictionaries>(() => {
+      if (!petTypes) {
+        return {
+          genderDictionary: [],
+          coatsDictionary: [],
+          colorsDictionary: [],
+        };
+      }
+      return {
+        genderDictionary: createDictionary(petTypes.genders),
+        coatsDictionary: createDictionary(petTypes.coats),
+        colorsDictionary: createDictionary(petTypes.colors),
+      };
+    }, [petTypes]);
+
+  const handleChange = (event: SelectChangeEvent<string>) => {
+    const {
+      target: { value, name },
+    } = event;
+    setFilterData({
+      ...filterData,
+      [name]: value,
+    });
+  };
+
+  const handleCheckboxChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    checked: boolean
+  ) => {
+    const {
+      target: { name },
+    } = event;
+    setFilterData({
+      ...filterData,
+      [name]: checked || undefined,
+    });
+  };
+
+  const submitHandler: React.FormEventHandler<HTMLFormElement> = (event) => {
+    event.preventDefault();
+    dispatch(
+      getPetsAsync({
+        ...defaultDogFilters,
+        ...filterData,
+      })
+    );
+  };
+
+  return (
+    <form onSubmit={submitHandler}>
+      <div>
+        <FormControl sx={{ m: 1, width: 300 }}>
+          <InputLabel id="gender-field">Gender</InputLabel>
+          <Select
+            labelId="gender-field"
+            name="gender"
+            value={filterData.gender || ""}
+            onChange={handleChange}
+            input={<OutlinedInput id="select-multiple-chip" label="Gender" />}
+          >
+            {genderDictionary.map((gender) => (
+              <MenuItem key={gender.value} value={gender.value}>
+                {gender.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </div>
+
+      <div>
+        <FormControl sx={{ m: 1, width: 300 }}>
+          <InputLabel id="size-field">Size</InputLabel>
+          <Select
+            labelId="size-field"
+            name="size"
+            value={filterData.size || ""}
+            onChange={handleChange}
+            input={<OutlinedInput id="select-multiple-chip" label="Size" />}
+          >
+            {sizeDictionary.map((size) => (
+              <MenuItem key={size.value} value={size.value}>
+                {size.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </div>
+
+      <div>
+        <FormControl sx={{ m: 1, width: 300 }}>
+          <InputLabel id="age-field">Age</InputLabel>
+          <Select
+            labelId="age-field"
+            name="age"
+            value={filterData.age || ""}
+            onChange={handleChange}
+            input={<OutlinedInput id="select-multiple-chip" label="Age" />}
+          >
+            {ageDictionary.map((age) => (
+              <MenuItem key={age.value} value={age.value}>
+                {age.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </div>
+
+      <div>
+        <FormControl sx={{ m: 1, width: 300 }}>
+          <InputLabel id="coat-field">Coat</InputLabel>
+          <Select
+            labelId="coat-field"
+            name="coat"
+            value={filterData.coat || ""}
+            onChange={handleChange}
+            input={<OutlinedInput id="select-multiple-chip" label="Coat" />}
+          >
+            {coatsDictionary.map((coat) => (
+              <MenuItem key={coat.value} value={coat.value}>
+                {coat.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </div>
+
+      <div>
+        <FormControl sx={{ m: 1, width: 300 }}>
+          <InputLabel id="status-field">Status</InputLabel>
+          <Select
+            labelId="status-field"
+            name="status"
+            value={filterData.status || ""}
+            onChange={handleChange}
+            input={<OutlinedInput id="select-multiple-chip" label="Status" />}
+          >
+            {statusDictionary.map((status) => (
+              <MenuItem key={status.value} value={status.value}>
+                {status.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </div>
+
+      <div>
+        <FormControl sx={{ m: 1, width: 300 }}>
+          <InputLabel id="status-field">Color</InputLabel>
+          <Select
+            labelId="color-field"
+            name="color"
+            value={filterData.color || ""}
+            onChange={handleChange}
+            input={<OutlinedInput id="select-multiple-chip" label="Color" />}
+          >
+            {colorsDictionary.map((color) => (
+              <MenuItem key={color.value} value={color.value}>
+                {color.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </div>
+
+      <div>
+        <FormControl sx={{ m: 1, width: 300 }}>
+          <FormControlLabel
+            control={
+              <Checkbox
+                name="good_with_children"
+                checked={filterData.good_with_children || false}
+                onChange={handleCheckboxChange}
+                inputProps={{ "aria-label": "Good with children" }}
+              />
+            }
+            label="Good with children"
+          />
+        </FormControl>
+      </div>
+
+      <div>
+        <FormControl sx={{ m: 1, width: 300 }}>
+          <FormControlLabel
+            control={
+              <Checkbox
+                name="good_with_dogs"
+                checked={filterData.good_with_dogs || false}
+                onChange={handleCheckboxChange}
+                inputProps={{ "aria-label": "Good with dogs" }}
+              />
+            }
+            label="Good with dogs"
+          />
+        </FormControl>
+      </div>
+
+      <div>
+        <FormControl sx={{ m: 1, width: 300 }}>
+          <FormControlLabel
+            control={
+              <Checkbox
+                name="good_with_cats"
+                checked={filterData.good_with_cats || false}
+                onChange={handleCheckboxChange}
+                inputProps={{ "aria-label": "Good with cats" }}
+              />
+            }
+            label="Good with cats"
+          />
+        </FormControl>
+      </div>
+
+      <div>
+        <FormControl sx={{ m: 1, width: 300 }}>
+          <FormControlLabel
+            control={
+              <Checkbox
+                name="house_trained"
+                checked={filterData.house_trained || false}
+                onChange={handleCheckboxChange}
+                inputProps={{ "aria-label": "House trained" }}
+              />
+            }
+            label="House trained"
+          />
+        </FormControl>
+      </div>
+
+      <div>
+        <FormControl sx={{ m: 1, width: 300 }}>
+          <FormControlLabel
+            control={
+              <Checkbox
+                name="declawed"
+                checked={filterData.declawed || false}
+                onChange={handleCheckboxChange}
+                inputProps={{ "aria-label": "Declawed" }}
+              />
+            }
+            label="Declawed"
+          />
+        </FormControl>
+      </div>
+
+      <div>
+        <FormControl sx={{ m: 1, width: 300 }}>
+          <FormControlLabel
+            control={
+              <Checkbox
+                name="special_needs"
+                checked={filterData.special_needs || false}
+                onChange={handleCheckboxChange}
+                inputProps={{ "aria-label": "Special needs" }}
+              />
+            }
+            label="Special needs"
+          />
+        </FormControl>
+      </div>
+
+      {/* <label>Organization</label>
+      <label>Location</label>
+      <label>Distance</label> */}
+
+      <Button
+        variant="contained"
+        size="medium"
+        type="submit"
+        className="form__button--submit"
+      >
+        Find
+      </Button>
+    </form>
+  );
+};
+
+export default FiltersAnimals;

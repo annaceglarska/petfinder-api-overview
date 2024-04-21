@@ -1,0 +1,15 @@
+.hero-buttons {
+    position: relative;
+    top: -550px;
+}
+
+.hero-image {
+    width: 100%;
+    position: relative;
+    top: -220px;
+}
+
+.hero-wrapper {
+    height: 400px;
+    overflow: hidden;
+}

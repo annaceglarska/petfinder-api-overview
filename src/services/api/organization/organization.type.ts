@@ -49,4 +49,4 @@ export interface OrganizationInfo {
   animals: LinkToSource;
 }
 
-export interface getOrganizationQueryParam {}
+export interface OrganizationQueryParam {}

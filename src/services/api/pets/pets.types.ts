@@ -103,8 +103,18 @@ export interface ObjectInfo {
   organization: LinkToSource;
 }
 
+export type AnimalType =
+  | "dog"
+  | "cat"
+  | "rabbit"
+  | "horse"
+  | "bird"
+  | "small & furry"
+  | "scales, fins & other"
+  | "barnyard";
+
 export interface PetsQueryParams {
-  type?: string;
+  type?: AnimalType;
   breed?: MultipleValuesString;
   size?: MultipleValuesString<Size>;
   gender?: MultipleValuesString<Gender>;
@@ -175,3 +185,18 @@ export type Sort = "recent" | "-recent" | "distance" | "-distance";
 export type MultipleValuesString<T extends string | number | boolean = never> =
   | string
   | T;
+
+export interface AnimalTypesInfoDTO {
+  types: AnimalTypesDetails[];
+}
+
+export interface AnimalTypesDetails {
+  name: Capitalize<AnimalType>;
+  coats: string[];
+  colors: string[];
+  genders: string[];
+  _links: {
+    self: LinkToSource;
+    breeds: LinkToSource;
+  };
+}

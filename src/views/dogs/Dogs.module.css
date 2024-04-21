@@ -1,0 +1,11 @@
+.animals-wrapper {
+    display: flex;
+    }
+
+    .animals-wrapper >*:nth-child(1){
+width: 30%;
+    }
+
+    .animals-wrapper >*:nth-child(2){
+        width: 70%;
+    }

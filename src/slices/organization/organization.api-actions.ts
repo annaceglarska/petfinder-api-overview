@@ -1,9 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-//import { getOrganizationQueryParam } from "../../services/api/organization/organization.type";
+import { OrganizationQueryParam } from "../../services/api/organization/organization.type";
+import organizationService from "../../services/api/organization/organization.service";
 
-export const getOrgainzationAsync = createAsyncThunk(
+export const getOrganizationAsync = createAsyncThunk(
   "organization/getOrganization",
-  async () => {
-    return;
+  async (params?: OrganizationQueryParam) => {
+    return organizationService.getOrganization(params);
   }
 );
