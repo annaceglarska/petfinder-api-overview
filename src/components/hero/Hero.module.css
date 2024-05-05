@@ -1,16 +1,18 @@
 .hero-buttons {
-    position: relative;
-    top: -550px;
+  position: relative;
+  display: flex;
+  justify-content: space-around;
+  top: -500px;
 }
 
 .hero-image {
-    width: 100%;
-    position: relative;
-    top: -220px;
+  width: 100%;
+  position: relative;
+  top: -220px;
 }
 
 .hero-wrapper {
-    height: 400px;
-    overflow: hidden;
-    margin-bottom: 50px;
+  height: 400px;
+  overflow: hidden;
+  margin-bottom: 50px;
 }

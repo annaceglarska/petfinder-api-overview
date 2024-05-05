@@ -8,16 +8,30 @@ export const Hero = () => {
     <div className={styles["hero-wrapper"]}>
       <img src={hero_image} className={styles["hero-image"]} />
       <div className={styles["hero-buttons"]}>
-        <Button variant="contained">Type location...</Button>
         <Button variant="contained" component={Link} to="/dogs">
           Find a dog
         </Button>
         <Button variant="contained" component={Link} to="/cats">
           Find a cat
         </Button>
-        {/* <Button onClick={}>Find a horse</Button>
-        <Button onClick={}>Find a rabbit</Button>
-        <Button onClick={}>Find a bird</Button>  */}
+        <Button variant="contained" component={Link} to="/rabbits">
+          Find a rabbit
+        </Button>
+        <Button variant="contained" component={Link} to="/small-and-furies">
+          Find small and furry
+        </Button>
+        <Button variant="contained" component={Link} to="/horses">
+          Find a horse
+        </Button>
+        <Button variant="contained" component={Link} to="/birds">
+          Find a bird
+        </Button>
+        <Button variant="contained" component={Link} to="/barnyards">
+          Find a barnyard
+        </Button>
+        <Button variant="contained" component={Link} to="/others">
+          Find other
+        </Button>
       </div>
     </div>
   );

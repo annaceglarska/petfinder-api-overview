@@ -1,7 +1,7 @@
 .navigation__button {
-  color: white;
+  color: white !important;
 }
 
 .navigation__button--sign-up {
-  border-color: white;
+  border-color: white !important;
 }
