@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { PetsState } from "./pets.types";
 import { getPetTypesAsync, getPetsAsync } from "./pets.api-actions";
 import { RootState } from "../../app/store";
@@ -22,7 +22,14 @@ const initialState: PetsState = {
 export const petsSlice = createSlice({
   name: "pets",
   initialState,
-  reducers: {},
+  reducers: {
+    clearPets: (state, _: PayloadAction) => {
+      state.pets.value = null;
+    },
+    clearTypes: (state, _: PayloadAction) => {
+      state.types.value = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getPetsAsync.pending, (state) => {
@@ -48,7 +55,7 @@ export const petsSlice = createSlice({
   },
 });
 
-export const {} = petsSlice.actions;
+export const { clearPets, clearTypes } = petsSlice.actions;
 
 export const getPets = (state: RootState): Pet[] =>
   state.pets.pets.value?.animals || [];

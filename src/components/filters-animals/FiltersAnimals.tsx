@@ -24,11 +24,17 @@ import {
   getPetTypesAsync,
   getPetsAsync,
 } from "../../slices/pets/pets.api-actions";
-import { getPetTypeInfoByTypeName } from "../../slices/pets/pets.slice";
+import {
+  clearTypes,
+  getPetTypeInfoByTypeName,
+} from "../../slices/pets/pets.slice";
 import { FilterDictionaries, SelectOption } from "./filters/filters.types";
 import { createDictionary } from "./filters/filters.helpers";
 import { getOrganizationAsync } from "../../slices/organization/organization.api-actions";
-import { getOrganizations } from "../../slices/organization/organization.slice";
+import {
+  clearOrganizations,
+  getOrganizations,
+} from "../../slices/organization/organization.slice";
 import { Organization } from "../../services/api/petfinder/organization/organization.type";
 import { PetsQueryParams } from "../../services/api/petfinder/pets/pets.types";
 
@@ -84,6 +90,10 @@ const FiltersAnimals: React.FC<FiltersAnimalsProps> = (props) => {
 
   useEffect(() => {
     dispatch(getPetTypesAsync(null));
+    return () => {
+      dispatch(clearOrganizations());
+      dispatch(clearTypes());
+    };
   }, []);
 
   const petTypes = useAppSelector(

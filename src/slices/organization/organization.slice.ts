@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { OrganizationState } from "./organization.types";
 import { getOrganizationAsync } from "./organization.api-actions";
 import { RootState } from "../../app/store";
@@ -14,7 +14,11 @@ const initialState: OrganizationState = {
 export const organizationSlice = createSlice({
   name: "organization",
   initialState,
-  reducers: {},
+  reducers: {
+    clearOrganizations: (state, _: PayloadAction) => {
+      state.organizations.value = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getOrganizationAsync.pending, (state) => {
@@ -30,7 +34,7 @@ export const organizationSlice = createSlice({
   },
 });
 
-export const {} = organizationSlice.actions;
+export const { clearOrganizations } = organizationSlice.actions;
 
 export const getOrganizations = (state: RootState): Organization[] =>
   state.organization.organizations.value?.organizations || [];
