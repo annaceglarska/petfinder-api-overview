@@ -6,7 +6,7 @@ import {
   AnimalType,
   AnimalTypesDetails,
   Pet,
-} from "../../services/api/pets/pets.types";
+} from "../../services/api/petfinder/pets/pets.types";
 
 const initialState: PetsState = {
   pets: {

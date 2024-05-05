@@ -49,4 +49,7 @@ export interface OrganizationInfo {
   animals: LinkToSource;
 }
 
-export interface OrganizationQueryParam {}
+export interface OrganizationQueryParam {
+  query?: string;
+  //ToDo
+}

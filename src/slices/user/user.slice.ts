@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { UserState } from "./user.types";
 import { loginUserAsync, protectedAsync } from "./user.api-actions";
 import { RootState } from "../../app/store";
-import { UserInfo } from "../../services/api/auth/auth.types";
+import { UserInfo } from "../../services/api/backend/auth/auth.types";
 
 const initialState: UserState = {
   user: {

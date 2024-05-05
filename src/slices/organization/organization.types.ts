@@ -1,4 +1,4 @@
-import { OrganizationDTO } from "../../services/api/organization/organization.type";
+import { OrganizationDTO } from "../../services/api/petfinder/organization/organization.type";
 import { DataContainer } from "../index.types";
 
 export interface OrganizationState {

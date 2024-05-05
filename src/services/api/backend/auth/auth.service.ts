@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
-import { UserCredential } from "../../../slices/user/user.types";
-import { UserInfo, UserInfoDTO } from "./auth.types";
+import { UserCredential } from "../../../../slices/user/user.types";
+import { TokenInfoDTO, UserInfo, UserInfoDTO } from "./auth.types";
 
 const DEFAULT_SERVER_BASE_URL = "http://localhost:5000/api/v1/auth";
 class AuthApiService {
@@ -15,6 +15,17 @@ class AuthApiService {
         UserCredential
       >(`${this.baseUrl}/login`, userCredential);
       return response.data.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getPetfinderAuthorizationToken() {
+    try {
+      const response = await axios.post<TokenInfoDTO>(
+        `${this.baseUrl}/get-access`
+      );
+      return response.data;
     } catch (error) {
       throw error;
     }

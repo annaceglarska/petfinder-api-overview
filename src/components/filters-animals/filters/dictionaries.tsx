@@ -1,6 +1,6 @@
-import { SelectOptions } from "./filters.types";
+import { SelectOption } from "./filters.types";
 
-export const sizeDictionary: SelectOptions[] = [
+export const sizeDictionary: SelectOption[] = [
   {
     label: "Small",
     value: "small",
@@ -19,7 +19,7 @@ export const sizeDictionary: SelectOptions[] = [
   },
 ];
 
-export const ageDictionary: SelectOptions[] = [
+export const ageDictionary: SelectOption[] = [
   {
     label: "Baby",
     value: "baby",
@@ -34,7 +34,7 @@ export const ageDictionary: SelectOptions[] = [
   },
 ];
 
-export const statusDictionary: SelectOptions[] = [
+export const statusDictionary: SelectOption[] = [
   {
     label: "Adoptable",
     value: "adoptable",

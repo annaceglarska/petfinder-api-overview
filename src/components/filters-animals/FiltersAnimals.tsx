@@ -1,4 +1,7 @@
 import {
+  Autocomplete,
+  AutocompleteChangeReason,
+  AutocompleteInputChangeReason,
   Button,
   Checkbox,
   FormControl,
@@ -8,22 +11,26 @@ import {
   OutlinedInput,
   Select,
   SelectChangeEvent,
+  TextField,
 } from "@mui/material";
 import {
   sizeDictionary,
   ageDictionary,
   statusDictionary,
 } from "./filters/dictionaries";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { ChangeEventHandler, useEffect, useMemo, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
   getPetTypesAsync,
   getPetsAsync,
 } from "../../slices/pets/pets.api-actions";
-import { defaultDogFilters } from "../../../src/views/dogs/Dogs";
 import { getPetTypeInfoByTypeName } from "../../slices/pets/pets.slice";
-import { FilterDictionaries } from "./filters/filters.types";
+import { FilterDictionaries, SelectOption } from "./filters/filters.types";
 import { createDictionary } from "./filters/filters.helpers";
+import { getOrganizationAsync } from "../../slices/organization/organization.api-actions";
+import { getOrganizations } from "../../slices/organization/organization.slice";
+import { Organization } from "../../services/api/petfinder/organization/organization.type";
+import { PetsQueryParams } from "../../services/api/petfinder/pets/pets.types";
 
 export interface FormData {
   gender: string | undefined;
@@ -38,10 +45,26 @@ export interface FormData {
   house_trained: true | undefined;
   declawed: true | undefined;
   special_needs: true | undefined;
+  organization: string | undefined;
 }
 
-const FiltersAnimals: React.FC = () => {
+export interface FiltersAnimalsProps {
+  defaultFilters: PetsQueryParams;
+}
+
+const FiltersAnimals: React.FC<FiltersAnimalsProps> = (props) => {
   const dispatch = useAppDispatch();
+  const organizationsByPhrase: Organization[] =
+    useAppSelector(getOrganizations);
+  const organizationOptions: SelectOption[] = useMemo<SelectOption[]>(() => {
+    if (!organizationsByPhrase) {
+      return [];
+    }
+    return organizationsByPhrase.map((organization) => ({
+      label: organization.name,
+      value: organization.id,
+    }));
+  }, [organizationsByPhrase]);
 
   const [filterData, setFilterData] = useState<FormData>({
     gender: undefined,
@@ -56,14 +79,15 @@ const FiltersAnimals: React.FC = () => {
     house_trained: undefined,
     declawed: undefined,
     special_needs: undefined,
+    organization: undefined,
   });
 
   useEffect(() => {
-    dispatch(getPetTypesAsync());
+    dispatch(getPetTypesAsync(null));
   }, []);
 
   const petTypes = useAppSelector(
-    getPetTypeInfoByTypeName(defaultDogFilters.type!)
+    getPetTypeInfoByTypeName(props.defaultFilters.type!)
   );
 
   const { genderDictionary, coatsDictionary, colorsDictionary } =
@@ -92,6 +116,18 @@ const FiltersAnimals: React.FC = () => {
     });
   };
 
+  const handleTextFieldChange: ChangeEventHandler<
+    HTMLInputElement | HTMLTextAreaElement
+  > = (event) => {
+    const {
+      target: { value, name },
+    } = event;
+    setFilterData({
+      ...filterData,
+      [name]: value,
+    });
+  };
+
   const handleCheckboxChange = (
     event: React.ChangeEvent<HTMLInputElement>,
     checked: boolean
@@ -105,11 +141,38 @@ const FiltersAnimals: React.FC = () => {
     });
   };
 
+  const handleAutocompleteChange =
+    (name: string) =>
+    (
+      event: React.SyntheticEvent<Element, Event>,
+      value: SelectOption | null,
+      reason: AutocompleteChangeReason
+    ) => {
+      console.log("handleAutocompleteChange", event, reason, value);
+      if (reason === "selectOption") {
+        setFilterData({
+          ...filterData,
+          [name]: value?.value,
+        });
+      }
+    };
+
+  const handleAutocompleteInputChange = (
+    event: React.SyntheticEvent<Element, Event>,
+    value: string,
+    reason: AutocompleteInputChangeReason
+  ) => {
+    console.log("handleAutocompleteInputChange", event, value, reason);
+    if (reason === "input") {
+      dispatch(getOrganizationAsync({ query: value }));
+    }
+  };
+
   const submitHandler: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
     dispatch(
       getPetsAsync({
-        ...defaultDogFilters,
+        ...props.defaultFilters,
         ...filterData,
       })
     );
@@ -135,7 +198,6 @@ const FiltersAnimals: React.FC = () => {
           </Select>
         </FormControl>
       </div>
-
       <div>
         <FormControl sx={{ m: 1, width: 300 }}>
           <InputLabel id="size-field">Size</InputLabel>
@@ -154,7 +216,6 @@ const FiltersAnimals: React.FC = () => {
           </Select>
         </FormControl>
       </div>
-
       <div>
         <FormControl sx={{ m: 1, width: 300 }}>
           <InputLabel id="age-field">Age</InputLabel>
@@ -173,7 +234,6 @@ const FiltersAnimals: React.FC = () => {
           </Select>
         </FormControl>
       </div>
-
       <div>
         <FormControl sx={{ m: 1, width: 300 }}>
           <InputLabel id="coat-field">Coat</InputLabel>
@@ -192,7 +252,6 @@ const FiltersAnimals: React.FC = () => {
           </Select>
         </FormControl>
       </div>
-
       <div>
         <FormControl sx={{ m: 1, width: 300 }}>
           <InputLabel id="status-field">Status</InputLabel>
@@ -211,7 +270,6 @@ const FiltersAnimals: React.FC = () => {
           </Select>
         </FormControl>
       </div>
-
       <div>
         <FormControl sx={{ m: 1, width: 300 }}>
           <InputLabel id="status-field">Color</InputLabel>
@@ -230,7 +288,6 @@ const FiltersAnimals: React.FC = () => {
           </Select>
         </FormControl>
       </div>
-
       <div>
         <FormControl sx={{ m: 1, width: 300 }}>
           <FormControlLabel
@@ -246,7 +303,6 @@ const FiltersAnimals: React.FC = () => {
           />
         </FormControl>
       </div>
-
       <div>
         <FormControl sx={{ m: 1, width: 300 }}>
           <FormControlLabel
@@ -262,7 +318,6 @@ const FiltersAnimals: React.FC = () => {
           />
         </FormControl>
       </div>
-
       <div>
         <FormControl sx={{ m: 1, width: 300 }}>
           <FormControlLabel
@@ -278,7 +333,6 @@ const FiltersAnimals: React.FC = () => {
           />
         </FormControl>
       </div>
-
       <div>
         <FormControl sx={{ m: 1, width: 300 }}>
           <FormControlLabel
@@ -294,7 +348,6 @@ const FiltersAnimals: React.FC = () => {
           />
         </FormControl>
       </div>
-
       <div>
         <FormControl sx={{ m: 1, width: 300 }}>
           <FormControlLabel
@@ -310,7 +363,6 @@ const FiltersAnimals: React.FC = () => {
           />
         </FormControl>
       </div>
-
       <div>
         <FormControl sx={{ m: 1, width: 300 }}>
           <FormControlLabel
@@ -326,11 +378,31 @@ const FiltersAnimals: React.FC = () => {
           />
         </FormControl>
       </div>
+      <div>
+        <Autocomplete
+          disablePortal
+          id="organizations"
+          onInputChange={handleAutocompleteInputChange}
+          onChange={handleAutocompleteChange("organization")}
+          options={organizationOptions}
+          sx={{ width: 300 }}
+          renderInput={(params) => (
+            <TextField {...params} name="organization" label="Organization" />
+          )}
+        />
+      </div>
+      <div>
+        <FormControl sx={{ m: 1, width: 300 }}>
+          <TextField
+            label="localization"
+            onChange={handleTextFieldChange}
+            name="localization"
+          />
+        </FormControl>
+      </div>
 
-      {/* <label>Organization</label>
-      <label>Location</label>
-      <label>Distance</label> */}
-
+      {/* <label>Location</label>
+      <label>Distance</label>  */}
       <Button
         variant="contained"
         size="medium"

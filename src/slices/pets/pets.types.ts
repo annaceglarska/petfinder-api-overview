@@ -1,7 +1,7 @@
 import {
   AnimalTypesInfoDTO,
   PetsDTO,
-} from "../../services/api/pets/pets.types";
+} from "../../services/api/petfinder/pets/pets.types";
 import { DataContainer } from "../index.types";
 
 export interface PetsState {

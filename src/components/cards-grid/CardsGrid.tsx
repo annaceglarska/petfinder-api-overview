@@ -1,9 +1,9 @@
 import { Grid } from "@mui/material";
 import { CardElement } from "../card-element/CardElement";
 import styles from "./CardsGrid.module.css";
-import { Pet } from "../../services/api/pets/pets.types";
+import { Pet } from "../../services/api/petfinder/pets/pets.types";
 import React from "react";
-import { Organization } from "../../services/api/organization/organization.type";
+import { Organization } from "../../services/api/petfinder/organization/organization.type";
 
 export interface CardsGridProps {
   data: Pet[] | Organization[];
@@ -14,7 +14,7 @@ export const CardsGrid: React.FC<CardsGridProps> = (props) => {
     <>
       <Grid container spacing={2} className={styles["cards-wrapper"]}>
         {props.data.map((data: Pet | Organization) => (
-          <Grid item key={data.id}>
+          <Grid item key={data.id} xl={3} md={4} sm={6}>
             <CardElement data={data} />
           </Grid>
         ))}

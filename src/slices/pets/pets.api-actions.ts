@@ -1,20 +1,25 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import petsApiService from "../../services/api/pets/pets.service";
+import petsApiService from "../../services/api/petfinder/pets/pets.service";
 import {
   AnimalType,
   PetsQueryParams,
-} from "../../services/api/pets/pets.types";
+} from "../../services/api/petfinder/pets/pets.types";
+import { RootState } from "../../app/store";
 
 export const getPetsAsync = createAsyncThunk(
   "pets/getPets",
-  async (params?: PetsQueryParams) => {
-    return petsApiService.getAnimals(params);
+  async (params: PetsQueryParams, redux) => {
+    const token: string | undefined = (redux.getState() as RootState).config
+      .petfinderToken.value?.access_token;
+    return petsApiService.getAnimals(params, token);
   }
 );
 
 export const getPetTypesAsync = createAsyncThunk(
   "pets/getTypes",
-  async (params?: AnimalType) => {
-    return petsApiService.getAnimalTypes(params);
+  async (params: AnimalType | null, redux) => {
+    const token: string | undefined = (redux.getState() as RootState).config
+      .petfinderToken.value?.access_token;
+    return petsApiService.getAnimalTypes(params, token);
   }
 );

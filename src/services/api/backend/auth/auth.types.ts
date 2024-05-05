@@ -11,3 +11,9 @@ export interface UserInfoDTO {
   message: string;
   data: UserInfo;
 }
+
+export interface TokenInfoDTO {
+  access_token: string;
+  expires_in: number;
+  token_type: string;
+}

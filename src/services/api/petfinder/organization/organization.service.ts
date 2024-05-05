@@ -1,17 +1,18 @@
 import axios from "axios";
 import { OrganizationDTO, OrganizationQueryParam } from "./organization.type";
-import { baseUrl, bearer } from "../pets/pets.service";
+import { baseUrl } from "../pets/pets.service";
 
 class OrganizationApiService {
   async getOrganization(
-    params?: OrganizationQueryParam
+    params: OrganizationQueryParam,
+    token: string | undefined
   ): Promise<OrganizationDTO | undefined> {
     try {
       const response = await axios.get<OrganizationDTO>(
         `${baseUrl}/v2/organizations`,
         {
           headers: {
-            Authorization: `Bearer ${bearer}`,
+            Authorization: `Bearer ${token}`,
           },
           params,
         }

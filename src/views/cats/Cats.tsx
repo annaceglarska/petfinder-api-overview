@@ -8,23 +8,23 @@ import {
 import { getPets } from "../../slices/pets/pets.slice";
 import { getPetsAsync } from "../../slices/pets/pets.api-actions";
 import FiltersAnimals from "../../components/filters-animals/FiltersAnimals";
-import styles from "./Dogs.module.css";
+import styles from "./Cats.module.css";
 
-export const defaultDogFilters: PetsQueryParams = { type: "dog" };
+export const defaultCatFilters: Partial<PetsQueryParams> = { type: "cat" };
 
-const Dogs = () => {
+const Cats = () => {
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(getPetsAsync(defaultDogFilters));
+    dispatch(getPetsAsync(defaultCatFilters));
   }, []);
 
   const pets: Pet[] = useAppSelector(getPets);
   return (
     <div className={styles["animals-wrapper"]}>
-      <FiltersAnimals defaultFilters={defaultDogFilters} />
+      <FiltersAnimals defaultFilters={defaultCatFilters} />
       <CardsGrid data={pets} />
     </div>
   );
 };
 
-export default Dogs;
+export default Cats;

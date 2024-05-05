@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { OrganizationState } from "./organization.types";
 import { getOrganizationAsync } from "./organization.api-actions";
 import { RootState } from "../../app/store";
-import { Organization } from "../../services/api/organization/organization.type";
+import { Organization } from "../../services/api/petfinder/organization/organization.type";
 
 const initialState: OrganizationState = {
   organizations: {

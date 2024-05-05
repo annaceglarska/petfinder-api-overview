@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { UserCredential } from "./user.types";
-import authApiService from "../../services/api/auth/auth.service";
+import authApiService from "../../services/api/backend/auth/auth.service";
 import axios from "axios";
 import { RootState } from "../../app/store";
 
