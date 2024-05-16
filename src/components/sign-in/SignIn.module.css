@@ -1,0 +1,12 @@
+.sign-panel__text-field {
+  font-size: 18px;
+}
+
+.sign-panel__form {
+  display: flex;
+  flex-direction: column;
+}
+
+.sign-panel__control {
+  margin: 10px 0 !important;
+}

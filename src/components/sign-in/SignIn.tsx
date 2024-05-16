@@ -1,7 +1,15 @@
 import React, { useState } from "react";
 import { FormData } from "./SignIn.types";
-import { useAppDispatch } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { loginUserAsync } from "../../slices/user/user.api-actions";
+import {
+  Button,
+  CircularProgress,
+  FormControl,
+  TextField,
+} from "@mui/material";
+import styles from "./SignIn.module.css";
+import { getError, isUserSignInPending } from "../../slices/user/user.slice";
 
 export const SignIn: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -10,6 +18,9 @@ export const SignIn: React.FC = () => {
     email: "",
     password: "",
   });
+
+  const errors = useAppSelector(getError);
+  const isPendingStatus = useAppSelector(isUserSignInPending);
 
   const changeHandler: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     const { name, value } = event.target;
@@ -25,28 +36,43 @@ export const SignIn: React.FC = () => {
   };
 
   return (
-    <form onSubmit={submitHandler}>
-      <label>
-        Email
-        <input
+    <form onSubmit={submitHandler} className={styles["sign-panel__form"]}>
+      <FormControl className={styles["sign-panel__control"]}>
+        <TextField
+          label="email"
+          onChange={changeHandler}
+          name="email"
           required
           type="email"
           value={formData.email}
-          name="email"
-          onChange={changeHandler}
+          className={styles["sign-panel__text-field"]}
         />
-      </label>
-      <label>
-        Password
-        <input
+      </FormControl>
+      <FormControl className={styles["sign-panel__control"]}>
+        <TextField
+          label="password"
+          onChange={changeHandler}
+          name="password"
           required
           type="password"
           value={formData.password}
-          name="password"
-          onChange={changeHandler}
+          className={styles["sign-panel__text-field"]}
         />
-      </label>
-      <button type="submit">Submit</button>
+      </FormControl>
+      {Boolean(errors) && <p>Incorrect login or password.</p>}
+
+      <Button
+        variant="contained"
+        size="medium"
+        type="submit"
+        disabled={isPendingStatus}
+      >
+        {isPendingStatus ? (
+          <CircularProgress style={{ width: "30px" }} />
+        ) : (
+          "Submit"
+        )}
+      </Button>
     </form>
   );
 };

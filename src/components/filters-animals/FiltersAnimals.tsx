@@ -37,6 +37,7 @@ import {
 } from "../../slices/organization/organization.slice";
 import { Organization } from "../../services/api/petfinder/organization/organization.type";
 import { PetsQueryParams } from "../../services/api/petfinder/pets/pets.types";
+import styles from "../filters-animals/FiltersAnimals.module.css";
 
 export interface FormData {
   gender: string | undefined;
@@ -417,7 +418,7 @@ const FiltersAnimals: React.FC<FiltersAnimalsProps> = (props) => {
         variant="contained"
         size="medium"
         type="submit"
-        className="form__button--submit"
+        className={styles["form__button--submit"]}
       >
         Find
       </Button>
