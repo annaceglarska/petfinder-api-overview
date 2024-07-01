@@ -3,6 +3,8 @@ import { UserCredential } from "./user.types";
 import authApiService from "../../services/api/backend/auth/auth.service";
 import axios from "axios";
 import { RootState } from "../../app/store";
+import { UserData } from "../../services/api/backend/auth/auth.types";
+import userService from "../../services/api/backend/auth/user.service";
 
 export const loginUserAsync = createAsyncThunk(
   "user/login",
@@ -29,5 +31,14 @@ export const protectedAsync = createAsyncThunk(
     } catch (error) {
       throw error;
     }
+  }
+);
+
+export const editUserDataAsync = createAsyncThunk(
+  "user/edit",
+  async (userUpdatedData: UserData, redux) => {
+    const token: string | undefined = (redux.getState() as RootState).user.user
+      .value?.token;
+    return userService.editUserData(userUpdatedData, token || "");
   }
 );

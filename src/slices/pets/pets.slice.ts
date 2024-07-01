@@ -1,6 +1,10 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { PetsState } from "./pets.types";
-import { getPetTypesAsync, getPetsAsync } from "./pets.api-actions";
+import {
+  getPetAsync,
+  getPetTypesAsync,
+  getPetsAsync,
+} from "./pets.api-actions";
 import { RootState } from "../../app/store";
 import {
   AnimalType,
@@ -17,6 +21,10 @@ const initialState: PetsState = {
     status: "ready",
     value: null,
   },
+  pet: {
+    status: "ready",
+    value: null,
+  },
 };
 
 export const petsSlice = createSlice({
@@ -28,6 +36,9 @@ export const petsSlice = createSlice({
     },
     clearTypes: (state, _: PayloadAction) => {
       state.types.value = null;
+    },
+    clearPet: (state, _: PayloadAction) => {
+      state.pet.value = null;
     },
   },
   extraReducers: (builder) => {
@@ -51,11 +62,21 @@ export const petsSlice = createSlice({
       })
       .addCase(getPetTypesAsync.rejected, (state) => {
         state.types.status = "failed";
+      })
+      .addCase(getPetAsync.pending, (state) => {
+        state.pet.status = "pending";
+      })
+      .addCase(getPetAsync.fulfilled, (state, action) => {
+        state.pet.status = "ready";
+        state.pet.value = action.payload || null;
+      })
+      .addCase(getPetAsync.rejected, (state) => {
+        state.pet.status = "failed";
       });
   },
 });
 
-export const { clearPets, clearTypes } = petsSlice.actions;
+export const { clearPets, clearTypes, clearPet } = petsSlice.actions;
 
 export const getPets = (state: RootState): Pet[] =>
   state.pets.pets.value?.animals || [];
@@ -66,5 +87,8 @@ export const getPetTypeInfoByTypeName =
     state.pets.types.value?.types.find(
       (typeInfo) => typeInfo.name.toLowerCase() === type
     ) || null;
+
+export const getPet = (state: RootState): Pet | undefined =>
+  state.pets.pet.value?.animal;
 
 export default petsSlice.reducer;

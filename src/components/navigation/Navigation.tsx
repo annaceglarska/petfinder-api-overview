@@ -13,14 +13,23 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { clearErrors, isUserLogged } from "../../slices/user/user.slice";
+import {
+  clearErrors,
+  clearUserData,
+  isUserLogged,
+} from "../../slices/user/user.slice";
 import styles from "./Navigation.module.css";
 import { Link } from "react-router-dom";
 import Modal from "@mui/material/Modal";
 import { SignIn } from "../sign-in/SignIn";
 
+export interface PageSetting {
+  label: string;
+  onClick?: () => void;
+  to?: string;
+}
+
 const pages: string[] = [];
-const settings = ["Profile", "Account", "Dashboard", "Sign out"];
 
 export const Navigation: React.FC = () => {
   const isLogged = useAppSelector(isUserLogged);
@@ -34,6 +43,18 @@ export const Navigation: React.FC = () => {
       handleClose();
     }
   }, [open, isLogged]);
+
+  const onSignOutClick = () => {
+    dispatch(clearUserData());
+    handleCloseUserMenu();
+  };
+
+  const settings: PageSetting[] = [
+    { label: "Profile", to: "/user" },
+    { label: "Account" },
+    { label: "Dashboard" },
+    { label: "Sign out", onClick: onSignOutClick },
+  ];
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -176,8 +197,17 @@ export const Navigation: React.FC = () => {
                     onClose={handleCloseUserMenu}
                   >
                     {settings.map((setting) => (
-                      <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                        <Typography textAlign="center">{setting}</Typography>
+                      <MenuItem
+                        key={setting.label}
+                        onClick={setting.onClick || handleCloseUserMenu}
+                      >
+                        <Typography
+                          textAlign="center"
+                          component={setting.to ? Link : "p"}
+                          to={setting.to || ""}
+                        >
+                          {setting.label}
+                        </Typography>
                       </MenuItem>
                     ))}
                   </Menu>

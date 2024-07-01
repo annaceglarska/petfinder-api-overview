@@ -17,3 +17,10 @@ export interface TokenInfoDTO {
   expires_in: number;
   token_type: string;
 }
+
+export type UserData = Omit<UserInfo, "_id" | "token">;
+
+export interface UserUpdatedInfoDTO {
+  message: string;
+  data: Omit<UserInfo, "token">;
+}

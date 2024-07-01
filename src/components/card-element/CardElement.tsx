@@ -4,17 +4,24 @@ import {
   CardActions,
   CardContent,
   CardMedia,
+  IconButton,
   Typography,
 } from "@mui/material";
 import { Pet } from "../../services/api/petfinder/pets/pets.types";
 import { Organization } from "../../services/api/petfinder/organization/organization.type";
 import { getPlaceholderByAnimalType } from "./CardElement.helpers";
+import StarBorderIcon from "@mui/icons-material/StarBorder";
+import { useAppSelector } from "../../app/hooks";
+import { isUserLogged } from "../../slices/user/user.slice";
+import styles from "./CardElement.module.css";
+import { Link } from "react-router-dom";
 
 export interface CardElementProps {
   data: Pet | Organization;
 }
 
 export const CardElement: React.FC<CardElementProps> = (props) => {
+  const isLogged = useAppSelector(isUserLogged);
   const getPlaceholderPicture = (): string => {
     if ("type" in props.data) {
       return getPlaceholderByAnimalType(props.data.type);
@@ -24,24 +31,34 @@ export const CardElement: React.FC<CardElementProps> = (props) => {
   };
 
   return (
-    <Card>
+    <Card className={styles["card-element"]}>
+      {isLogged ? (
+        <IconButton
+          aria-label="star-icon"
+          className={styles["card__icon-button"]}
+        >
+          <StarBorderIcon />
+        </IconButton>
+      ) : (
+        <></>
+      )}
       <CardMedia
         sx={{ height: 250 }}
         image={props.data.photos[0]?.small || getPlaceholderPicture()}
         title={props.data.name}
       />
-      <CardContent>
+      <CardContent className={styles["card__content"]}>
         <Typography gutterBottom variant="h5" component="div">
           {props.data.name}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          Lizards are a widespread group of squamate reptiles, with over 6,000
-          species, ranging across all continents except Antarctica
+          {(props.data as any).description}
         </Typography>
       </CardContent>
-      <CardActions>
-        <Button size="small">Share</Button>
-        <Button size="small">Learn More</Button>
+      <CardActions className={styles["card__card-actions"]}>
+        <Button size="small" component={Link} to={`/details/${props.data.id}`}>
+          Go to details
+        </Button>
       </CardActions>
     </Card>
   );

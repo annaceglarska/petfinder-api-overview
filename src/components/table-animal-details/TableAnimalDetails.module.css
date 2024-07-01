@@ -1,0 +1,33 @@
+.details__table {
+  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.details__table li {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  flex-direction: row;
+  width: 100%;
+}
+
+.details__table strong {
+  font-weight: 800;
+  flex: 1;
+  font-size: 16px !important;
+  background: #f9f9f9;
+  display: block;
+  padding: 8px 10px;
+  border-bottom: solid 0.5px rgba(0, 0, 0, 0.1);
+}
+
+.details__table span {
+  flex: 1;
+  font-size: 16px !important;
+  display: block;
+  padding: 8px 10px;
+  border-bottom: solid 0.5px rgba(0, 0, 0, 0.1);
+}

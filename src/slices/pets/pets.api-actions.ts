@@ -23,3 +23,12 @@ export const getPetTypesAsync = createAsyncThunk(
     return petsApiService.getAnimalTypes(params, token);
   }
 );
+
+export const getPetAsync = createAsyncThunk(
+  "pets/getPet",
+  async (id: number | null, redux) => {
+    const token: string | undefined = (redux.getState() as RootState).config
+      .petfinderToken.value?.access_token;
+    return petsApiService.getAnimalById(id, token);
+  }
+);

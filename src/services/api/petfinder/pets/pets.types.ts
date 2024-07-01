@@ -5,6 +5,10 @@ export interface PetsDTO {
   pagination: Pagination;
 }
 
+export interface PetDTO {
+  animal: Pet;
+}
+
 export interface Pagination {
   count_per_page: number;
   total_count: number;

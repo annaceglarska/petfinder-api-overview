@@ -3,7 +3,7 @@ import hero_image from "./../../assets/images/hero_image.jpg";
 import styles from "./Hero.module.css";
 import { Link } from "react-router-dom";
 
-export const Hero = () => {
+export const Hero: React.FC = () => {
   return (
     <div className={styles["hero-wrapper"]}>
       <img src={hero_image} className={styles["hero-image"]} />

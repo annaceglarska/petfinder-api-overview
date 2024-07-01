@@ -2,6 +2,7 @@ import axios from "axios";
 import {
   AnimalType,
   AnimalTypesInfoDTO,
+  PetDTO,
   PetsDTO,
   PetsQueryParams,
 } from "./pets.types";
@@ -33,6 +34,25 @@ class PetsApiService {
     try {
       const response = await axios.get<AnimalTypesInfoDTO>(
         `${baseUrl}/v2/types${type ? `/${type}` : ""}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      // ToDo: add notification
+    }
+  }
+
+  async getAnimalById(
+    id: number | null,
+    token: string | undefined
+  ): Promise<PetDTO | undefined> {
+    try {
+      const response = await axios.get<PetDTO>(
+        `${baseUrl}/v2/animals${id ? `/${id}` : ""}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
