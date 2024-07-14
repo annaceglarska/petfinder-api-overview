@@ -83,12 +83,14 @@ export const getPets = (state: RootState): Pet[] =>
 
 export const getPetTypeInfoByTypeName =
   (type: AnimalType) =>
-  (state: RootState): AnimalTypesDetails | null =>
-    state.pets.types.value?.types.find(
-      (typeInfo) => typeInfo.name.toLowerCase() === type
-    ) || null;
+    (state: RootState): AnimalTypesDetails | null =>
+      state.pets.types.value?.types.find(
+        (typeInfo) => typeInfo.name.toLowerCase() === type
+      ) || null;
 
 export const getPet = (state: RootState): Pet | undefined =>
   state.pets.pet.value?.animal;
+
+export const isPetDataPending = (state: RootState): boolean => state.pets.pet.status === "pending"
 
 export default petsSlice.reducer;

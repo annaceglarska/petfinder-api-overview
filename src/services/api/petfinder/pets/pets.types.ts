@@ -39,7 +39,7 @@ export interface Pet {
   organization_animal_id: string | null;
   photos: Photo[];
   primary_photo_cropped: Photo;
-  videos: ToCheck[];
+  videos: Video[];
   status: Status;
   status_changed_at: string;
   published_at: string;
@@ -47,6 +47,8 @@ export interface Pet {
   contact: Contact;
   _links: ObjectInfo;
 }
+
+export type Video = ToCheck
 
 export interface Breeds {
   primary: string;
@@ -84,13 +86,13 @@ export interface Photo {
 
 export interface Contact {
   email: string;
-  phone: string;
+  phone: string | null;
   address: Address;
 }
 
 export interface Address {
-  address1: string;
-  address2: string;
+  address1: string | null;
+  address2: string | null;
   city: string;
   state: string;
   postcode: string;

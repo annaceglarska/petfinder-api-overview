@@ -1,0 +1,17 @@
+.pet-attributes__list {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  flex-flow: column wrap;
+  height: 100px;
+}
+
+.pet-attributes__list li {
+  display: flex;
+  align-items: center;
+  margin: 10px 0px;
+}
+
+.pet-attributes__list li > *:nth-child(1) {
+  margin-right: 5px;
+}
