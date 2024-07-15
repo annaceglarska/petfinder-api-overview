@@ -4,6 +4,7 @@ import AnimalPhotos from "../animal-photos/AnimalPhotos";
 import TableAnimalDetails from "../table-animal-details/TableAnimalDetails";
 import styles from "./FrameAnimalDetails.module.css";
 import PetAttributes from "../pet-attributes/PetAttributes";
+import ContactPanel from "../contact-panel/ContactPanel";
 
 export interface FrameAnimalDetailsProps {
   data: Pet | undefined;
@@ -22,7 +23,7 @@ const FrameAnimalDetails: React.FC<FrameAnimalDetailsProps> = ({ data }) => {
           <PetAttributes data={data} />
         </div>
         <div>
-          <Box>aside</Box>
+          <ContactPanel />
         </div>
       </div>
     </Container>

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { Organization } from "../../services/api/petfinder/organization/organization.type";
 import { Pet } from "../../services/api/petfinder/pets/pets.types";
-import { getOrganizationAsync } from "../../slices/organization/organization.api-actions";
+import { getOrganizationsAsync } from "../../slices/organization/organization.api-actions";
 import {
   clearOrganizations,
   getOrganizations,
@@ -15,7 +15,7 @@ export const Main: React.FC = () => {
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(getPetsAsync({}));
-    dispatch(getOrganizationAsync({}));
+    dispatch(getOrganizationsAsync({}));
     return () => {
       dispatch(clearOrganizations());
       dispatch(clearPets());

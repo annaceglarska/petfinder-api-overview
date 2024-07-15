@@ -30,7 +30,7 @@ import {
 } from "../../slices/pets/pets.slice";
 import { FilterDictionaries, SelectOption } from "./filters/filters.types";
 import { createDictionary } from "./filters/filters.helpers";
-import { getOrganizationAsync } from "../../slices/organization/organization.api-actions";
+import { getOrganizationsAsync } from "../../slices/organization/organization.api-actions";
 import {
   clearOrganizations,
   getOrganizations,
@@ -175,7 +175,7 @@ const FiltersAnimals: React.FC<FiltersAnimalsProps> = (props) => {
   ) => {
     console.log("handleAutocompleteInputChange", event, value, reason);
     if (reason === "input") {
-      dispatch(getOrganizationAsync({ query: value }));
+      dispatch(getOrganizationsAsync({ query: value }));
     }
   };
 

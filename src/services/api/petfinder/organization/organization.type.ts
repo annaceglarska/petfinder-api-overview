@@ -1,7 +1,11 @@
 import { Address, LinkToSource, Photo, ToCheck } from "../pets/pets.types";
 
-export interface OrganizationDTO {
+export interface OrganizationsDTO {
   organizations: Organization[];
+}
+
+export interface OrganizationDTO {
+  organization: Organization
 }
 
 export interface Organization {
