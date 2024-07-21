@@ -17,8 +17,8 @@ The application requires a working backend and defined environment variables to 
 
 ## Technology stack
 
-- TypeScript
 - React
+- TypeScript
 - Redux
 - Mui
 
