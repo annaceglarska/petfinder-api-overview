@@ -1,26 +1,27 @@
-import { Box, Container } from "@mui/material";
-import { Pet } from "../../services/api/petfinder/pets/pets.types";
+import { Container } from "@mui/material";
 import AnimalPhotos from "../animal-photos/AnimalPhotos";
 import TableAnimalDetails from "../table-animal-details/TableAnimalDetails";
 import styles from "./FrameAnimalDetails.module.css";
 import PetAttributes from "../pet-attributes/PetAttributes";
 import ContactPanel from "../contact-panel/ContactPanel";
+import { useAppSelector } from "../../app/hooks";
+import { getPet } from "../../slices/pets/pets.slice";
 
-export interface FrameAnimalDetailsProps {
-  data: Pet | undefined;
-}
+export interface FrameAnimalDetailsProps {}
 
-const FrameAnimalDetails: React.FC<FrameAnimalDetailsProps> = ({ data }) => {
+const FrameAnimalDetails: React.FC<FrameAnimalDetailsProps> = () => {
+  const pet = useAppSelector(getPet);
+
   return (
     <Container maxWidth="lg">
       <div className={styles["animal-details__frame"]}>
         <div>
-          {!!(data?.photos.length || data?.videos.length) && (
-            <AnimalPhotos photos={data?.photos} videos={data?.videos} />
+          {!!(pet?.photos.length || pet?.videos.length) && (
+            <AnimalPhotos photos={pet?.photos} videos={pet?.videos} />
           )}
 
-          <TableAnimalDetails data={data} />
-          <PetAttributes data={data} />
+          <TableAnimalDetails />
+          <PetAttributes />
         </div>
         <div>
           <ContactPanel />

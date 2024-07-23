@@ -40,7 +40,7 @@ const AnimalDetails = () => {
       {isPending ? (
         <CircularProgress className={styles["pet_details__progress"]} />
       ) : (
-        <FrameAnimalDetails data={pet} />
+        <FrameAnimalDetails />
       )}
     </>
   );

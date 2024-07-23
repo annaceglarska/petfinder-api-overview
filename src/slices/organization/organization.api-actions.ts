@@ -12,8 +12,8 @@ export const getOrganizationsAsync = createAsyncThunk(
   }
 );
 
-export const getOrganizationAsync = createAsyncThunk("organization/getOrganizations",
-  async (id: number | null, redux) => {
+export const getOrganizationAsync = createAsyncThunk("organization/getOrganization",
+  async (id: string | undefined, redux) => {
     const token: string | undefined = (redux.getState() as RootState).config
       .petfinderToken.value?.access_token;
     return organizationService.getOrganizationById(id, token);

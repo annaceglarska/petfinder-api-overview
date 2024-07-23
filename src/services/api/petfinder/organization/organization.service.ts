@@ -23,7 +23,7 @@ class OrganizationsApiService {
     }
   }
 
-  async getOrganizationById(id: number | null, token: string | undefined): Promise<OrganizationDTO | undefined> {
+  async getOrganizationById(id: string | undefined, token: string | undefined): Promise<OrganizationDTO | undefined> {
     try {
       const response = await axios.get<OrganizationDTO>(
         `${baseUrl}/v2/organizations${id ? `/${id}` : ""}`,

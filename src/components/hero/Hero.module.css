@@ -5,6 +5,17 @@
   top: -500px;
 }
 
+.hero-buttons a,
+.hero-buttons a:link,
+.hero-buttons a:visited,
+.hero-buttons a:active {
+  background-color: var(--main-theme-color);
+}
+
+.hero-buttons a:hover {
+  background-color: var(--a-hover-color);
+}
+
 .hero-image {
   width: 100%;
   position: relative;
