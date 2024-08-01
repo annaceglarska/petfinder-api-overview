@@ -12,6 +12,7 @@ import {
 } from "../../slices/pets/pets.slice";
 import { Pet } from "../../services/api/petfinder/pets/pets.types";
 import { CircularProgress } from "@mui/material";
+import { isPetfinderTokenReady } from "../../slices/config/config.slice";
 
 const AnimalDetails = () => {
   const params = useParams();
@@ -20,7 +21,13 @@ const AnimalDetails = () => {
   const isPending: boolean = useAppSelector(isPetDataPending);
   const pet: Pet | undefined = useAppSelector(getPet);
 
+  const isTokenReady = useAppSelector(isPetfinderTokenReady);
+
   useEffect(() => {
+    if (!isTokenReady) {
+      return;
+    }
+
     if (params.id) {
       dispatch(getPetAsync(+params.id));
     }
@@ -28,7 +35,11 @@ const AnimalDetails = () => {
     return () => {
       dispatch(clearPet());
     };
-  }, [params]);
+  }, [params, isTokenReady]);
+
+  if (!isTokenReady) {
+    return <CircularProgress className={styles["pet_details__progress"]} />;
+  }
 
   return (
     <>

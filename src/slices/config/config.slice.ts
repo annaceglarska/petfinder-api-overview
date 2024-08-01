@@ -29,12 +29,12 @@ export const configSlice = createSlice({
   },
 });
 
-export const {} = configSlice.actions;
+export const { } = configSlice.actions;
 
 export const getPetfinderToken = (state: RootState): string | undefined =>
   state.config.petfinderToken.value?.access_token;
 
-export const isPetfinderTokenStatus = (state: RootState): boolean =>
-  state.config.petfinderToken.status === "ready";
+export const isPetfinderTokenReady = (state: RootState): boolean =>
+  Boolean(state.config.petfinderToken.value);
 
 export default configSlice.reducer;

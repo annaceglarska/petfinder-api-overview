@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import Container from "@mui/material/Container";
 import { useAppDispatch, useAppSelector } from "./app/hooks";
 import { getPetfinderTokenAsync } from "./slices/config/config.api-actions";
-import { isPetfinderTokenStatus } from "./slices/config/config.slice";
+import { isPetfinderTokenReady } from "./slices/config/config.slice";
 
 interface AppProps {}
 
@@ -13,11 +13,11 @@ const App: React.FC<AppProps> = () => {
     dispatch(getPetfinderTokenAsync());
   }, []);
 
-  const isPetfinderTokenReady = useAppSelector(isPetfinderTokenStatus);
+  const isTokenReady = useAppSelector(isPetfinderTokenReady);
 
   return (
     <Container maxWidth="xl">
-      <main>{isPetfinderTokenReady ? <Outlet /> : <></>}</main>
+      <main>{isTokenReady ? <Outlet /> : <></>}</main>
     </Container>
   );
 };
