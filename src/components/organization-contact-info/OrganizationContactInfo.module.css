@@ -1,0 +1,9 @@
+.organization-contact-info__container {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+.organization-contact-info__container p {
+  text-align: center;
+}
