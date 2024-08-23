@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { UserData, UserInfo, UserUpdatedInfoDTO } from "./auth.types";
+import { UserData, UserInfo, UserUpdatedInfoDTO } from "../auth/auth.types";
 
 const DEFAULT_SERVER_BASE_URL = "http://localhost:5000/api/v1/user";
 class UserApiService {

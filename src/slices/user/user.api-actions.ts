@@ -4,7 +4,7 @@ import authApiService from "../../services/api/backend/auth/auth.service";
 import axios from "axios";
 import { RootState } from "../../app/store";
 import { UserData } from "../../services/api/backend/auth/auth.types";
-import userService from "../../services/api/backend/auth/user.service";
+import userService from "../../services/api/backend/user/user.service";
 
 export const loginUserAsync = createAsyncThunk(
   "user/login",

@@ -8,16 +8,21 @@ import { RouterProvider } from "react-router-dom";
 import { router } from "./router";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { ThemeContext } from "@emotion/react";
+import { createTheme } from "@mui/material";
 
 const container = document.getElementById("root")!;
 const root = createRoot(container);
+const theme = createTheme();
 
 root.render(
   <React.StrictMode>
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Provider store={store}>
-        <RouterProvider router={router} />
-      </Provider>
+      <ThemeContext.Provider value={theme}>
+        <Provider store={store}>
+          <RouterProvider router={router} />
+        </Provider>
+      </ThemeContext.Provider>
     </LocalizationProvider>
   </React.StrictMode>
 );
