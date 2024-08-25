@@ -3,6 +3,7 @@ import {
   FormControl,
   FormControlLabel,
   TextField,
+  Typography,
 } from "@mui/material";
 import React, { useState } from "react";
 import styles from "./ContactForm.module.css";
@@ -14,6 +15,7 @@ import { getOrganization } from "../../slices/organization/organization.slice";
 import { MessageFormData } from "./ContactForm.types";
 import { StyledButton } from "../../styled/SendMessageButton";
 import messagesApiService from "./../../services/api/backend/message/message.service";
+import { SubmitHandler, useForm } from "react-hook-form";
 
 export interface ContactFormProps {
   closeModal: () => void;
@@ -23,42 +25,21 @@ const ContactForm: React.FC<ContactFormProps> = (props) => {
   const pet = useAppSelector(getPet);
   const organization = useAppSelector(getOrganization);
   const [hoverFormButton, setHoverFormButton] = useState<boolean>(false);
-
-  const [formData, setFormData] = useState<MessageFormData>({
-    email: "",
-    name: "",
-    phone: "",
-    message: "",
-    agreement: false,
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<MessageFormData>({
+    defaultValues: {
+      email: "",
+      name: "",
+      phone: "",
+      message: "",
+      agreement: false,
+    },
   });
 
-  const changeTextFieldHandler: React.ChangeEventHandler<HTMLInputElement> = (
-    event
-  ) => {
-    const { name, value } = event.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const handleCheckboxChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    checked: boolean
-  ) => {
-    const {
-      target: { name },
-    } = event;
-    setFormData({
-      ...formData,
-      [name]: checked || undefined,
-    });
-  };
-
-  const submitHandler: React.FormEventHandler<HTMLFormElement> = async (
-    event
-  ) => {
-    event.preventDefault();
+  const onSubmit: SubmitHandler<MessageFormData> = async (formData) => {
     const dataToSend = {
       ...formData,
       organizationEmail: organization?.email,
@@ -73,71 +54,97 @@ const ContactForm: React.FC<ContactFormProps> = (props) => {
   };
 
   return (
-    <form onSubmit={submitHandler}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className={styles["contact-form__fields"]}>
         <FormControl>
           <TextField
+            {...register("email", {
+              required: true,
+              pattern: {
+                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                message: "Please enter a valid email address",
+              },
+            })}
+            aria-invalid={Boolean(errors.email)}
             color="secondary"
             variant="standard"
             label="Your email"
-            name="email"
-            required
-            type="email"
-            onChange={changeTextFieldHandler}
-            value={formData.email}
           />
+          {errors.email && (
+            <Typography component={"span"} sx={{ color: "red" }}>
+              {errors.email.message}
+            </Typography>
+          )}
         </FormControl>
+
         <FormControl>
           <TextField
+            {...register("name", { required: "This field is required" })}
             color="secondary"
             variant="standard"
             label="Your name"
-            name="name"
-            required
             type="text"
-            onChange={changeTextFieldHandler}
-            value={formData.name}
+            aria-invalid={Boolean(errors.name)}
           />
+          {errors.name && (
+            <Typography component={"span"} sx={{ color: "red" }}>
+              {errors.name.message}
+            </Typography>
+          )}
         </FormControl>
         <FormControl>
           <TextField
+            {...register("phone", {
+              required: true,
+              pattern: {
+                value: /^\+?([0-9]{2})?[0-9]{9}$/,
+                message: "Please enter a valid phone number",
+              },
+            })}
             color="secondary"
             variant="standard"
             label="Your phone number"
-            name="phone"
-            required
-            type="tel"
-            onChange={changeTextFieldHandler}
-            value={formData.phone}
+            aria-invalid={Boolean(errors.phone)}
           />
+          {errors.phone && (
+            <Typography component={"span"} sx={{ color: "red" }}>
+              {errors.phone.message}
+            </Typography>
+          )}
         </FormControl>
         <FormControl>
           <TextField
+            {...register("message", { required: "This field is required" })}
             color="secondary"
             label="Enter your message"
-            name="message"
-            required
             type="text"
             rows={6}
             multiline={true}
-            onChange={changeTextFieldHandler}
-            value={formData.message}
+            aria-invalid={Boolean(errors.message)}
           />
+          {errors.message && (
+            <Typography component={"span"} sx={{ color: "red" }}>
+              {errors.message.message}
+            </Typography>
+          )}
         </FormControl>
 
         <FormControlLabel
-          required
           control={
             <Checkbox
+              {...register("agreement", { required: "This field is required" })}
               icon={<RadioButtonUncheckedIcon />}
-              checked={formData.agreement}
               checkedIcon={<CheckCircleIcon color="secondary" />}
-              onChange={handleCheckboxChange}
-              name="agreement"
+              aria-invalid={Boolean(errors.agreement)}
             />
           }
           label="I declare that I have read the Privacy Policy"
         />
+        {errors.agreement && (
+          <Typography component={"span"} sx={{ color: "red" }}>
+            {errors.agreement.message}
+          </Typography>
+        )}
 
         <StyledButton
           borderRadius="20px"
