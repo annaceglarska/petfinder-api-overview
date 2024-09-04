@@ -14,6 +14,10 @@
   margin-bottom: 10px;
 }
 
+.organization-contact-info__container a {
+  margin-bottom: 10px;
+}
+
 .organization-contact-info__container button svg {
   margin-right: 4px;
 }

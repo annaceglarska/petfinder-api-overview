@@ -10,3 +10,7 @@
 .sign-panel__control {
   margin: 10px 0 !important;
 }
+
+.sign-panel__error {
+  color: red;
+}
