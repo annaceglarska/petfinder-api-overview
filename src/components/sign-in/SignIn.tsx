@@ -29,7 +29,7 @@ export const SignIn: React.FC = () => {
   const errorsFromBackend = useAppSelector(getError);
   const isPendingStatus = useAppSelector(isUserSignInPending);
 
-  const onSubmit: SubmitHandler<SignInFormData> = async (formData) => {
+  const onSubmit: SubmitHandler<SignInFormData> = (formData) => {
     dispatch(loginUserAsync(formData));
   };
 

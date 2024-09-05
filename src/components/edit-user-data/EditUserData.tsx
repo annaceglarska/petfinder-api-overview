@@ -1,4 +1,4 @@
-import { Button, FormControl, TextField } from "@mui/material";
+import { Button, FormControl, TextField, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
   clearUserEditionStatus,
@@ -9,6 +9,8 @@ import { useEffect, useState } from "react";
 import styles from "./EditUserData.module.css";
 import { editUserDataAsync } from "../../slices/user/user.api-actions";
 import { UserData } from "../../services/api/backend/auth/auth.types";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { EditUserFormData } from "./EditUserData.types";
 
 export interface EditUserDataProps {
   handleEdition: () => void;
@@ -20,11 +22,18 @@ const EditUserData: React.FC<EditUserDataProps> = (props) => {
   const isReady = useAppSelector(isUserEditionReady);
   const userData = useAppSelector(getUser);
 
-  const [formData, setFormData] = useState<UserData>({
-    name: "",
-    surname: "",
-    email: "",
-    phone: "",
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<EditUserFormData>({
+    defaultValues: {
+      name: "",
+      surname: "",
+      email: "",
+      phone: "",
+    },
   });
 
   useEffect(() => {
@@ -36,60 +45,85 @@ const EditUserData: React.FC<EditUserDataProps> = (props) => {
 
   useEffect(() => {
     const { name, surname, email, phone } = userData || {};
-    setFormData({ name, surname, email, phone } as UserData);
+    const formData = { name, surname, email, phone } as UserData;
+    Object.entries(formData).forEach(([key, value]) => {
+      setValue(key as keyof UserData, value);
+    });
   }, [userData]);
 
-  const submitHandler: React.FormEventHandler<HTMLFormElement> = (e) => {
-    e.preventDefault();
+  const onSubmit: SubmitHandler<EditUserFormData> = (formData) => {
     dispatch(editUserDataAsync(formData));
-  };
-
-  const changeHandler: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-    const { name, value } = event.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
   };
 
   return (
     <>
-      <form onSubmit={submitHandler} className={styles["edit-panel__form"]}>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className={styles["edit-panel__form"]}
+      >
         <FormControl sx={{ m: 1, width: 300 }}>
           <TextField
+            {...register("name", {
+              required: "This field is required",
+            })}
             label="name"
-            onChange={changeHandler}
-            name="name"
-            required
-            value={formData.name}
+            aria-invalid={Boolean(errors.name)}
           />
+          {errors.name && (
+            <Typography component={"span"} sx={{ color: "red" }}>
+              {errors.name.message}
+            </Typography>
+          )}
         </FormControl>
         <FormControl sx={{ m: 1, width: 300 }}>
           <TextField
+            {...register("surname", {
+              required: "This field is required",
+            })}
             label="surname"
-            onChange={changeHandler}
-            name="surname"
-            required
-            value={formData.surname}
+            aria-invalid={Boolean(errors.surname)}
           />
+          {errors.surname && (
+            <Typography component={"span"} sx={{ color: "red" }}>
+              {errors.surname.message}
+            </Typography>
+          )}
         </FormControl>
         <FormControl sx={{ m: 1, width: 300 }}>
           <TextField
+            {...register("email", {
+              required: "This field is required",
+              pattern: {
+                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                message: "Please enter a valid email address",
+              },
+            })}
             label="email"
-            onChange={changeHandler}
-            name="email"
-            type="email"
-            required
-            value={formData.email}
+            aria-invalid={Boolean(errors.email)}
           />
+          {errors.email && (
+            <Typography component={"span"} sx={{ color: "red" }}>
+              {errors.email.message}
+            </Typography>
+          )}
         </FormControl>
         <FormControl sx={{ m: 1, width: 300 }}>
           <TextField
+            {...register("phone", {
+              required: "This field is required",
+              pattern: {
+                value: /^\+?([0-9]{2})?[0-9]{9}$/,
+                message: "Please enter a valid phone number",
+              },
+            })}
             label="phone"
-            onChange={changeHandler}
-            name="phone"
-            value={formData.phone}
+            aria-invalid={Boolean(errors.phone)}
           />
+          {errors.phone && (
+            <Typography component={"span"} sx={{ color: "red" }}>
+              {errors.phone.message}
+            </Typography>
+          )}
         </FormControl>
         <Button
           variant="contained"
