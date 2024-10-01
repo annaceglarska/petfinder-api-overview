@@ -11,10 +11,10 @@ import { Pet } from "../../services/api/petfinder/pets/pets.types";
 import { Organization } from "../../services/api/petfinder/organization/organization.type";
 import { getPlaceholderByAnimalType } from "./CardElement.helpers";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
-import { useAppSelector } from "../../app/hooks";
-import { isUserLogged } from "../../slices/user/user.slice";
 import styles from "./CardElement.module.css";
 import { Link } from "react-router-dom";
+import { useAppSelector } from "../../app/hooks";
+import { isUserLogged } from "../../slices/user/user.slice";
 
 export interface CardElementProps {
   data: Pet | Organization;

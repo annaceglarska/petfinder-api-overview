@@ -12,6 +12,11 @@ export interface UserInfoDTO {
   data: UserInfo;
 }
 
+export interface UserBasicInfoDTO {
+  message: string;
+  data: Omit<UserInfo, 'token'>;
+}
+
 export interface TokenInfoDTO {
   access_token: string;
   expires_in: number;

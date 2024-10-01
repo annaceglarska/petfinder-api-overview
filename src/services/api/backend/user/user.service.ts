@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { UserData, UserInfo, UserUpdatedInfoDTO } from "../auth/auth.types";
+import { UserBasicInfoDTO, UserData, UserInfo, UserUpdatedInfoDTO } from "../auth/auth.types";
 
 const DEFAULT_SERVER_BASE_URL = "http://localhost:5000/api/v1/user";
 class UserApiService {
@@ -16,6 +16,23 @@ class UserApiService {
         AxiosResponse<UserUpdatedInfoDTO>,
         UserData
       >(`${this.baseUrl}/edit-user`, userData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getUserData(
+    token: string | undefined
+  ): Promise<UserData> {
+    try {
+      const response = await axios.get<
+        UserBasicInfoDTO
+      >(`${this.baseUrl}/get-user`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

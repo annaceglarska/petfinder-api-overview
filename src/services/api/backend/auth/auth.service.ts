@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { UserCredential } from "../../../../slices/user/user.types";
 import { TokenInfoDTO, UserInfo, UserInfoDTO } from "./auth.types";
+import TokenService from "../../../token/token";
 
 const DEFAULT_SERVER_BASE_URL = "http://localhost:5000/api/v1/auth";
 class AuthApiService {
@@ -14,6 +15,7 @@ class AuthApiService {
         AxiosResponse<UserInfoDTO>,
         UserCredential
       >(`${this.baseUrl}/login`, userCredential);
+      TokenService.saveToken(response.data.data.token)
       return response.data.data;
     } catch (error) {
       throw error;

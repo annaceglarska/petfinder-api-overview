@@ -2,11 +2,13 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { UserState } from "./user.types";
 import {
   editUserDataAsync,
+  getUserAsync,
   loginUserAsync,
   protectedAsync,
 } from "./user.api-actions";
 import { RootState } from "../../app/store";
 import { UserInfo } from "../../services/api/backend/auth/auth.types";
+import TokenService from "../../services/token/token";
 
 const initialState: UserState = {
   user: {
@@ -31,6 +33,9 @@ export const userSlice = createSlice({
     clearUserEditionStatus: (state) => {
       state.editionStatus = "unset";
     },
+    saveToken: (state, { payload }: PayloadAction<{ token: string }>) => {
+      state.user.value = { ...state.user.value || {}, token: payload.token }
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -63,18 +68,30 @@ export const userSlice = createSlice({
       })
       .addCase(editUserDataAsync.pending, (state) => {
         state.editionStatus = "pending";
-      });
+      })
+      .addCase(getUserAsync.pending, (state) => {
+        state.user.status = "pending"
+      })
+      .addCase(getUserAsync.fulfilled, (state, action) => {
+        state.user.status = "ready";
+        state.user.value = { ...state.user.value || {}, ...action.payload }
+        state.user.error = null;
+      })
+      .addCase(getUserAsync.rejected, (state, action) => {
+        state.user.status = "failed";
+        state.user.error = action.error;
+      })
   },
 });
 
-export const { clearErrors, clearUserData, clearUserEditionStatus } =
+export const { clearErrors, clearUserData, clearUserEditionStatus, saveToken } =
   userSlice.actions;
 
 // Selectors
-export const getUser = (state: RootState): UserInfo | null =>
+export const getUser = (state: RootState): Partial<UserInfo> | null =>
   state.user.user.value;
 export const isUserLogged = (state: RootState): boolean =>
-  Boolean(state.user.user.value);
+  state.user.user.value?.token ? TokenService.validateToken(state.user.user.value.token) : false
 
 export const getError = (state: RootState): any => state.user.user.error;
 

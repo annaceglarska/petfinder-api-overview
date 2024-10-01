@@ -42,3 +42,12 @@ export const editUserDataAsync = createAsyncThunk(
     return userService.editUserData(userUpdatedData, token || "");
   }
 );
+
+export const getUserAsync = createAsyncThunk(
+  "user/getUser",
+  async (_, redux) => {
+    const token: string | undefined = (redux.getState() as RootState).user.user
+      .value?.token;
+    return userService.getUserData(token);
+  }
+)

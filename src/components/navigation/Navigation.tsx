@@ -22,6 +22,7 @@ import styles from "./Navigation.module.css";
 import { Link } from "react-router-dom";
 import Modal from "@mui/material/Modal";
 import { SignIn } from "../sign-in/SignIn";
+import TokenService from "../../services/token/token";
 
 export interface PageSetting {
   label: string;
@@ -46,6 +47,7 @@ export const Navigation: React.FC = () => {
 
   const onSignOutClick = () => {
     dispatch(clearUserData());
+    TokenService.deleteToken();
     handleCloseUserMenu();
   };
 

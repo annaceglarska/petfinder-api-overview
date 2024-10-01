@@ -4,6 +4,9 @@ import Container from "@mui/material/Container";
 import { useAppDispatch, useAppSelector } from "./app/hooks";
 import { getPetfinderTokenAsync } from "./slices/config/config.api-actions";
 import { isPetfinderTokenReady } from "./slices/config/config.slice";
+import TokenService from "./services/token/token";
+import { saveToken } from "./slices/user/user.slice";
+import { getUserAsync } from "./slices/user/user.api-actions";
 
 interface AppProps {}
 
@@ -11,6 +14,15 @@ const App: React.FC<AppProps> = () => {
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(getPetfinderTokenAsync());
+  }, []);
+
+  useEffect(() => {
+    const token = TokenService.getToken() || undefined;
+    if (!token || !TokenService.validateToken(token)) {
+      return;
+    }
+    dispatch(saveToken({ token }));
+    dispatch(getUserAsync());
   }, []);
 
   const isTokenReady = useAppSelector(isPetfinderTokenReady);
