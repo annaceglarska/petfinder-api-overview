@@ -3,13 +3,12 @@
   flex-direction: column;
   align-items: center;
   padding: 10px;
-  height: 300px;
   justify-content: center;
 }
 
 .organization-info__container a {
   text-decoration: none;
-  color: var(--main-theme-color);
+  color: var(--primary-color);
   font-size: 1.2rem;
   font-weight: bolder;
 }

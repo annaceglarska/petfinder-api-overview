@@ -51,7 +51,7 @@ export const CardElement: React.FC<CardElementProps> = (props) => {
         <Typography gutterBottom variant="h5" component="div">
           {props.data.name}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" className={styles["card__description"]}>
           {(props.data as any).description}
         </Typography>
       </CardContent>

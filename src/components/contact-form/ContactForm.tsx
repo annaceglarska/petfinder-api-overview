@@ -69,6 +69,7 @@ const ContactForm: React.FC<ContactFormProps> = (props) => {
             color="secondary"
             variant="standard"
             label="Your email"
+            className={styles["contact-form__fields"]}
           />
           {errors.email && (
             <Typography component={"span"} sx={{ color: "red" }}>

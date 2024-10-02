@@ -1,5 +1,5 @@
 .top-background {
-  background-color: var(--main-theme-color);
+  background-color: var(--primary-color);
   padding: 3% 0%;
   height: 150px;
 }
@@ -7,14 +7,14 @@
 .pet-details__span {
   display: block;
   font-size: 1.5rem;
-  color: #fff;
+  color: var(--info-color);
   font-weight: 300;
   margin: 0px 0px 0px 170px;
 }
 
 .pet_details__header {
   font-size: 5rem;
-  color: #fff;
+  color: var(--info-color);
   padding: 0;
   margin: 0;
   font-weight: 800;
@@ -25,4 +25,5 @@
   position: relative;
   left: 50%;
   top: 25vh;
+  color: var(--info-color) !important;
 }

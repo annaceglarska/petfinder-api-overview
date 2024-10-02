@@ -1,6 +1,10 @@
 :root {
-  --main-theme-color: hwb(204 47% 0%);
-  --a-hover-color: hwb(204 20% 0%);
+  --primary-color: #7696ff;
+  --secondary-color: #9dbdff;
+  --error-color: #ff9874;
+  --warning-color: #ffd7c4;
+  --info-color: #fff;
+  --success-color: #040f32;
 }
 
 body {
@@ -18,5 +22,5 @@ code {
 }
 
 .form__button--submit {
-  background-color: #8ac651 !important;
+  background-color: #9dbdff !important;
 }

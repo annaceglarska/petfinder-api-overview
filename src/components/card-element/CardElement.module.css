@@ -1,6 +1,6 @@
 .card__icon-button {
   position: absolute !important;
-  background-color: #7cabda !important;
+  background-color: var(--secondary-color) !important;
   right: 0px;
 }
 
@@ -16,4 +16,8 @@
 
 .card__content {
   margin-bottom: 30px;
+}
+
+.card__description {
+  color: var(--success-color);
 }

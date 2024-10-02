@@ -1,6 +1,7 @@
 import { Button } from "@mui/material";
 import { useAppSelector } from "../../app/hooks";
 import { getUser } from "../../slices/user/user.slice";
+import styles from "./DispalyUserData.module.css";
 
 export interface DispalyUserDataProps {
   handleEdition: () => void;
@@ -34,7 +35,11 @@ const DispalyUserData: React.FC<DispalyUserDataProps> = (props) => {
         </p>
         <p>{userData?.phone}</p>
       </div>
-      <Button variant="contained" onClick={props.handleEdition}>
+      <Button
+        variant="contained"
+        onClick={props.handleEdition}
+        className={styles["user-data-container__button"]}
+      >
         Edit
       </Button>
     </>

@@ -12,5 +12,5 @@
 }
 
 .sign-panel__error {
-  color: red;
+  color: var(--error-color);
 }

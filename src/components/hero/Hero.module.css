@@ -9,11 +9,11 @@
 .hero-buttons a:link,
 .hero-buttons a:visited,
 .hero-buttons a:active {
-  background-color: var(--main-theme-color);
+  background-color: var(--primary-color);
 }
 
 .hero-buttons a:hover {
-  background-color: var(--a-hover-color);
+  background-color: var(--secondary-color);
 }
 
 .hero-image {
