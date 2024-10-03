@@ -23,6 +23,7 @@ import { Link } from "react-router-dom";
 import Modal from "@mui/material/Modal";
 import { SignIn } from "../sign-in/SignIn";
 import TokenService from "../../services/token/token";
+import logo from "../../assets/images/petfinder_logo.png";
 
 export interface PageSetting {
   label: string;
@@ -30,7 +31,10 @@ export interface PageSetting {
   to?: string;
 }
 
-const pages: string[] = [];
+const pages: PageSetting[] = [
+  { label: "Pets", to: "/pets" },
+  { label: "Organizations", to: "/organizations" },
+];
 
 export const Navigation: React.FC = () => {
   const isLogged = useAppSelector(isUserLogged);
@@ -85,7 +89,6 @@ export const Navigation: React.FC = () => {
       <AppBar position="static" className={styles["navigation-container"]}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
             <Typography
               variant="h6"
               noWrap
@@ -101,7 +104,11 @@ export const Navigation: React.FC = () => {
                 textDecoration: "none",
               }}
             >
-              LOGO
+              <img
+                src={logo}
+                alt="Logo"
+                className={styles["navigation__img"]}
+              />
             </Typography>
 
             <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -134,8 +141,14 @@ export const Navigation: React.FC = () => {
                 }}
               >
                 {pages.map((page) => (
-                  <MenuItem key={page} onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center">{page}</Typography>
+                  <MenuItem key={page.label} onClick={handleCloseNavMenu}>
+                    <Typography
+                      textAlign="center"
+                      component={page.to ? Link : "p"}
+                      to={page.to}
+                    >
+                      {page.label}
+                    </Typography>
                   </MenuItem>
                 ))}
               </Menu>
@@ -162,11 +175,13 @@ export const Navigation: React.FC = () => {
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               {pages.map((page) => (
                 <Button
-                  key={page}
+                  key={page.label}
+                  component={page.to ? Link : "p"}
+                  to={page.to}
                   onClick={handleCloseNavMenu}
                   sx={{ my: 2, color: "white", display: "block" }}
                 >
-                  {page}
+                  {page.label}
                 </Button>
               ))}
             </Box>

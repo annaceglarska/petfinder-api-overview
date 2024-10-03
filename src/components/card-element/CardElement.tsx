@@ -44,7 +44,7 @@ export const CardElement: React.FC<CardElementProps> = (props) => {
       )}
       <CardMedia
         sx={{ height: 250 }}
-        image={props.data.photos[0]?.small || getPlaceholderPicture()}
+        image={props.data.photos[0]?.medium || getPlaceholderPicture()}
         title={props.data.name}
       />
       <CardContent className={styles["card__content"]}>
@@ -56,7 +56,11 @@ export const CardElement: React.FC<CardElementProps> = (props) => {
         </Typography>
       </CardContent>
       <CardActions className={styles["card__card-actions"]}>
-        <Button size="small" component={Link} to={`/details/${props.data.id}`}>
+        <Button
+          size="small"
+          component={Link}
+          to={`/pet/details/${props.data.id}`}
+        >
           Go to details
         </Button>
       </CardActions>

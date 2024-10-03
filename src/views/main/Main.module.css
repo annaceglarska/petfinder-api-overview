@@ -1,0 +1,7 @@
+.main__container h1 {
+  text-align: center;
+  padding: 20px;
+  font-size: 40px;
+  color: var(--primary-color);
+  font-family: "Lucida Handwriting";
+}

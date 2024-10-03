@@ -33,3 +33,7 @@
 .navigation-container {
   background-color: var(--primary-color);
 }
+
+.navigation__img {
+  height: 48px;
+}

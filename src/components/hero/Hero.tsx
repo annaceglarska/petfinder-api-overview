@@ -8,28 +8,32 @@ export const Hero: React.FC = () => {
     <div className={styles["hero-wrapper"]}>
       <img src={hero_image} className={styles["hero-image"]} />
       <div className={styles["hero-buttons"]}>
-        <Button variant="contained" component={Link} to="/dogs">
+        <Button variant="contained" component={Link} to="/pets/dogs">
           Find a dog
         </Button>
-        <Button variant="contained" component={Link} to="/cats">
+        <Button variant="contained" component={Link} to="/pets/cats">
           Find a cat
         </Button>
-        <Button variant="contained" component={Link} to="/rabbits">
+        <Button variant="contained" component={Link} to="/pets/rabbits">
           Find a rabbit
         </Button>
-        <Button variant="contained" component={Link} to="/small-and-furies">
+        <Button
+          variant="contained"
+          component={Link}
+          to="/pets/small-and-furies"
+        >
           Find small and furry
         </Button>
-        <Button variant="contained" component={Link} to="/horses">
+        <Button variant="contained" component={Link} to="/pets/horses">
           Find a horse
         </Button>
-        <Button variant="contained" component={Link} to="/birds">
+        <Button variant="contained" component={Link} to="/pets/birds">
           Find a bird
         </Button>
-        <Button variant="contained" component={Link} to="/barnyards">
+        <Button variant="contained" component={Link} to="/pets/barnyards">
           Find a barnyard
         </Button>
-        <Button variant="contained" component={Link} to="/others">
+        <Button variant="contained" component={Link} to="/pets/others">
           Find other
         </Button>
       </div>
