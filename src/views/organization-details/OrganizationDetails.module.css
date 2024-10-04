@@ -1,0 +1,20 @@
+.organization-details__progress {
+  position: relative;
+  left: 50%;
+  top: 25vh;
+  color: var(--primary-color) !important;
+}
+
+.top-background {
+  background-color: var(--primary-color);
+  padding: 3% 0%;
+}
+
+.organization_details__header {
+  font-size: 4rem;
+  color: var(--info-color);
+  padding: 0;
+  margin: 0;
+  font-weight: 800;
+  margin: 0px 0px 0px 170px;
+}

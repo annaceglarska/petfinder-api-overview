@@ -11,7 +11,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircleOutline";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import { useAppSelector } from "../../app/hooks";
 import { getPet } from "../../slices/pets/pets.slice";
-import { getOrganization } from "../../slices/organization/organization.slice";
+import { getOrganization } from "../../slices/organizations/organizations.slice";
 import { MessageFormData } from "./ContactForm.types";
 import { StyledButton } from "../../styled/SendMessageButton";
 import messagesApiService from "./../../services/api/backend/message/message.service";

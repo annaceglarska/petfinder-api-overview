@@ -5,7 +5,7 @@ export interface MessageData {
     message: string,
     agreement: Boolean,
     organizationEmail: string | undefined,
-    petId: number | undefined,
+    petId?: number,
 }
 
 export interface MessageInfoDTO {

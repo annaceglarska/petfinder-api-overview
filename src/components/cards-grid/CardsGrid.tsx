@@ -3,7 +3,7 @@ import { CardElement } from "../card-element/CardElement";
 import styles from "./CardsGrid.module.css";
 import { Pet } from "../../services/api/petfinder/pets/pets.types";
 import React from "react";
-import { Organization } from "../../services/api/petfinder/organization/organization.type";
+import { Organization } from "../../services/api/petfinder/organizations/organizations.type";
 
 export interface CardsGridProps {
   data: Pet[] | Organization[];

@@ -1,6 +1,6 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 import petsReducer from "./../slices/pets/pets.slice";
-import organizationReducer from "./../slices/organization/organization.slice";
+import organizationReducer from "../slices/organizations/organizations.slice";
 import configReducer from "./../slices/config/config.slice";
 import userReducer from "../slices/user/user.slice";
 

@@ -1,0 +1,27 @@
+.organization-details__container {
+  margin: 0px;
+  display: flex;
+}
+.organization-details__container > * {
+  padding: 20px;
+}
+
+.organization-details__container > *:nth-child(1) {
+  flex: 3;
+  margin-right: 30px;
+}
+.organization-details__container > *:nth-child(2) {
+  flex: 1;
+  margin-left: 30px;
+}
+
+.organization-details__container h1 {
+  padding: 20px 20px 5px 20px;
+  color: var(--primary-color);
+  font-family: "Lucida Handwriting";
+}
+
+.organization-details__container p {
+  padding: 5px 5px 5px 20px;
+  font-family: Verdana, Tahoma, sans-serif;
+}

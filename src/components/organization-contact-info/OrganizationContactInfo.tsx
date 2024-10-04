@@ -1,6 +1,6 @@
 import Button from "@mui/material/Button";
 import { useAppSelector } from "../../app/hooks";
-import { getOrganization } from "../../slices/organization/organization.slice";
+import { getOrganization } from "../../slices/organizations/organizations.slice";
 import { useState } from "react";
 import PhoneInTalkIcon from "@mui/icons-material/PhoneInTalk";
 import styles from "./OrganizationContactInfo.module.css";
@@ -10,7 +10,13 @@ import { StyledBox } from "../../styled/StyledBox";
 import ContactForm from "../contact-form/ContactForm";
 import CloseIcon from "@mui/icons-material/Close";
 
-const OrganizationContactInfo: React.FC = () => {
+export interface OrganizationContactInfoProps {
+  context: "organization" | "pet";
+}
+
+const OrganizationContactInfo: React.FC<OrganizationContactInfoProps> = (
+  props
+) => {
   const organization = useAppSelector(getOrganization);
 
   const [isNumberHidden, setIsNumberHidden] = useState<Boolean>(true);
@@ -35,11 +41,12 @@ const OrganizationContactInfo: React.FC = () => {
 
   return (
     <>
-      {Boolean(organization?.email) && Boolean(organization?.phone) && (
-        <div className={styles["organization-contact-info__container"]}>
-          <p>Interested in adopting this pet?</p>
-        </div>
-      )}
+      {(Boolean(organization?.email) || Boolean(organization?.phone)) &&
+        props.context === "pet" && (
+          <div className={styles["organization-contact-info__container"]}>
+            <p>Interested in adopting this pet?</p>
+          </div>
+        )}
 
       {Boolean(organization?.phone) && (
         <div className={styles["organization-contact-info__container"]}>

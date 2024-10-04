@@ -30,12 +30,12 @@ import {
 } from "../../slices/pets/pets.slice";
 import { FilterDictionaries, SelectOption } from "./filters/filters.types";
 import { createDictionary } from "./filters/filters.helpers";
-import { getOrganizationsAsync } from "../../slices/organization/organization.api-actions";
+import { getOrganizationsAsync } from "../../slices/organizations/organizations.api-actions";
 import {
   clearOrganizations,
   getOrganizations,
-} from "../../slices/organization/organization.slice";
-import { Organization } from "../../services/api/petfinder/organization/organization.type";
+} from "../../slices/organizations/organizations.slice";
+import { Organization } from "../../services/api/petfinder/organizations/organizations.type";
 import { PetsQueryParams } from "../../services/api/petfinder/pets/pets.types";
 import styles from "../filters-animals/FiltersAnimals.module.css";
 

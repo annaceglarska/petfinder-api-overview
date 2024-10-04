@@ -24,5 +24,5 @@
   position: relative;
   left: 50%;
   top: 25vh;
-  color: var(--info-color) !important;
+  color: var(--primary-color) !important;
 }

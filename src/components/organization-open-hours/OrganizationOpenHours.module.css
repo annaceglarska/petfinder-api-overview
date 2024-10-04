@@ -1,0 +1,11 @@
+.open-hours__hours-container p::first-letter {
+  text-transform: uppercase;
+}
+
+.open-hours__hours-container p {
+  padding: 1px;
+}
+
+.open-hours__hours-container div {
+  padding: 1px 20px 20px 20px;
+}

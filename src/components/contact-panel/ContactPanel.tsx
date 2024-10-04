@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { getPet } from "../../slices/pets/pets.slice";
 import Localization from "../localization/Localization";
-import { getOrganizationAsync } from "../../slices/organization/organization.api-actions";
+import { getOrganizationAsync } from "../../slices/organizations/organizations.api-actions";
 import OrganizationInfo from "../organization-info/OrganizationInfo";
 import OrganizationContactInfo from "../organization-contact-info/OrganizationContactInfo";
 
@@ -19,7 +19,7 @@ const ContactPanel: React.FC = () => {
     <>
       <OrganizationInfo />
       <Localization />
-      <OrganizationContactInfo />
+      <OrganizationContactInfo context={"pet"} />
     </>
   );
 };

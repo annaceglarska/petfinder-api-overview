@@ -1,5 +1,5 @@
 import axios from "axios";
-import { OrganizationsDTO, OrganizationQueryParam, OrganizationDTO } from "./organization.type";
+import { OrganizationsDTO, OrganizationQueryParam, OrganizationDTO } from "./organizations.type";
 import { baseUrl } from "../pets/pets.service";
 
 class OrganizationsApiService {

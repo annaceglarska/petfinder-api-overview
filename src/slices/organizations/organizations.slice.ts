@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { OrganizationState } from "./organization.types";
-import { getOrganizationAsync, getOrganizationsAsync } from "./organization.api-actions";
+import { OrganizationState } from "./organizations.types";
+import { getOrganizationAsync, getOrganizationsAsync } from "./organizations.api-actions";
 import { RootState } from "../../app/store";
-import { Organization } from "../../services/api/petfinder/organization/organization.type";
+import { Organization } from "../../services/api/petfinder/organizations/organizations.type";
 
 const initialState: OrganizationState = {
   organizations: {
@@ -16,13 +16,17 @@ const initialState: OrganizationState = {
 };
 
 export const organizationSlice = createSlice({
-  name: "organization",
+  name: "organizations",
   initialState,
   reducers: {
     clearOrganizations: (state, _: PayloadAction) => {
       state.organizations.value = null;
     },
+    clearOrganization: (state, _: PayloadAction) => {
+      state.organization.value = null;
+    },
   },
+
   extraReducers: (builder) => {
     builder
       .addCase(getOrganizationsAsync.pending, (state) => {
@@ -48,11 +52,13 @@ export const organizationSlice = createSlice({
   },
 });
 
-export const { clearOrganizations } = organizationSlice.actions;
+export const { clearOrganizations, clearOrganization } = organizationSlice.actions;
 
 export const getOrganizations = (state: RootState): Organization[] =>
   state.organization.organizations.value?.organizations || [];
 
 export const getOrganization = (state: RootState): Organization | null => state.organization.organization.value?.organization || null;
+
+export const isOrganizationDataPending = (state: RootState): boolean => state.organization.organization.status === "pending";
 
 export default organizationSlice.reducer;

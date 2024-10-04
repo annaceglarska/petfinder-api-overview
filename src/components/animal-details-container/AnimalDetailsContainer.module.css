@@ -1,0 +1,16 @@
+.animal-details__container {
+  margin: 0px;
+  display: flex;
+}
+.animal-details__container > * {
+  padding: 20px;
+}
+
+.animal-details__container > *:nth-child(1) {
+  flex: 3;
+  margin-right: 30px;
+}
+.animal-details__container > *:nth-child(2) {
+  flex: 1;
+  margin-left: 30px;
+}

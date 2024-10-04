@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Pet } from "../../services/api/petfinder/pets/pets.types";
-import { Organization } from "../../services/api/petfinder/organization/organization.type";
+import { Organization } from "../../services/api/petfinder/organizations/organizations.type";
 import { getPlaceholderByAnimalType } from "./CardElement.helpers";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import styles from "./CardElement.module.css";
@@ -22,9 +22,12 @@ export interface CardElementProps {
 
 export const CardElement: React.FC<CardElementProps> = (props) => {
   const isLogged = useAppSelector(isUserLogged);
+  const dataType: "pet" | "organization" =
+    "type" in props.data ? "pet" : "organization";
+
   const getPlaceholderPicture = (): string => {
-    if ("type" in props.data) {
-      return getPlaceholderByAnimalType(props.data.type);
+    if (dataType === "pet") {
+      return getPlaceholderByAnimalType((props.data as Pet).type);
     } else {
       return "";
     }
@@ -59,7 +62,9 @@ export const CardElement: React.FC<CardElementProps> = (props) => {
         <Button
           size="small"
           component={Link}
-          to={`/pet/details/${props.data.id}`}
+          to={`${dataType === "pet" ? "/pet" : "/organization"}/details/${
+            props.data.id
+          }`}
         >
           Go to details
         </Button>

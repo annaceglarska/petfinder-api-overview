@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { OrganizationQueryParam } from "../../services/api/petfinder/organization/organization.type";
-import organizationService from "../../services/api/petfinder/organization/organization.service";
+import { OrganizationQueryParam } from "../../services/api/petfinder/organizations/organizations.type";
+import organizationService from "../../services/api/petfinder/organizations/organizations.service";
 import { RootState } from "../../app/store";
 
 export const getOrganizationsAsync = createAsyncThunk(

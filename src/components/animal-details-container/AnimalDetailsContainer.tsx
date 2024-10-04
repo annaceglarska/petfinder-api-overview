@@ -1,7 +1,7 @@
 import { Container } from "@mui/material";
-import AnimalPhotos from "../animal-photos/AnimalPhotos";
+import PhotosCarousel from "../photos-carousel/PhotosCarousel";
 import TableAnimalDetails from "../table-animal-details/TableAnimalDetails";
-import styles from "./FrameAnimalDetails.module.css";
+import styles from "./AnimalDetailsContainer.module.css";
 import PetAttributes from "../pet-attributes/PetAttributes";
 import ContactPanel from "../contact-panel/ContactPanel";
 import { useAppSelector } from "../../app/hooks";
@@ -9,15 +9,15 @@ import { getPet } from "../../slices/pets/pets.slice";
 
 export interface FrameAnimalDetailsProps {}
 
-const FrameAnimalDetails: React.FC<FrameAnimalDetailsProps> = () => {
+const AnimalDetailsContainer: React.FC<FrameAnimalDetailsProps> = () => {
   const pet = useAppSelector(getPet);
 
   return (
     <Container maxWidth="lg">
-      <div className={styles["animal-details__frame"]}>
+      <div className={styles["animal-details__container"]}>
         <div>
           {!!(pet?.photos.length || pet?.videos.length) && (
-            <AnimalPhotos photos={pet?.photos} videos={pet?.videos} />
+            <PhotosCarousel photos={pet?.photos} videos={pet?.videos} />
           )}
 
           <TableAnimalDetails />
@@ -31,4 +31,4 @@ const FrameAnimalDetails: React.FC<FrameAnimalDetailsProps> = () => {
   );
 };
 
-export default FrameAnimalDetails;
+export default AnimalDetailsContainer;

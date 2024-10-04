@@ -1,15 +1,10 @@
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import { useAppSelector } from "../../app/hooks";
-import { getOrganization } from "../../slices/organization/organization.slice";
+import { getOrganization } from "../../slices/organizations/organizations.slice";
 import { useEffect, useMemo, useState } from "react";
 import { getAddressLabel } from "../table-animal-details/helpers/TableAnimalDetails.helpers";
 import { OutputFormat, fromAddress, setDefaults } from "react-geocode";
-import { Organization } from "../../services/api/petfinder/organization/organization.type";
-
-const center = {
-  lat: -3.745,
-  lng: -38.523,
-};
+import { Organization } from "../../services/api/petfinder/organizations/organizations.type";
 
 const containerStyle = {
   width: "400px",

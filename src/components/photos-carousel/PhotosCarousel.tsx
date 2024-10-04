@@ -3,12 +3,12 @@ import { Pet } from "../../services/api/petfinder/pets/pets.types";
 import Carousel from "react-material-ui-carousel";
 import { mergePhotosVideos } from "./helpers/AnimalPhoto.helpers";
 
-export interface AnimalPhotosProps {
+export interface PhotosProps {
   photos: Pet["photos"] | undefined;
-  videos: Pet["videos"] | undefined;
+  videos?: Pet["videos"] | undefined;
 }
 
-const AnimalPhotos: React.FC<AnimalPhotosProps> = ({ photos, videos }) => {
+const PhotosCarousel: React.FC<PhotosProps> = ({ photos, videos }) => {
   const isOnlyOneElement: boolean =
     Number(photos?.length) + Number(videos?.length) === 1;
 
@@ -47,4 +47,4 @@ const AnimalPhotos: React.FC<AnimalPhotosProps> = ({ photos, videos }) => {
   );
 };
 
-export default AnimalPhotos;
+export default PhotosCarousel;

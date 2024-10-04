@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import FrameAnimalDetails from "../../components/border-animal-details/FrameAnimalDetails";
+import AnimalDetailsContainer from "../../components/animal-details-container/AnimalDetailsContainer";
 import { Navigation } from "../../components/navigation/Navigation";
 import styles from "./AnimalDetails.module.css";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
@@ -51,7 +51,7 @@ const AnimalDetails = () => {
       {isPending ? (
         <CircularProgress className={styles["pet_details__progress"]} />
       ) : (
-        <FrameAnimalDetails />
+        <AnimalDetailsContainer />
       )}
     </>
   );
