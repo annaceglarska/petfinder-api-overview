@@ -3,9 +3,17 @@
 }
 
 .open-hours__hours-container p {
-  padding: 1px;
+  padding: 0px;
+}
+
+.open-hours__hours-container p:not(:first-of-type) {
+  margin: 10px 0;
 }
 
 .open-hours__hours-container div {
   padding: 1px 20px 20px 20px;
+}
+
+.open-hours__hours-container p:nth-child(2) {
+  color: green;
 }

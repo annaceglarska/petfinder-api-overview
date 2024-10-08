@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { Pet } from "../../services/api/petfinder/pets/pets.types";
 import Carousel from "react-material-ui-carousel";
-import { mergePhotosVideos } from "./helpers/AnimalPhoto.helpers";
+import { mergePhotosVideos } from "./helpers/PhotoCarousel.helpers";
 
 export interface PhotosProps {
   photos: Pet["photos"] | undefined;
