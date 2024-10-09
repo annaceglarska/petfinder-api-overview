@@ -1,0 +1,20 @@
+.additional-card__content {
+  margin-top: 30px;
+}
+
+.additional-card__description {
+  color: var(--success-color) !important;
+}
+
+.additional-card__card-actions {
+  position: absolute;
+  bottom: 0;
+  width: -webkit-fill-available;
+  justify-content: center;
+}
+
+.additional-card-element {
+  position: relative;
+  height: 100%;
+  background-color: var(--warning-color) !important;
+}

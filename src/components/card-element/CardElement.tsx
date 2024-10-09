@@ -35,15 +35,13 @@ export const CardElement: React.FC<CardElementProps> = (props) => {
 
   return (
     <Card className={styles["card-element"]}>
-      {isLogged ? (
+      {isLogged && (
         <IconButton
           aria-label="star-icon"
           className={styles["card__icon-button"]}
         >
           <StarBorderIcon />
         </IconButton>
-      ) : (
-        <></>
       )}
       <CardMedia
         sx={{ height: 250 }}

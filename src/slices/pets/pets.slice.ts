@@ -93,4 +93,6 @@ export const getPet = (state: RootState): Pet | undefined =>
 
 export const isPetDataPending = (state: RootState): boolean => state.pets.pet.status === "pending"
 
+export const totalCountOfPets = (state: RootState): number | undefined => state.pets.pets.value?.pagination.total_count
+
 export default petsSlice.reducer;
