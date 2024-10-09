@@ -1,7 +1,3 @@
-import { WorkingHours } from "../../../services/api/petfinder/organizations/organizations.type";
-
-export const checkIfAnyOpenHoursInfo = (openHoursData: WorkingHours): boolean =>
-    Object.entries(openHoursData).some(([_, value]) => value)
 
 export const changeOpenHoursFormat = (hours: string) => {
     /*

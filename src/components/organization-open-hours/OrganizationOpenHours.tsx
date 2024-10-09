@@ -3,23 +3,17 @@ import { useAppSelector } from "../../app/hooks";
 import { WorkingHours } from "../../services/api/petfinder/organizations/organizations.type";
 import { getOrganization } from "../../slices/organizations/organizations.slice";
 import styles from "./OrganizationOpenHours.module.css";
-import {
-  changeOpenHoursFormat,
-  checkIfAnyOpenHoursInfo,
-} from "./helpers/OrganizationOpenHours";
+import { changeOpenHoursFormat } from "./helpers/OrganizationOpenHours";
 
 const OrganizationOpenHours = () => {
   const organizationHours: WorkingHours | undefined =
     useAppSelector(getOrganization)?.hours;
-  const isAnyOpenHoursInfo: boolean = organizationHours
-    ? checkIfAnyOpenHoursInfo(organizationHours)
-    : false;
 
   const openHoursInfo = useMemo(() => {
-    if (!isAnyOpenHoursInfo) {
+    if (!organizationHours) {
       return [];
     }
-    const organizationHoursArray = Object.entries(organizationHours!);
+    const organizationHoursArray = Object.entries(organizationHours);
     const currentDay = new Date().getDay();
     const firstPartOfOrganizationHoursArray = organizationHoursArray.slice(
       0,
@@ -39,10 +33,10 @@ const OrganizationOpenHours = () => {
           {day}: {changeOpenHoursFormat(hours)}
         </p>
       ));
-  }, [organizationHours, isAnyOpenHoursInfo]);
+  }, [organizationHours]);
   return (
     <div className={styles["open-hours__hours-container"]}>
-      {isAnyOpenHoursInfo && (
+      {Boolean(openHoursInfo.length) && (
         <div>
           <p>
             <b>Hours</b>
