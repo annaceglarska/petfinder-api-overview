@@ -16,6 +16,7 @@ import { MessageFormData } from "./ContactForm.types";
 import { StyledButton } from "../../styled/SendMessageButton";
 import messagesApiService from "./../../services/api/backend/message/message.service";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 export interface ContactFormProps {
   closeModal: () => void;
@@ -25,6 +26,7 @@ const ContactForm: React.FC<ContactFormProps> = (props) => {
   const pet = useAppSelector(getPet);
   const organization = useAppSelector(getOrganization);
   const [hoverFormButton, setHoverFormButton] = useState<boolean>(false);
+  const { t } = useTranslation();
   const {
     register,
     handleSubmit,
@@ -59,16 +61,16 @@ const ContactForm: React.FC<ContactFormProps> = (props) => {
         <FormControl>
           <TextField
             {...register("email", {
-              required: "This field is required",
+              required: t("REQUIRED_FIELD"),
               pattern: {
                 value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                message: "Please enter a valid email address",
+                message: t("EMAIL_MESSAGE"),
               },
             })}
             aria-invalid={Boolean(errors.email)}
             color="secondary"
             variant="standard"
-            label="Your email"
+            label={t("YOUR_EMAIL")}
             className={styles["contact-form__fields"]}
           />
           {errors.email && (
@@ -80,10 +82,10 @@ const ContactForm: React.FC<ContactFormProps> = (props) => {
 
         <FormControl>
           <TextField
-            {...register("name", { required: "This field is required" })}
+            {...register("name", { required: t("REQUIRED_FIELD") })}
             color="secondary"
             variant="standard"
-            label="Your name"
+            label={t("YOUR_NAME")}
             type="text"
             aria-invalid={Boolean(errors.name)}
           />
@@ -96,15 +98,15 @@ const ContactForm: React.FC<ContactFormProps> = (props) => {
         <FormControl>
           <TextField
             {...register("phone", {
-              required: true,
+              required: t("REQUIRED_FIELD"),
               pattern: {
                 value: /^\+?([0-9]{2})?[0-9]{9}$/,
-                message: "Please enter a valid phone number",
+                message: t("WRONG_PHONE_MESSAGE"),
               },
             })}
             color="secondary"
             variant="standard"
-            label="Your phone number"
+            label={t("YOUR_PHONE")}
             aria-invalid={Boolean(errors.phone)}
           />
           {errors.phone && (
@@ -115,9 +117,9 @@ const ContactForm: React.FC<ContactFormProps> = (props) => {
         </FormControl>
         <FormControl>
           <TextField
-            {...register("message", { required: "This field is required" })}
+            {...register("message", { required: t("REQUIRED_FIELD") })}
             color="secondary"
-            label="Enter your message"
+            label={t("YOUR_MESSAGE")}
             type="text"
             rows={6}
             multiline={true}
@@ -133,13 +135,13 @@ const ContactForm: React.FC<ContactFormProps> = (props) => {
         <FormControlLabel
           control={
             <Checkbox
-              {...register("agreement", { required: "This field is required" })}
+              {...register("agreement", { required: t("REQUIRED_FIELD") })}
               icon={<RadioButtonUncheckedIcon />}
               checkedIcon={<CheckCircleIcon color="secondary" />}
               aria-invalid={Boolean(errors.agreement)}
             />
           }
-          label="I declare that I have read the Privacy Policy"
+          label={t("AGREEMENT_MESSAGE")}
         />
         {errors.agreement && (
           <Typography component={"span"} sx={{ color: "red" }}>
@@ -156,7 +158,7 @@ const ContactForm: React.FC<ContactFormProps> = (props) => {
           onMouseEnter={() => setHoverFormButton(true)}
           onMouseLeave={() => setHoverFormButton(false)}
         >
-          Send message
+          {t("SEND_MESSAGE")}
         </StyledButton>
       </div>
     </form>

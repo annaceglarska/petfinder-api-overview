@@ -24,6 +24,7 @@ import Modal from "@mui/material/Modal";
 import { SignIn } from "../sign-in/SignIn";
 import TokenService from "../../services/token/token";
 import logo from "../../assets/images/petfinder_logo.png";
+import { useTranslation } from "react-i18next";
 
 export interface PageSetting {
   label: string;
@@ -43,6 +44,8 @@ export const Navigation: React.FC = () => {
   const [open, setOpen] = useState<boolean>(false);
   const dispatch = useAppDispatch();
 
+  const { t } = useTranslation();
+
   useEffect(() => {
     if (open && isLogged) {
       handleClose();
@@ -59,7 +62,7 @@ export const Navigation: React.FC = () => {
     { label: "Profile", to: "/user" },
     { label: "Account" },
     { label: "Dashboard" },
-    { label: "Sign out", onClick: onSignOutClick },
+    { label: t("SIGN_OUT"), onClick: onSignOutClick },
   ];
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -169,9 +172,7 @@ export const Navigation: React.FC = () => {
                 color: "inherit",
                 textDecoration: "none",
               }}
-            >
-              LOGO
-            </Typography>
+            ></Typography>
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               {pages.map((page) => (
                 <Button
@@ -236,13 +237,13 @@ export const Navigation: React.FC = () => {
                     className={styles["navigation__button"]}
                     onClick={handleOpen}
                   >
-                    Sign in
+                    {t("SIGN_IN")}
                   </Button>
                   <Button
                     variant="outlined"
                     className={`${styles["navigation__button"]} ${styles["navigation__button--sign-up"]}`}
                   >
-                    Sign up
+                    {t("SIGN_UP")}
                   </Button>
                 </>
               )}
@@ -263,7 +264,7 @@ export const Navigation: React.FC = () => {
             component="h2"
             className={styles["navigation__modal-header"]}
           >
-            Sign in
+            {t("SIGN_IN")}
           </Typography>
           <SignIn />
         </Box>

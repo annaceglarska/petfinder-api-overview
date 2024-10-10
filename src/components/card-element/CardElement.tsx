@@ -15,6 +15,7 @@ import styles from "./CardElement.module.css";
 import { Link } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
 import { isUserLogged } from "../../slices/user/user.slice";
+import { useTranslation } from "react-i18next";
 
 export interface CardElementProps {
   data: Pet | Organization;
@@ -22,6 +23,7 @@ export interface CardElementProps {
 
 export const CardElement: React.FC<CardElementProps> = (props) => {
   const isLogged = useAppSelector(isUserLogged);
+  const { t } = useTranslation();
   const dataType: "pet" | "organization" =
     "type" in props.data ? "pet" : "organization";
 
@@ -64,7 +66,7 @@ export const CardElement: React.FC<CardElementProps> = (props) => {
             props.data.id
           }`}
         >
-          Go to details
+          {t("GO_TO_DETAILS")}
         </Button>
       </CardActions>
     </Card>

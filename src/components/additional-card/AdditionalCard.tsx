@@ -11,8 +11,10 @@ import { useAppSelector } from "../../app/hooks";
 import { totalCountOfPets } from "../../slices/pets/pets.slice";
 import logo from "./../../assets/images/petfinder_logo.png";
 import styles from "./AdditionalCard.module.css";
+import { useTranslation } from "react-i18next";
 
 const AdditionalCard = () => {
+  const { t } = useTranslation();
   const totalPetsCount = useAppSelector(totalCountOfPets);
   return (
     <Card className={styles["additional-card-element"]}>
@@ -25,7 +27,7 @@ const AdditionalCard = () => {
       </CardContent>
       <CardActions className={styles["additional-card__card-actions"]}>
         <Button size="large" component={Link} to={``}>
-          Meet them
+          {t("GO_TO_OTHER_PETS")}
         </Button>
       </CardActions>
     </Card>

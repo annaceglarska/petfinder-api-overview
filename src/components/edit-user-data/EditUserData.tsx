@@ -11,6 +11,7 @@ import { editUserDataAsync } from "../../slices/user/user.api-actions";
 import { UserData } from "../../services/api/backend/auth/auth.types";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { EditUserFormData } from "./EditUserData.types";
+import { useTranslation } from "react-i18next";
 
 export interface EditUserDataProps {
   handleEdition: () => void;
@@ -21,6 +22,7 @@ const EditUserData: React.FC<EditUserDataProps> = (props) => {
 
   const isReady = useAppSelector(isUserEditionReady);
   const userData = useAppSelector(getUser);
+  const { t } = useTranslation();
 
   const {
     register,
@@ -64,9 +66,9 @@ const EditUserData: React.FC<EditUserDataProps> = (props) => {
         <FormControl sx={{ m: 1, width: 300 }}>
           <TextField
             {...register("name", {
-              required: "This field is required",
+              required: t("REQUIRED_FIELD"),
             })}
-            label="name"
+            label={t("YOUR_NAME")}
             aria-invalid={Boolean(errors.name)}
           />
           {errors.name && (
@@ -78,9 +80,9 @@ const EditUserData: React.FC<EditUserDataProps> = (props) => {
         <FormControl sx={{ m: 1, width: 300 }}>
           <TextField
             {...register("surname", {
-              required: "This field is required",
+              required: t("REQUIRED_FIELD"),
             })}
-            label="surname"
+            label={t("YOUR_SURNAME")}
             aria-invalid={Boolean(errors.surname)}
           />
           {errors.surname && (
@@ -92,13 +94,13 @@ const EditUserData: React.FC<EditUserDataProps> = (props) => {
         <FormControl sx={{ m: 1, width: 300 }}>
           <TextField
             {...register("email", {
-              required: "This field is required",
+              required: t("REQUIRED_FIELD"),
               pattern: {
                 value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                message: "Please enter a valid email address",
+                message: t("EMAIL_MESSAGE"),
               },
             })}
-            label="email"
+            label={t("YOUR_EMAIL")}
             aria-invalid={Boolean(errors.email)}
           />
           {errors.email && (
@@ -110,13 +112,13 @@ const EditUserData: React.FC<EditUserDataProps> = (props) => {
         <FormControl sx={{ m: 1, width: 300 }}>
           <TextField
             {...register("phone", {
-              required: "This field is required",
+              required: t("REQUIRED_FIELD"),
               pattern: {
                 value: /^\+?([0-9]{2})?[0-9]{9}$/,
-                message: "Please enter a valid phone number",
+                message: t("WRONG_PHONE_MESSAGE"),
               },
             })}
-            label="phone"
+            label={t("YOUR_PHONE")}
             aria-invalid={Boolean(errors.phone)}
           />
           {errors.phone && (
@@ -131,7 +133,7 @@ const EditUserData: React.FC<EditUserDataProps> = (props) => {
           type="submit"
           className={styles["form__button--submit"]}
         >
-          Submit
+          {t("SUBMIT")}
         </Button>
       </form>
     </>

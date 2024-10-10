@@ -38,6 +38,7 @@ import {
 import { Organization } from "../../services/api/petfinder/organizations/organizations.type";
 import { PetsQueryParams } from "../../services/api/petfinder/pets/pets.types";
 import styles from "../filters-animals/FiltersAnimals.module.css";
+import { useTranslation } from "react-i18next";
 
 export interface FormData {
   gender: string | undefined;
@@ -63,6 +64,7 @@ const FiltersAnimals: React.FC<FiltersAnimalsProps> = (props) => {
   const dispatch = useAppDispatch();
   const organizationsByPhrase: Organization[] =
     useAppSelector(getOrganizations);
+  const { t } = useTranslation();
   const organizationOptions: SelectOption[] = useMemo<SelectOption[]>(() => {
     if (!organizationsByPhrase) {
       return [];
@@ -193,13 +195,15 @@ const FiltersAnimals: React.FC<FiltersAnimalsProps> = (props) => {
     <form onSubmit={submitHandler}>
       <div>
         <FormControl sx={{ m: 1, width: 300 }}>
-          <InputLabel id="gender-field">Gender</InputLabel>
+          <InputLabel id="gender-field">{t("GENDER")}</InputLabel>
           <Select
             labelId="gender-field"
             name="gender"
             value={filterData.gender || ""}
             onChange={handleChange}
-            input={<OutlinedInput id="select-multiple-chip" label="Gender" />}
+            input={
+              <OutlinedInput id="select-multiple-chip" label={t("GENDER")} />
+            }
           >
             {genderDictionary.map((gender) => (
               <MenuItem key={gender.value} value={gender.value}>
@@ -211,13 +215,15 @@ const FiltersAnimals: React.FC<FiltersAnimalsProps> = (props) => {
       </div>
       <div>
         <FormControl sx={{ m: 1, width: 300 }}>
-          <InputLabel id="size-field">Size</InputLabel>
+          <InputLabel id="size-field">{t("SIZE")}</InputLabel>
           <Select
             labelId="size-field"
             name="size"
             value={filterData.size || ""}
             onChange={handleChange}
-            input={<OutlinedInput id="select-multiple-chip" label="Size" />}
+            input={
+              <OutlinedInput id="select-multiple-chip" label={t("SIZE")} />
+            }
           >
             {sizeDictionary.map((size) => (
               <MenuItem key={size.value} value={size.value}>
@@ -229,13 +235,13 @@ const FiltersAnimals: React.FC<FiltersAnimalsProps> = (props) => {
       </div>
       <div>
         <FormControl sx={{ m: 1, width: 300 }}>
-          <InputLabel id="age-field">Age</InputLabel>
+          <InputLabel id="age-field">{t("AGE")}</InputLabel>
           <Select
             labelId="age-field"
             name="age"
             value={filterData.age || ""}
             onChange={handleChange}
-            input={<OutlinedInput id="select-multiple-chip" label="Age" />}
+            input={<OutlinedInput id="select-multiple-chip" label={t("AGE")} />}
           >
             {ageDictionary.map((age) => (
               <MenuItem key={age.value} value={age.value}>
@@ -247,13 +253,15 @@ const FiltersAnimals: React.FC<FiltersAnimalsProps> = (props) => {
       </div>
       <div>
         <FormControl sx={{ m: 1, width: 300 }}>
-          <InputLabel id="coat-field">Coat</InputLabel>
+          <InputLabel id="coat-field">{t("COAT")}</InputLabel>
           <Select
             labelId="coat-field"
             name="coat"
             value={filterData.coat || ""}
             onChange={handleChange}
-            input={<OutlinedInput id="select-multiple-chip" label="Coat" />}
+            input={
+              <OutlinedInput id="select-multiple-chip" label={t("COAT")} />
+            }
           >
             {coatsDictionary.map((coat) => (
               <MenuItem key={coat.value} value={coat.value}>
@@ -265,13 +273,15 @@ const FiltersAnimals: React.FC<FiltersAnimalsProps> = (props) => {
       </div>
       <div>
         <FormControl sx={{ m: 1, width: 300 }}>
-          <InputLabel id="status-field">Status</InputLabel>
+          <InputLabel id="status-field">{t("STATUS")}</InputLabel>
           <Select
             labelId="status-field"
             name="status"
             value={filterData.status || ""}
             onChange={handleChange}
-            input={<OutlinedInput id="select-multiple-chip" label="Status" />}
+            input={
+              <OutlinedInput id="select-multiple-chip" label={t("STATUS")} />
+            }
           >
             {statusDictionary.map((status) => (
               <MenuItem key={status.value} value={status.value}>
@@ -283,13 +293,15 @@ const FiltersAnimals: React.FC<FiltersAnimalsProps> = (props) => {
       </div>
       <div>
         <FormControl sx={{ m: 1, width: 300 }}>
-          <InputLabel id="status-field">Color</InputLabel>
+          <InputLabel id="status-field">{t("COLOR")}</InputLabel>
           <Select
             labelId="color-field"
             name="color"
             value={filterData.color || ""}
             onChange={handleChange}
-            input={<OutlinedInput id="select-multiple-chip" label="Color" />}
+            input={
+              <OutlinedInput id="select-multiple-chip" label={t("COLOR")} />
+            }
           >
             {colorsDictionary.map((color) => (
               <MenuItem key={color.value} value={color.value}>
@@ -307,10 +319,10 @@ const FiltersAnimals: React.FC<FiltersAnimalsProps> = (props) => {
                 name="good_with_children"
                 checked={filterData.good_with_children || false}
                 onChange={handleCheckboxChange}
-                inputProps={{ "aria-label": "Good with children" }}
+                inputProps={{ "aria-label": t("GOOD_WITH_CHILDREN") }}
               />
             }
-            label="Good with children"
+            label={t("GOOD_WITH_CHILDREN")}
           />
         </FormControl>
       </div>
@@ -322,10 +334,10 @@ const FiltersAnimals: React.FC<FiltersAnimalsProps> = (props) => {
                 name="good_with_dogs"
                 checked={filterData.good_with_dogs || false}
                 onChange={handleCheckboxChange}
-                inputProps={{ "aria-label": "Good with dogs" }}
+                inputProps={{ "aria-label": t("GOOD_WITH_DOGS") }}
               />
             }
-            label="Good with dogs"
+            label={t("GOOD_WITH_DOGS")}
           />
         </FormControl>
       </div>
@@ -337,10 +349,10 @@ const FiltersAnimals: React.FC<FiltersAnimalsProps> = (props) => {
                 name="good_with_cats"
                 checked={filterData.good_with_cats || false}
                 onChange={handleCheckboxChange}
-                inputProps={{ "aria-label": "Good with cats" }}
+                inputProps={{ "aria-label": t("GOOD_WITH_CATS") }}
               />
             }
-            label="Good with cats"
+            label={t("GOOD_WITH_CATS")}
           />
         </FormControl>
       </div>
@@ -352,10 +364,10 @@ const FiltersAnimals: React.FC<FiltersAnimalsProps> = (props) => {
                 name="house_trained"
                 checked={filterData.house_trained || false}
                 onChange={handleCheckboxChange}
-                inputProps={{ "aria-label": "House trained" }}
+                inputProps={{ "aria-label": t("HOUSE_TRAINED") }}
               />
             }
-            label="House trained"
+            label={t("HOUSE_TRAINED")}
           />
         </FormControl>
       </div>
@@ -367,10 +379,10 @@ const FiltersAnimals: React.FC<FiltersAnimalsProps> = (props) => {
                 name="declawed"
                 checked={filterData.declawed || false}
                 onChange={handleCheckboxChange}
-                inputProps={{ "aria-label": "Declawed" }}
+                inputProps={{ "aria-label": t("DECLAWED") }}
               />
             }
-            label="Declawed"
+            label={t("DECLAWED")}
           />
         </FormControl>
       </div>
@@ -382,10 +394,10 @@ const FiltersAnimals: React.FC<FiltersAnimalsProps> = (props) => {
                 name="special_needs"
                 checked={filterData.special_needs || false}
                 onChange={handleCheckboxChange}
-                inputProps={{ "aria-label": "Special needs" }}
+                inputProps={{ "aria-label": t("SPECIAL_NEEDS") }}
               />
             }
-            label="Special needs"
+            label={t("SPECIAL_NEEDS")}
           />
         </FormControl>
       </div>
@@ -398,14 +410,18 @@ const FiltersAnimals: React.FC<FiltersAnimalsProps> = (props) => {
           options={organizationOptions}
           sx={{ width: 300 }}
           renderInput={(params) => (
-            <TextField {...params} name="organization" label="Organization" />
+            <TextField
+              {...params}
+              name="organization"
+              label={t("ORGANIZATION")}
+            />
           )}
         />
       </div>
       <div>
         <FormControl sx={{ m: 1, width: 300 }}>
           <TextField
-            label="localization"
+            label={t("LOCALIZATION")}
             onChange={handleTextFieldChange}
             name="localization"
           />
@@ -420,7 +436,7 @@ const FiltersAnimals: React.FC<FiltersAnimalsProps> = (props) => {
         type="submit"
         className={styles["form__button--submit"]}
       >
-        Find
+        {t("FIND")}
       </Button>
     </form>
   );

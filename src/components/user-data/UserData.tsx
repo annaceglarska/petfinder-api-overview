@@ -1,5 +1,5 @@
 import { useState } from "react";
-import DispalyUserData from "../dispaly-user-data/DispalyUserData";
+import DisplayUserData from "../dispaly-user-data/DispalyUserData";
 import EditUserData from "../edit-user-data/EditUserData";
 
 const UserData: React.FC = () => {
@@ -14,7 +14,7 @@ const UserData: React.FC = () => {
       {isEdition ? (
         <EditUserData handleEdition={handleEdition} />
       ) : (
-        <DispalyUserData handleEdition={handleEdition} />
+        <DisplayUserData handleEdition={handleEdition} />
       )}
     </>
   );
