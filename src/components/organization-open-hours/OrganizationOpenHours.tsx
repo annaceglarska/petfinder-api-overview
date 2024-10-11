@@ -4,10 +4,12 @@ import { WorkingHours } from "../../services/api/petfinder/organizations/organiz
 import { getOrganization } from "../../slices/organizations/organizations.slice";
 import styles from "./OrganizationOpenHours.module.css";
 import { changeOpenHoursFormat } from "./helpers/OrganizationOpenHours";
+import { useTranslation } from "react-i18next";
 
 const OrganizationOpenHours = () => {
   const organizationHours: WorkingHours | undefined =
     useAppSelector(getOrganization)?.hours;
+  const { t } = useTranslation();
 
   const openHoursInfo = useMemo(() => {
     if (!organizationHours) {
@@ -39,7 +41,7 @@ const OrganizationOpenHours = () => {
       {Boolean(openHoursInfo.length) && (
         <div>
           <p>
-            <b>Hours</b>
+            <b>{t("OPENING_HOURS")}</b>
           </p>
           {openHoursInfo}
         </div>

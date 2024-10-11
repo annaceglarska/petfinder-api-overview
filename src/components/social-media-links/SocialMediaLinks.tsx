@@ -9,9 +9,11 @@ import YouTubeIcon from "@mui/icons-material/YouTube";
 import { SocialMedia } from "../../services/api/petfinder/organizations/organizations.type";
 import { useMemo } from "react";
 import styles from "./SocialMedia.module.css";
+import { useTranslation } from "react-i18next";
 
 const SocialMediaLinks = () => {
   const organizationSocialMedia = useAppSelector(getOrganization)?.social_media;
+  const { t } = useTranslation();
 
   const socialMediaConfig: Record<keyof SocialMedia, any> = {
     facebook: FacebookIcon,
@@ -39,7 +41,7 @@ const SocialMediaLinks = () => {
 
   return (
     <div className={styles["social-media__container"]}>
-      {Boolean(socialMedia.length) && <p>Follow us</p>}
+      {Boolean(socialMedia.length) && <p>{t("FOLLOW_US")}</p>}
       <div>{socialMedia}</div>
     </div>
   );

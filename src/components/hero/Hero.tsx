@@ -2,9 +2,11 @@ import { Button } from "@mui/material";
 import hero_image from "./../../assets/images/hero_image.jpg";
 import styles from "./Hero.module.css";
 import { Link, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export const Hero: React.FC = () => {
   const locationPath = useLocation();
+  const { t } = useTranslation();
 
   return (
     <div className={styles["hero-wrapper"]}>
@@ -12,32 +14,32 @@ export const Hero: React.FC = () => {
       {locationPath.pathname.includes("/pets") ? (
         <div className={styles["hero-buttons"]}>
           <Button variant="contained" component={Link} to="/pets/dogs">
-            Find a dog
+            {t("FIND_DOG")}
           </Button>
           <Button variant="contained" component={Link} to="/pets/cats">
-            Find a cat
+            {t("FIND_CAT")}
           </Button>
           <Button variant="contained" component={Link} to="/pets/rabbits">
-            Find a rabbit
+            {t("FIND_RABBIT")}
           </Button>
           <Button
             variant="contained"
             component={Link}
             to="/pets/small-and-furies"
           >
-            Find small and furry
+            {t("FIND_SMALL_FURRY")}
           </Button>
           <Button variant="contained" component={Link} to="/pets/horses">
-            Find a horse
+            {t("FIND_HORSE")}
           </Button>
           <Button variant="contained" component={Link} to="/pets/birds">
-            Find a bird
+            {t("FIND_BIRD")}
           </Button>
           <Button variant="contained" component={Link} to="/pets/barnyards">
-            Find a barnyard
+            {t("FIND_BARNYARD")}
           </Button>
           <Button variant="contained" component={Link} to="/pets/others">
-            Find other
+            {t("FIND_OTHER")}
           </Button>
         </div>
       ) : (

@@ -13,10 +13,12 @@ import {
 import { Pet } from "../../services/api/petfinder/pets/pets.types";
 import { CircularProgress } from "@mui/material";
 import { isPetfinderTokenReady } from "../../slices/config/config.slice";
+import { useTranslation } from "react-i18next";
 
 const AnimalDetails = () => {
   const params = useParams();
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
   const isPending: boolean = useAppSelector(isPetDataPending);
   const pet: Pet | undefined = useAppSelector(getPet);
@@ -45,7 +47,7 @@ const AnimalDetails = () => {
     <>
       <Navigation />
       <div className={styles["top-background"]}>
-        <span className={styles["pet-details__span"]}>My name is</span>
+        <span className={styles["pet-details__span"]}>{t("MY_NAME_IS")}</span>
         <h1 className={styles["pet_details__header"]}>{pet?.name}</h1>
       </div>
       {isPending ? (

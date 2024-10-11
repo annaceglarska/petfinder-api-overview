@@ -1,46 +1,47 @@
 import { SelectOption } from "./filters.types";
+import i18next from "./../../../config/i18next";
 
 export const sizeDictionary: SelectOption[] = [
   {
-    label: "Small",
+    label: i18next.t("SMALL"),
     value: "small",
   },
   {
-    label: "Medium",
+    label: i18next.t("MEDIUM"),
     value: "medium",
   },
   {
-    label: "Large",
+    label: i18next.t("LARGE"),
     value: "large",
   },
   {
-    label: "Xlarge",
+    label: i18next.t("XLARGE"),
     value: "xlarge",
   },
 ];
 
 export const ageDictionary: SelectOption[] = [
   {
-    label: "Baby",
+    label: i18next.t("BABY"),
     value: "baby",
   },
   {
-    label: "Young",
+    label: i18next.t("YOUNG"),
     value: "young",
   },
   {
-    label: "Adult",
+    label: i18next.t("ADULT"),
     value: "adult",
   },
 ];
 
 export const statusDictionary: SelectOption[] = [
   {
-    label: "Adoptable",
+    label: i18next.t("ADOPTABLE"),
     value: "adoptable",
   },
   {
-    label: "Adopted",
+    label: i18next.t("ADOPTED"),
     value: "adopted",
   },
 ];

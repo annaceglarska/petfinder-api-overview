@@ -9,6 +9,8 @@ import { IconButton, Modal, Typography } from "@mui/material";
 import { StyledBox } from "../../styled/StyledBox";
 import ContactForm from "../contact-form/ContactForm";
 import CloseIcon from "@mui/icons-material/Close";
+import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 export interface OrganizationContactInfoProps {
   context: "organization" | "pet";
@@ -23,6 +25,7 @@ const OrganizationContactInfo: React.FC<OrganizationContactInfoProps> = (
   const [hoverPhoneButton, setHoverPhoneButton] = useState<Boolean>(false);
   const [hoverEmailButton, setHoverEmailButton] = useState<Boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const { t } = useTranslation();
 
   const onClickPhoneButtonHandler = () => setIsNumberHidden(false);
   const handleModalOpen = () => setIsModalOpen(true);
@@ -44,7 +47,7 @@ const OrganizationContactInfo: React.FC<OrganizationContactInfoProps> = (
       {(Boolean(organization?.email) || Boolean(organization?.phone)) &&
         props.context === "pet" && (
           <div className={styles["organization-contact-info__container"]}>
-            <p>Interested in adopting this pet?</p>
+            <p>{t("INTERESTED_IN_ADOPTING")}</p>
           </div>
         )}
 
@@ -53,7 +56,7 @@ const OrganizationContactInfo: React.FC<OrganizationContactInfoProps> = (
           {!isNumberHidden && (
             <p>
               <small>
-                <b>Mention that you are calling from Petfinder!</b>
+                <b>{t("CALLING_FROM_PETFINDER")}</b>
               </small>
             </p>
           )}
@@ -81,7 +84,7 @@ const OrganizationContactInfo: React.FC<OrganizationContactInfoProps> = (
                 onClick={handleModalOpen}
               >
                 <EmailIcon />
-                Ask about the pet
+                {t("ASK_ABOUT_PET")}
               </Button>
             )}
           </div>
@@ -107,7 +110,7 @@ const OrganizationContactInfo: React.FC<OrganizationContactInfoProps> = (
             variant="h6"
             component="h2"
           >
-            Ask about pet
+            {t("ASK_ABOUT_PET")}
           </Typography>
           <ContactForm closeModal={closeModal} />
         </StyledBox>

@@ -7,10 +7,13 @@ import OrganizationDetails from "../organization-details/OrganizationDetails";
 import { getPets } from "../../slices/pets/pets.slice";
 import { CardsGrid } from "../cards-grid/CardsGrid";
 import AdditionalCard from "../additional-card/AdditionalCard";
+import { useTranslation } from "react-i18next";
 
 const OrganizationDetailsContainer = () => {
   const organization = useAppSelector(getOrganization);
   const pets = useAppSelector(getPets);
+  const { t } = useTranslation();
+
   return (
     <Container maxWidth="lg">
       <div className={styles["organization-details__container"]}>
@@ -23,13 +26,13 @@ const OrganizationDetailsContainer = () => {
 
           {!!organization?.mission_statement && (
             <div>
-              <h1>Our Mission</h1>
+              <h1>{t("OUR_MISSION")}</h1>
               <p>{organization.mission_statement}</p>
             </div>
           )}
           {pets.length && (
             <>
-              <h1>Our Pets</h1>
+              <h1>{t("OUR_PETS")}</h1>
               <CardsGrid
                 data={pets}
                 gridCardConfig={{ xl: 4, md: 6, sm: 12 }}

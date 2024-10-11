@@ -11,9 +11,11 @@ import {
 import styles from "./SignIn.module.css";
 import { getError, isUserSignInPending } from "../../slices/user/user.slice";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 export const SignIn: React.FC = () => {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
   const {
     register,
@@ -41,14 +43,14 @@ export const SignIn: React.FC = () => {
       <FormControl className={styles["sign-panel__control"]}>
         <TextField
           {...register("email", {
-            required: "This field is required",
+            required: t("REQUIRED_FIELD"),
             pattern: {
               value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
               message: "Please enter a valid email address",
             },
           })}
           aria-invalid={Boolean(errors.email)}
-          label="Your email"
+          label={t("YOUR_EMAIL")}
           className={styles["sign-panel__text-field"]}
         />
         {errors.email && (
@@ -60,9 +62,9 @@ export const SignIn: React.FC = () => {
       <FormControl className={styles["sign-panel__control"]}>
         <TextField
           {...register("password", {
-            required: "This field is required",
+            required: t("REQUIRED_FIELD"),
           })}
-          label="password"
+          label={t("YOUR_PASSWORD")}
           aria-invalid={Boolean(errors.password)}
           className={styles["sign-panel__text-field"]}
         />
@@ -74,7 +76,7 @@ export const SignIn: React.FC = () => {
       </FormControl>
       {Boolean(errorsFromBackend) && (
         <p className={styles["sign-panel__error"]}>
-          Incorrect login or password.
+          {t("INCORRECT_LOGIN_OR_PASSWORD")}
         </p>
       )}
 
@@ -87,7 +89,7 @@ export const SignIn: React.FC = () => {
         {isPendingStatus ? (
           <CircularProgress style={{ width: "30px" }} />
         ) : (
-          "Submit"
+          t("SUBMIT")
         )}
       </Button>
     </form>
