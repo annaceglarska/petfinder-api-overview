@@ -5,18 +5,22 @@ import pl from "./translations/pl.json"
 import de from "./translations/de.json"
 import { initReactI18next } from 'react-i18next';
 
+export const NAMESPACE = 'translation';
+export const LANGUAGES = ['de', 'en', 'pl'];
+
 i18next
     .use(LanguageDetector)
     .use(initReactI18next)
     .init<any>({
-        supportedLngs: ['de', 'en', 'pl'],
+        supportedLngs: LANGUAGES,
         debug: true,
-        ns: ['translation'],
+        ns: [NAMESPACE],
         resources: {
             en,
             pl,
             de
         }
     });
+
 
 export default i18next;

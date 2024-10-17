@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -25,6 +25,8 @@ import { SignIn } from "../sign-in/SignIn";
 import TokenService from "../../services/token/token";
 import logo from "../../assets/images/petfinder_logo.png";
 import { useTranslation } from "react-i18next";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { LANGUAGES } from "../../config/i18next";
 
 export interface PageSetting {
   label: string;
@@ -42,9 +44,11 @@ export const Navigation: React.FC = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const [open, setOpen] = useState<boolean>(false);
+  const [LanguageAnchorEl, setLanguageAnchorEl] =
+    React.useState<null | HTMLElement>(null);
   const dispatch = useAppDispatch();
 
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     if (open && isLogged) {
@@ -58,12 +62,26 @@ export const Navigation: React.FC = () => {
     handleCloseUserMenu();
   };
 
+  const languagesToDisplay = useMemo(
+    () =>
+      LANGUAGES.filter((language) => language !== i18n.language).map(
+        (language) => (
+          <MenuItem onClick={() => changeLanguage(language)}>
+            {language.toUpperCase()}
+          </MenuItem>
+        )
+      ),
+    [LANGUAGES, i18n.language]
+  );
+
   const settings: PageSetting[] = [
     { label: "Profile", to: "/user" },
     { label: "Account" },
     { label: "Dashboard" },
     { label: t("SIGN_OUT"), onClick: onSignOutClick },
   ];
+
+  const openLanguageMenu = Boolean(LanguageAnchorEl);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -85,6 +103,21 @@ export const Navigation: React.FC = () => {
   const handleClose = () => {
     setOpen(false);
     dispatch(clearErrors());
+  };
+
+  const handleClickLanguageMenu = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    setLanguageAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseLanguageMenu = () => {
+    setLanguageAnchorEl(null);
+  };
+
+  const changeLanguage = (language: string) => {
+    i18n.changeLanguage(language);
+    setLanguageAnchorEl(null);
   };
 
   return (
@@ -247,6 +280,28 @@ export const Navigation: React.FC = () => {
                   </Button>
                 </>
               )}
+              <Button
+                aria-controls={openLanguageMenu ? "language-menu" : undefined}
+                aria-haspopup="true"
+                aria-expanded={openLanguageMenu ? "true" : undefined}
+                variant="contained"
+                disableElevation
+                onClick={handleClickLanguageMenu}
+                endIcon={<KeyboardArrowDownIcon />}
+              >
+                {i18n.language}
+              </Button>
+              <Menu
+                id="basic-menu"
+                anchorEl={LanguageAnchorEl}
+                open={openLanguageMenu}
+                onClose={handleCloseLanguageMenu}
+                MenuListProps={{
+                  "aria-labelledby": "basic-button",
+                }}
+              >
+                {languagesToDisplay}
+              </Menu>
             </Box>
           </Toolbar>
         </Container>
