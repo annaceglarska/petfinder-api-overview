@@ -1,6 +1,5 @@
 import { useParams } from "react-router-dom";
 import AnimalDetailsContainer from "../../components/animal-details-container/AnimalDetailsContainer";
-import { Navigation } from "../../components/navigation/Navigation";
 import styles from "./AnimalDetails.module.css";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { useEffect } from "react";
@@ -45,7 +44,6 @@ const AnimalDetails = () => {
 
   return (
     <>
-      <Navigation />
       <div className={styles["top-background"]}>
         <span className={styles["pet-details__span"]}>{t("MY_NAME_IS")}</span>
         <h1 className={styles["pet_details__header"]}>{pet?.name}</h1>

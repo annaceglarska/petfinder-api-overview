@@ -24,10 +24,7 @@ import {
   getPetTypesAsync,
   getPetsAsync,
 } from "../../slices/pets/pets.api-actions";
-import {
-  clearTypes,
-  getPetTypeInfoByTypeName,
-} from "../../slices/pets/pets.slice";
+import { clearTypes, getTypesOfPets } from "../../slices/pets/pets.slice";
 import { FilterDictionaries, SelectOption } from "./filters/filters.types";
 import { createDictionary } from "./filters/filters.helpers";
 import { getOrganizationsAsync } from "../../slices/organizations/organizations.api-actions";
@@ -36,23 +33,28 @@ import {
   getOrganizations,
 } from "../../slices/organizations/organizations.slice";
 import { Organization } from "../../services/api/petfinder/organizations/organizations.type";
-import { PetsQueryParams } from "../../services/api/petfinder/pets/pets.types";
+import {
+  AnimalType,
+  AnimalTypesDetails,
+  PetsQueryParams,
+} from "../../services/api/petfinder/pets/pets.types";
 import styles from "../filters-animals/FiltersAnimals.module.css";
 import { useTranslation } from "react-i18next";
 
 export interface FormData {
+  type: AnimalType | undefined;
   gender: string | undefined;
   size: string | undefined;
   age: string | undefined;
   coat: string | undefined;
   status: string | undefined;
   color: string | undefined;
-  good_with_children: true | undefined;
-  good_with_dogs: true | undefined;
-  good_with_cats: true | undefined;
-  house_trained: true | undefined;
-  declawed: true | undefined;
-  special_needs: true | undefined;
+  good_with_children: boolean | undefined;
+  good_with_dogs: boolean | undefined;
+  good_with_cats: boolean | undefined;
+  house_trained: boolean | undefined;
+  declawed: boolean | undefined;
+  special_needs: boolean | undefined;
   organization: string | undefined;
 }
 
@@ -64,6 +66,7 @@ const FiltersAnimals: React.FC<FiltersAnimalsProps> = (props) => {
   const dispatch = useAppDispatch();
   const organizationsByPhrase: Organization[] =
     useAppSelector(getOrganizations);
+
   const { t } = useTranslation();
   const organizationOptions: SelectOption[] = useMemo<SelectOption[]>(() => {
     if (!organizationsByPhrase) {
@@ -75,7 +78,12 @@ const FiltersAnimals: React.FC<FiltersAnimalsProps> = (props) => {
     }));
   }, [organizationsByPhrase]);
 
+  useEffect(() => {
+    setFilterData({ ...filterData, ...props.defaultFilters });
+  }, [props.defaultFilters]);
+
   const [filterData, setFilterData] = useState<FormData>({
+    type: undefined,
     gender: undefined,
     size: undefined,
     age: undefined,
@@ -99,13 +107,25 @@ const FiltersAnimals: React.FC<FiltersAnimalsProps> = (props) => {
     };
   }, []);
 
-  const petTypes = useAppSelector(
-    getPetTypeInfoByTypeName(props.defaultFilters.type!)
-  );
+  const typesOfPets = useAppSelector(getTypesOfPets);
+
+  const typeDictionary = useMemo<SelectOption[]>(() => {
+    const types = typesOfPets.map(({ name }) => name);
+    return createDictionary(types);
+  }, [typesOfPets]);
+
+  const petTypeDetails = useMemo<AnimalTypesDetails | undefined>(() => {
+    if (!filterData.type) {
+      return undefined;
+    }
+    return typesOfPets.find(
+      ({ name }) => name.toLowerCase() === filterData.type
+    );
+  }, [typesOfPets, filterData.type]);
 
   const { genderDictionary, coatsDictionary, colorsDictionary } =
     useMemo<FilterDictionaries>(() => {
-      if (!petTypes) {
+      if (!petTypeDetails) {
         return {
           genderDictionary: [],
           coatsDictionary: [],
@@ -113,11 +133,11 @@ const FiltersAnimals: React.FC<FiltersAnimalsProps> = (props) => {
         };
       }
       return {
-        genderDictionary: createDictionary(petTypes.genders),
-        coatsDictionary: createDictionary(petTypes.coats),
-        colorsDictionary: createDictionary(petTypes.colors),
+        genderDictionary: createDictionary(petTypeDetails.genders),
+        coatsDictionary: createDictionary(petTypeDetails.coats),
+        colorsDictionary: createDictionary(petTypeDetails.colors),
       };
-    }, [petTypes]);
+    }, [petTypeDetails]);
 
   const handleChange = (event: SelectChangeEvent<string>) => {
     const {
@@ -181,136 +201,173 @@ const FiltersAnimals: React.FC<FiltersAnimalsProps> = (props) => {
     }
   };
 
+  const handleAutocompleteOpen = () => {
+    if (!filterData.organization) {
+      dispatch(getOrganizationsAsync({}));
+    }
+  };
+
   const submitHandler: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
-    dispatch(
-      getPetsAsync({
-        ...props.defaultFilters,
-        ...filterData,
-      })
-    );
+
+    dispatch(getPetsAsync(filterData));
   };
 
   return (
     <form onSubmit={submitHandler}>
-      <div>
-        <FormControl sx={{ m: 1, width: 300 }}>
-          <InputLabel id="gender-field">{t("GENDER")}</InputLabel>
-          <Select
-            labelId="gender-field"
-            name="gender"
-            value={filterData.gender || ""}
-            onChange={handleChange}
-            input={
-              <OutlinedInput id="select-multiple-chip" label={t("GENDER")} />
-            }
-          >
-            {genderDictionary.map((gender) => (
-              <MenuItem key={gender.value} value={gender.value}>
-                {gender.label}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </div>
-      <div>
-        <FormControl sx={{ m: 1, width: 300 }}>
-          <InputLabel id="size-field">{t("SIZE")}</InputLabel>
-          <Select
-            labelId="size-field"
-            name="size"
-            value={filterData.size || ""}
-            onChange={handleChange}
-            input={
-              <OutlinedInput id="select-multiple-chip" label={t("SIZE")} />
-            }
-          >
-            {sizeDictionary.map((size) => (
-              <MenuItem key={size.value} value={size.value}>
-                {size.label}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </div>
-      <div>
-        <FormControl sx={{ m: 1, width: 300 }}>
-          <InputLabel id="age-field">{t("AGE")}</InputLabel>
-          <Select
-            labelId="age-field"
-            name="age"
-            value={filterData.age || ""}
-            onChange={handleChange}
-            input={<OutlinedInput id="select-multiple-chip" label={t("AGE")} />}
-          >
-            {ageDictionary.map((age) => (
-              <MenuItem key={age.value} value={age.value}>
-                {age.label}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </div>
-      <div>
-        <FormControl sx={{ m: 1, width: 300 }}>
-          <InputLabel id="coat-field">{t("COAT")}</InputLabel>
-          <Select
-            labelId="coat-field"
-            name="coat"
-            value={filterData.coat || ""}
-            onChange={handleChange}
-            input={
-              <OutlinedInput id="select-multiple-chip" label={t("COAT")} />
-            }
-          >
-            {coatsDictionary.map((coat) => (
-              <MenuItem key={coat.value} value={coat.value}>
-                {coat.label}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </div>
-      <div>
-        <FormControl sx={{ m: 1, width: 300 }}>
-          <InputLabel id="status-field">{t("STATUS")}</InputLabel>
-          <Select
-            labelId="status-field"
-            name="status"
-            value={filterData.status || ""}
-            onChange={handleChange}
-            input={
-              <OutlinedInput id="select-multiple-chip" label={t("STATUS")} />
-            }
-          >
-            {statusDictionary.map((status) => (
-              <MenuItem key={status.value} value={status.value}>
-                {status.label}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </div>
-      <div>
-        <FormControl sx={{ m: 1, width: 300 }}>
-          <InputLabel id="status-field">{t("COLOR")}</InputLabel>
-          <Select
-            labelId="color-field"
-            name="color"
-            value={filterData.color || ""}
-            onChange={handleChange}
-            input={
-              <OutlinedInput id="select-multiple-chip" label={t("COLOR")} />
-            }
-          >
-            {colorsDictionary.map((color) => (
-              <MenuItem key={color.value} value={color.value}>
-                {color.label}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </div>
+      {!props.defaultFilters.type && (
+        <div>
+          <FormControl sx={{ m: 1, width: 300 }}>
+            <InputLabel id="type-field">{t("TYPE")}</InputLabel>
+            <Select
+              labelId="type-field"
+              name="type"
+              value={filterData.type || ""}
+              onChange={handleChange}
+              input={
+                <OutlinedInput id="select-multiple-chip" label={t("TYPE")} />
+              }
+            >
+              {typeDictionary.map((type) => (
+                <MenuItem key={type.value} value={type.value}>
+                  {type.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </div>
+      )}
+      {(petTypeDetails || props.defaultFilters.type) && (
+        <>
+          <div>
+            <FormControl sx={{ m: 1, width: 300 }}>
+              <InputLabel id="gender-field">{t("GENDER")}</InputLabel>
+              <Select
+                labelId="gender-field"
+                name="gender"
+                value={filterData.gender || ""}
+                onChange={handleChange}
+                input={
+                  <OutlinedInput
+                    id="select-multiple-chip"
+                    label={t("GENDER")}
+                  />
+                }
+              >
+                {genderDictionary.map((gender) => (
+                  <MenuItem key={gender.value} value={gender.value}>
+                    {gender.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
+          <div>
+            <FormControl sx={{ m: 1, width: 300 }}>
+              <InputLabel id="size-field">{t("SIZE")}</InputLabel>
+              <Select
+                labelId="size-field"
+                name="size"
+                value={filterData.size || ""}
+                onChange={handleChange}
+                input={
+                  <OutlinedInput id="select-multiple-chip" label={t("SIZE")} />
+                }
+              >
+                {sizeDictionary.map((size) => (
+                  <MenuItem key={size.value} value={size.value}>
+                    {size.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
+          <div>
+            <FormControl sx={{ m: 1, width: 300 }}>
+              <InputLabel id="age-field">{t("AGE")}</InputLabel>
+              <Select
+                labelId="age-field"
+                name="age"
+                value={filterData.age || ""}
+                onChange={handleChange}
+                input={
+                  <OutlinedInput id="select-multiple-chip" label={t("AGE")} />
+                }
+              >
+                {ageDictionary.map((age) => (
+                  <MenuItem key={age.value} value={age.value}>
+                    {age.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
+          <div>
+            <FormControl sx={{ m: 1, width: 300 }}>
+              <InputLabel id="coat-field">{t("COAT")}</InputLabel>
+              <Select
+                labelId="coat-field"
+                name="coat"
+                value={filterData.coat || ""}
+                onChange={handleChange}
+                input={
+                  <OutlinedInput id="select-multiple-chip" label={t("COAT")} />
+                }
+              >
+                {coatsDictionary.map((coat) => (
+                  <MenuItem key={coat.value} value={coat.value}>
+                    {coat.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
+          <div>
+            <FormControl sx={{ m: 1, width: 300 }}>
+              <InputLabel id="status-field">{t("STATUS")}</InputLabel>
+              <Select
+                labelId="status-field"
+                name="status"
+                value={filterData.status || ""}
+                onChange={handleChange}
+                input={
+                  <OutlinedInput
+                    id="select-multiple-chip"
+                    label={t("STATUS")}
+                  />
+                }
+              >
+                {statusDictionary.map((status) => (
+                  <MenuItem key={status.value} value={status.value}>
+                    {status.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
+          <div>
+            <FormControl sx={{ m: 1, width: 300 }}>
+              <InputLabel id="status-field">{t("COLOR")}</InputLabel>
+              <Select
+                labelId="color-field"
+                name="color"
+                value={filterData.color || ""}
+                onChange={handleChange}
+                input={
+                  <OutlinedInput id="select-multiple-chip" label={t("COLOR")} />
+                }
+              >
+                {colorsDictionary.map((color) => (
+                  <MenuItem key={color.value} value={color.value}>
+                    {color.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
+        </>
+      )}
+
       <div>
         <FormControl sx={{ m: 1, width: 300 }}>
           <FormControlLabel
@@ -401,23 +458,27 @@ const FiltersAnimals: React.FC<FiltersAnimalsProps> = (props) => {
           />
         </FormControl>
       </div>
-      <div>
-        <Autocomplete
-          disablePortal
-          id="organizations"
-          onInputChange={handleAutocompleteInputChange}
-          onChange={handleAutocompleteChange("organization")}
-          options={organizationOptions}
-          sx={{ width: 300 }}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              name="organization"
-              label={t("ORGANIZATION")}
-            />
-          )}
-        />
-      </div>
+      {!props.defaultFilters.organization && (
+        <div>
+          <Autocomplete
+            disablePortal
+            id="organizations"
+            onInputChange={handleAutocompleteInputChange}
+            onChange={handleAutocompleteChange("organization")}
+            onOpen={handleAutocompleteOpen}
+            options={organizationOptions}
+            sx={{ width: 300 }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                name="organization"
+                label={t("ORGANIZATION")}
+              />
+            )}
+          />
+        </div>
+      )}
+
       <div>
         <FormControl sx={{ m: 1, width: 300 }}>
           <TextField

@@ -133,9 +133,9 @@ export interface PetsQueryParams {
   good_with_children?: boolean;
   good_with_dogs?: boolean;
   good_with_cats?: boolean;
-  house_trained?: true;
-  declawed?: true;
-  special_needs?: true;
+  house_trained?: boolean;
+  declawed?: boolean;
+  special_needs?: boolean;
   /**
    * @description
    * city, state; latitude,longitude; or postal code.
@@ -206,3 +206,4 @@ export interface AnimalTypesDetails {
     breeds: LinkToSource;
   };
 }
+

@@ -81,12 +81,8 @@ export const { clearPets, clearTypes, clearPet } = petsSlice.actions;
 export const getPets = (state: RootState): Pet[] =>
   state.pets.pets.value?.animals || [];
 
-export const getPetTypeInfoByTypeName =
-  (type: AnimalType) =>
-    (state: RootState): AnimalTypesDetails | null =>
-      state.pets.types.value?.types.find(
-        (typeInfo) => typeInfo.name.toLowerCase() === type
-      ) || null;
+export const getTypesOfPets = (state: RootState): AnimalTypesDetails[] => state.pets.types.value?.types || [];
+
 
 export const getPet = (state: RootState): Pet | undefined =>
   state.pets.pet.value?.animal;

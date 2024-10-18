@@ -10,6 +10,7 @@ import AnimalDetails from "./views/animal-details/AnimalDetails";
 import { Pets } from "./views/pets/Pets";
 import { Organizations } from "./views/organizations/Organizations";
 import OrganizationDetails from "./views/organization-details/OrganizationDetails";
+import PetsInOrganization from "./views/pets-in-organization/PetsInOrganization";
 
 export const router = createBrowserRouter([
   {
@@ -59,8 +60,22 @@ export const router = createBrowserRouter([
         element: <AnimalDetails />,
       },
       {
-        path: "organization/details/:id",
-        element: <OrganizationDetails />,
+        path: "organization",
+        children: [
+          {
+            path: "details",
+            children: [
+              {
+                path: ":id",
+                element: <OrganizationDetails />,
+              },
+              {
+                path: ":id/pets",
+                element: <PetsInOrganization />,
+              },
+            ],
+          },
+        ],
       },
     ],
   },

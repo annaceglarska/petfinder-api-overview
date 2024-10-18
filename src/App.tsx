@@ -7,6 +7,7 @@ import { isPetfinderTokenReady } from "./slices/config/config.slice";
 import TokenService from "./services/token/token";
 import { saveToken } from "./slices/user/user.slice";
 import { getUserAsync } from "./slices/user/user.api-actions";
+import { Navigation } from "./components/navigation/Navigation";
 
 interface AppProps {}
 
@@ -29,7 +30,16 @@ const App: React.FC<AppProps> = () => {
 
   return (
     <Container maxWidth="xl">
-      <main>{isTokenReady ? <Outlet /> : <></>}</main>
+      <main>
+        {isTokenReady ? (
+          <>
+            <Navigation />
+            <Outlet />
+          </>
+        ) : (
+          <></>
+        )}
+      </main>
     </Container>
   );
 };

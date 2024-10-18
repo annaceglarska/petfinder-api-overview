@@ -7,11 +7,13 @@ export const Main: React.FC = () => {
   const { t } = useTranslation();
 
   return (
-    <div className={styles["main__container"]}>
-      <h1>{t("PETS")}</h1>
-      <Pets />
-      <h1>{t("ORGANIZATION")}</h1>
-      <Organizations />
-    </div>
+    <>
+      <div className={styles["main__container"]}>
+        <h1>{t("PETS")}</h1>
+        <Pets />
+        <h1>{t("ORGANIZATION")}</h1>
+        <Organizations />
+      </div>
+    </>
   );
 };

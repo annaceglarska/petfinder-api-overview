@@ -48,7 +48,6 @@ const OrganizationDetails = () => {
 
   return (
     <>
-      <Navigation />
       <div className={styles["top-background"]}>
         <h1 className={styles["organization_details__header"]}>
           {organization?.name}
