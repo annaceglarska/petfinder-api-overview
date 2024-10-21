@@ -11,6 +11,7 @@ import OrganizationDetails from "../organization-details/OrganizationDetails";
 import { getOrganizationAsync } from "../../slices/organizations/organizations.api-actions";
 import { getOrganization } from "../../slices/organizations/organizations.slice";
 import { Organization } from "../../services/api/petfinder/organizations/organizations.type";
+import OrganizationHeader from "../../components/organization-header/OrganizationHeader";
 
 const PetsInOrganization: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -32,7 +33,7 @@ const PetsInOrganization: React.FC = () => {
 
   return (
     <>
-      <h1 style={{ textAlign: "center" }}>{organization?.name}</h1>
+      <OrganizationHeader />
       <div className={styles["pets-in-organization__container"]}>
         <FiltersAnimals defaultFilters={{ organization: params.id }} />
         <CardsGrid data={petsInOrganization} />

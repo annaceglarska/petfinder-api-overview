@@ -15,6 +15,7 @@ import { Organization } from "../../services/api/petfinder/organizations/organiz
 import OrganizationDetailsContainer from "../../components/organization-details-container/OrganizationDetailsContainer";
 import { getPetsAsync } from "../../slices/pets/pets.api-actions";
 import { clearPets } from "../../slices/pets/pets.slice";
+import OrganizationHeader from "../../components/organization-header/OrganizationHeader";
 
 const OrganizationDetails = () => {
   const params = useParams();
@@ -48,11 +49,7 @@ const OrganizationDetails = () => {
 
   return (
     <>
-      <div className={styles["top-background"]}>
-        <h1 className={styles["organization_details__header"]}>
-          {organization?.name}
-        </h1>
-      </div>
+      <OrganizationHeader />
       {isPending ? (
         <CircularProgress
           className={styles["organization-details__progress"]}

@@ -1,0 +1,14 @@
+.organization-header__container {
+  background-color: var(--primary-color);
+  padding: 3% 0%;
+  margin-bottom: 5px;
+}
+
+.organization-header__container h1 {
+  font-size: 4rem;
+  color: var(--info-color);
+  padding: 0;
+  margin: 0;
+  font-weight: 800;
+  margin: 0px 0px 0px 170px;
+}
