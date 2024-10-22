@@ -1,0 +1,6 @@
+.pets__progress {
+  position: relative;
+  left: 50%;
+  top: 10vh;
+  color: var(--primary-color) !important;
+}

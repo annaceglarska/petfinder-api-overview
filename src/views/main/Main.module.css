@@ -5,3 +5,7 @@
   color: var(--primary-color);
   font-family: "Lucida Handwriting";
 }
+
+.main__container > div {
+  min-height: 350px;
+}

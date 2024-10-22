@@ -1,11 +1,18 @@
-import { Address, LinkToSource, Photo, ToCheck } from "../pets/pets.types";
+import {
+  Address,
+  LinkToSource,
+  Pagination,
+  Photo,
+  ToCheck,
+} from "../pets/pets.types";
 
 export interface OrganizationsDTO {
   organizations: Organization[];
+  pagination: Pagination;
 }
 
 export interface OrganizationDTO {
-  organization: Organization
+  organization: Organization;
 }
 
 export interface Organization {
@@ -54,6 +61,49 @@ export interface OrganizationInfo {
 }
 
 export interface OrganizationQueryParam {
+  name?: string;
+  location?: string;
+  /**
+   * @default
+   * 100
+   *
+   * @description
+   *  max: 500
+   */
+  distance?: number;
+  /**
+   * @description
+   * Accepts two-letter abbreviations, e.g. AL, WY
+   */
+  state?: string;
+  /**
+   * @description
+   * Accepts two-letter abbreviations, e.g. US, CA
+   */
+  country?: string;
   query?: string;
-  //ToDo
+  sort?: SortOrganization;
+  /**
+   * @default
+   * 100
+   *
+   * @description
+   *  max: 500
+   */
+  limit?: number;
+  /**
+   * @default
+   * 1
+   */
+  page?: number;
 }
+
+export type SortOrganization =
+  | "distance"
+  | "-distance"
+  | "name"
+  | "-name"
+  | "country"
+  | "-country"
+  | "state"
+  | "-state";

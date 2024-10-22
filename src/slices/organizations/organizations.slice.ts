@@ -3,6 +3,7 @@ import { OrganizationState } from "./organizations.types";
 import { getOrganizationAsync, getOrganizationsAsync } from "./organizations.api-actions";
 import { RootState } from "../../app/store";
 import { Organization } from "../../services/api/petfinder/organizations/organizations.type";
+import { Pagination } from "../../services/api/petfinder/pets/pets.types";
 
 const initialState: OrganizationState = {
   organizations: {
@@ -56,6 +57,10 @@ export const { clearOrganizations, clearOrganization } = organizationSlice.actio
 
 export const getOrganizations = (state: RootState): Organization[] =>
   state.organization.organizations.value?.organizations || [];
+
+export const isOrganizationsDataPending = (state: RootState): boolean => state.organization.organizations.status === 'pending';
+
+export const getOrganizationsPaginationInfo = (state: RootState): Pagination | undefined => state.organization.organizations.value?.pagination
 
 export const getOrganization = (state: RootState): Organization | null => state.organization.organization.value?.organization || null;
 

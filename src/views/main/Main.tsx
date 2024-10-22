@@ -9,10 +9,14 @@ export const Main: React.FC = () => {
   return (
     <>
       <div className={styles["main__container"]}>
-        <h1>{t("PETS")}</h1>
-        <Pets />
-        <h1>{t("ORGANIZATION")}</h1>
-        <Organizations />
+        <div>
+          <h1>{t("PETS")}</h1>
+          <Pets />
+        </div>
+        <div>
+          <h1>{t("ORGANIZATION")}</h1>
+          <Organizations />
+        </div>
       </div>
     </>
   );

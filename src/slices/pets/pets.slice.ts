@@ -7,8 +7,8 @@ import {
 } from "./pets.api-actions";
 import { RootState } from "../../app/store";
 import {
-  AnimalType,
   AnimalTypesDetails,
+  Pagination,
   Pet,
 } from "../../services/api/petfinder/pets/pets.types";
 
@@ -80,6 +80,10 @@ export const { clearPets, clearTypes, clearPet } = petsSlice.actions;
 
 export const getPets = (state: RootState): Pet[] =>
   state.pets.pets.value?.animals || [];
+
+export const isPetsDataPending = (state: RootState): boolean => state.pets.pets.status === "pending"
+
+export const getPetsPaginationInfo = (state: RootState): Pagination | undefined => state.pets.pets.value?.pagination
 
 export const getTypesOfPets = (state: RootState): AnimalTypesDetails[] => state.pets.types.value?.types || [];
 
