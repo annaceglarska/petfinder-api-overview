@@ -8,10 +8,12 @@ import { RootState } from "../../app/store";
 
 export const getPetsAsync = createAsyncThunk(
   "pets/getPets",
-  async (params: PetsQueryParams, redux) => {
-    const token: string | undefined = (redux.getState() as RootState).config
+  async (_: undefined, redux) => {
+    const store = (redux.getState() as RootState)
+    const token: string | undefined = store.config
       .petfinderToken.value?.access_token;
-    return petsApiService.getAnimals(params, token);
+    const queryParams: PetsQueryParams = store.pets.pets.queryParams || {}
+    return petsApiService.getAnimals(queryParams, token);
   }
 );
 

@@ -7,6 +7,7 @@ import {
   getPets,
   getPetsPaginationInfo,
   isPetsDataPending,
+  setPetsQueryParams,
 } from "../../slices/pets/pets.slice";
 import { CardsGrid } from "../../components/cards-grid/CardsGrid";
 import {
@@ -24,7 +25,7 @@ export const Pets: React.FC = () => {
   const petsPaginationInfo = useAppSelector(getPetsPaginationInfo);
 
   useEffect(() => {
-    dispatch(getPetsAsync({}));
+    dispatch(getPetsAsync());
 
     return () => {
       dispatch(clearPets());
@@ -35,7 +36,8 @@ export const Pets: React.FC = () => {
 
   const onChangeHandler = (e: React.ChangeEvent<unknown>, page: number) => {
     dispatch(clearPets());
-    dispatch(getPetsAsync({ page: page }));
+    dispatch(setPetsQueryParams({ page }));
+    dispatch(getPetsAsync());
   };
 
   if (isPetsPending) {

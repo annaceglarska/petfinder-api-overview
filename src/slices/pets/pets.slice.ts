@@ -10,12 +10,14 @@ import {
   AnimalTypesDetails,
   Pagination,
   Pet,
+  PetsQueryParams,
 } from "../../services/api/petfinder/pets/pets.types";
 
 const initialState: PetsState = {
   pets: {
     status: "ready",
     value: null,
+    queryParams: {}
   },
   types: {
     status: "ready",
@@ -40,6 +42,12 @@ export const petsSlice = createSlice({
     clearPet: (state, _: PayloadAction) => {
       state.pet.value = null;
     },
+    setPetsQueryParams: (state, value: PayloadAction<PetsQueryParams>) => {
+      state.pets.queryParams = value.payload
+    },
+    clearPetsFilters: (state) => {
+      state.pets.queryParams = {};
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -76,7 +84,7 @@ export const petsSlice = createSlice({
   },
 });
 
-export const { clearPets, clearTypes, clearPet } = petsSlice.actions;
+export const { clearPets, clearTypes, clearPet, setPetsQueryParams, clearPetsFilters } = petsSlice.actions;
 
 export const getPets = (state: RootState): Pet[] =>
   state.pets.pets.value?.animals || [];
@@ -94,5 +102,7 @@ export const getPet = (state: RootState): Pet | undefined =>
 export const isPetDataPending = (state: RootState): boolean => state.pets.pet.status === "pending"
 
 export const totalCountOfPets = (state: RootState): number | undefined => state.pets.pets.value?.pagination.total_count
+
+export const getPetsFilters = (state: RootState): PetsQueryParams => state.pets.pets.queryParams || {};
 
 export default petsSlice.reducer;

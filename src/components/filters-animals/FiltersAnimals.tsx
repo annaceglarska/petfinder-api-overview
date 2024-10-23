@@ -24,7 +24,11 @@ import {
   getPetTypesAsync,
   getPetsAsync,
 } from "../../slices/pets/pets.api-actions";
-import { clearTypes, getTypesOfPets } from "../../slices/pets/pets.slice";
+import {
+  clearTypes,
+  getTypesOfPets,
+  setPetsQueryParams,
+} from "../../slices/pets/pets.slice";
 import { FilterDictionaries, SelectOption } from "./filters/filters.types";
 import { createDictionary } from "./filters/filters.helpers";
 import { getOrganizationsAsync } from "../../slices/organizations/organizations.api-actions";
@@ -210,7 +214,8 @@ const FiltersAnimals: React.FC<FiltersAnimalsProps> = (props) => {
   const submitHandler: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
 
-    dispatch(getPetsAsync(filterData));
+    dispatch(setPetsQueryParams(filterData));
+    dispatch(getPetsAsync());
   };
 
   return (
