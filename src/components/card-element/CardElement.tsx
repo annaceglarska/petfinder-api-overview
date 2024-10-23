@@ -17,11 +17,13 @@ import { useAppSelector } from "../../app/hooks";
 import { isUserLogged } from "../../slices/user/user.slice";
 import { useTranslation } from "react-i18next";
 
-export interface CardElementProps {
-  data: Pet | Organization;
+export interface CardElementProps<T extends Pet | Organization> {
+  data: T;
 }
 
-export const CardElement: React.FC<CardElementProps> = (props) => {
+export const CardElement = <T extends Pet | Organization>(
+  props: CardElementProps<T>
+) => {
   const isLogged = useAppSelector(isUserLogged);
   const { t } = useTranslation();
   const dataType: "pet" | "organization" =

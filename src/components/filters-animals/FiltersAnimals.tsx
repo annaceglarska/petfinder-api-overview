@@ -44,6 +44,7 @@ import {
 } from "../../services/api/petfinder/pets/pets.types";
 import styles from "../filters-animals/FiltersAnimals.module.css";
 import { useTranslation } from "react-i18next";
+import { RESET_INFINITE_SCROLL_DATA } from "../infinite-scroll/InfiniteScroll";
 
 export interface FormData {
   type: AnimalType | undefined;
@@ -211,8 +212,14 @@ const FiltersAnimals: React.FC<FiltersAnimalsProps> = (props) => {
     }
   };
 
+  const sendResetInfiniteScrollEvent = () => {
+    const event = new CustomEvent(RESET_INFINITE_SCROLL_DATA);
+    window.dispatchEvent(event);
+  };
+
   const submitHandler: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
+    sendResetInfiniteScrollEvent();
 
     dispatch(setPetsQueryParams(filterData));
     dispatch(getPetsAsync());

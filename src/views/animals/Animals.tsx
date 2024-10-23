@@ -20,6 +20,7 @@ import styles from "./Animals.module.css";
 import { useParams } from "react-router-dom";
 import { getAnimalType, isValidAnimalType } from "./Animals.helpers";
 import { InfiniteScroll } from "../../components/infinite-scroll/InfiniteScroll";
+import { CardsGrid } from "../../components/cards-grid/CardsGrid";
 
 export const getDefaultAnimalsFilters = (
   type: AnimalType
@@ -55,14 +56,14 @@ const Animals: React.FC = () => {
 
   const pets: Pet[] = useAppSelector(getPets);
 
-  if (!isValidType) {
-    return <>Wrong animal type</>;
-  }
-
   const getPetData = (page: number): void => {
     dispatch(setPetsQueryParams({ ...petsFilters, page }));
     dispatch(getPetsAsync());
   };
+
+  if (!isValidType) {
+    return <>Wrong animal type</>;
+  }
 
   return (
     <div className={styles["animals-wrapper"]}>
@@ -72,6 +73,7 @@ const Animals: React.FC = () => {
         loading={loading}
         pagination={pagination}
         fetchData={getPetData}
+        render={(params) => <CardsGrid {...params} />}
       />
     </div>
   );
