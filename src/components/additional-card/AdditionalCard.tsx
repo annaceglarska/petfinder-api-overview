@@ -8,16 +8,31 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
-import { totalCountOfPets } from "../../slices/pets/pets.slice";
+import {
+  countOfPetsPerPage,
+  totalCountOfPets,
+} from "../../slices/pets/pets.slice";
 import logo from "./../../assets/images/petfinder_logo.png";
 import styles from "./AdditionalCard.module.css";
 import { useTranslation } from "react-i18next";
 import { getOrganization } from "../../slices/organizations/organizations.slice";
+import { Organization } from "../../services/api/petfinder/organizations/organizations.type";
 
 const AdditionalCard = () => {
   const { t } = useTranslation();
-  const totalPetsCount = useAppSelector(totalCountOfPets);
-  const organization = useAppSelector(getOrganization);
+  const totalPetsCount: number | undefined = useAppSelector(totalCountOfPets);
+  const organization: Organization | null = useAppSelector(getOrganization);
+  const countOfDisplayedPets: number | undefined =
+    useAppSelector(countOfPetsPerPage);
+  const isMorePetsThanInOrganizationDetails: boolean =
+    totalPetsCount && countOfDisplayedPets
+      ? Boolean(totalPetsCount > countOfDisplayedPets)
+      : false;
+
+  const morePetsToDisplayed: number | undefined =
+    countOfDisplayedPets &&
+    totalPetsCount &&
+    totalPetsCount - countOfDisplayedPets;
 
   return (
     <Card className={styles["additional-card-element"]}>
@@ -26,7 +41,11 @@ const AdditionalCard = () => {
         <Typography
           variant="body2"
           className={styles["additional-card__description"]}
-        >{`${totalPetsCount} more pets available`}</Typography>
+        >
+          {isMorePetsThanInOrganizationDetails
+            ? `${morePetsToDisplayed} more pets available`
+            : ""}
+        </Typography>
       </CardContent>
       <CardActions className={styles["additional-card__card-actions"]}>
         <Button
@@ -34,7 +53,9 @@ const AdditionalCard = () => {
           component={Link}
           to={`/organization/details/${organization?.id}/pets`}
         >
-          {t("GO_TO_OTHER_PETS")}
+          {isMorePetsThanInOrganizationDetails
+            ? t("GO_TO_OTHER_PETS")
+            : t("SEE_THEM")}
         </Button>
       </CardActions>
     </Card>

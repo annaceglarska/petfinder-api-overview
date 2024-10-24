@@ -30,7 +30,7 @@ const OrganizationDetailsContainer = () => {
               <p>{organization.mission_statement}</p>
             </div>
           )}
-          {pets.length && (
+          {!!pets.length && (
             <>
               <h1>{t("OUR_PETS")}</h1>
               <CardsGrid

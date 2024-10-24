@@ -21,7 +21,6 @@ const OrganizationDetails = () => {
   const dispatch = useAppDispatch();
   const isTokenReady = useAppSelector(isPetfinderTokenReady);
 
-  const organization: Organization | null = useAppSelector(getOrganization);
   const isPending: boolean = useAppSelector(isOrganizationDataPending);
 
   useEffect(() => {
@@ -31,9 +30,7 @@ const OrganizationDetails = () => {
 
     if (params.id) {
       dispatch(getOrganizationAsync(params.id));
-      dispatch(
-        setPetsQueryParams({ organization: organization?.id, limit: 5 })
-      );
+      dispatch(setPetsQueryParams({ organization: params.id, limit: 5 }));
       dispatch(getPetsAsync());
     }
 
