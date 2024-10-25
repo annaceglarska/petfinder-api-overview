@@ -18,6 +18,7 @@ import styles from "./PetsInOrganization.module.css";
 import { getOrganizationAsync } from "../../slices/organizations/organizations.api-actions";
 import OrganizationHeader from "../../components/organization-header/OrganizationHeader";
 import { InfiniteScroll } from "../../components/infinite-scroll/InfiniteScroll";
+import CardSkeleton from "../../components/card-skeleton/CardSkeleton";
 
 const PetsInOrganization: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -56,7 +57,14 @@ const PetsInOrganization: React.FC = () => {
           loading={loading}
           pagination={pagination}
           fetchData={getPetData}
-          render={(params) => <CardsGrid {...params} />}
+          render={(params) => (
+            <CardsGrid
+              {...params}
+              isLoading={loading}
+              skeleton={<CardSkeleton />}
+              skeletonNumber={pagination?.count_per_page}
+            />
+          )}
         />
       </div>
     </>

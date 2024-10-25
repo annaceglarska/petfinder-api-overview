@@ -98,10 +98,5 @@ export const InfiniteScroll = <T extends Pet[] | Organization[]>(
     setPageToGetData(null);
   };
 
-  return (
-    <>
-      {cards}
-      {props.loading && <p>Loading</p>}
-    </>
-  );
+  return <>{cards}</>;
 };

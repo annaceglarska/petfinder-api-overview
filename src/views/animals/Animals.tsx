@@ -21,6 +21,7 @@ import { useParams } from "react-router-dom";
 import { getAnimalType, isValidAnimalType } from "./Animals.helpers";
 import { InfiniteScroll } from "../../components/infinite-scroll/InfiniteScroll";
 import { CardsGrid } from "../../components/cards-grid/CardsGrid";
+import CardSkeleton from "../../components/card-skeleton/CardSkeleton";
 
 export const getDefaultAnimalsFilters = (
   type: AnimalType
@@ -73,7 +74,14 @@ const Animals: React.FC = () => {
         loading={loading}
         pagination={pagination}
         fetchData={getPetData}
-        render={(params) => <CardsGrid {...params} />}
+        render={(params) => (
+          <CardsGrid
+            {...params}
+            isLoading={loading}
+            skeleton={<CardSkeleton />}
+            skeletonNumber={pagination?.count_per_page || 20}
+          />
+        )}
       />
     </div>
   );

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { getOrganizationsAsync } from "../../slices/organizations/organizations.api-actions";
 import {
@@ -9,18 +9,20 @@ import {
 } from "../../slices/organizations/organizations.slice";
 import { Organization } from "../../services/api/petfinder/organizations/organizations.type";
 import { CardsGrid } from "../../components/cards-grid/CardsGrid";
-import {
-  CircularProgress,
-  Pagination,
-  PaginationItem,
-  Stack,
-} from "@mui/material";
-import styles from "./Organization.module.css";
+import { Pagination, PaginationItem, Stack } from "@mui/material";
 import { ArrowLeftIcon, ArrowRightIcon } from "@mui/x-date-pickers";
+import { Pagination as OrganizationPagination } from "../../services/api/petfinder/pets/pets.types";
+import CardSkeleton from "../../components/card-skeleton/CardSkeleton";
 
 export const Organizations: React.FC = () => {
   const dispatch = useAppDispatch();
   const isOrganizationPending = useAppSelector(isOrganizationsDataPending);
+  const organizationPaginationInfo = useAppSelector(
+    getOrganizationsPaginationInfo
+  );
+  const [paginationData, setPaginationData] = useState<
+    OrganizationPagination | undefined
+  >();
 
   useEffect(() => {
     dispatch(getOrganizationsAsync({}));
@@ -29,6 +31,12 @@ export const Organizations: React.FC = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (organizationPaginationInfo) {
+      setPaginationData(organizationPaginationInfo);
+    }
+  }, [organizationPaginationInfo]);
+
   const organizations: Organization[] = useAppSelector(getOrganizations);
   const organizationsPagination = useAppSelector(
     getOrganizationsPaginationInfo
@@ -36,25 +44,30 @@ export const Organizations: React.FC = () => {
 
   const onChangeHandler = (e: React.ChangeEvent<unknown>, page: number) => {
     dispatch(clearOrganizations());
+    setPaginationData({
+      ...(paginationData as OrganizationPagination),
+      current_page: page,
+    });
     dispatch(getOrganizationsAsync({ page: page }));
   };
 
-  if (isOrganizationPending) {
-    return <CircularProgress className={styles["organizations__progress"]} />;
-  }
-
   return (
     <>
-      <CardsGrid data={organizations} />
+      <CardsGrid
+        data={organizations}
+        isLoading={isOrganizationPending}
+        skeleton={<CardSkeleton />}
+        skeletonNumber={organizationPaginationInfo?.count_per_page || 20}
+      />
       <Stack
         spacing={2}
         sx={{ marginBottom: "25px", display: "flex", alignItems: "center" }}
       >
         <Pagination
-          count={organizationsPagination?.total_pages}
+          count={paginationData?.total_pages || 1}
           variant="outlined"
           color="primary"
-          page={organizationsPagination?.current_page}
+          page={paginationData?.current_page || 1}
           onChange={onChangeHandler}
           renderItem={(item) => (
             <PaginationItem
