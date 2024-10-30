@@ -1,11 +1,19 @@
 .animals-wrapper {
-    display: flex;
-    }
+  display: flex;
+}
 
-    .animals-wrapper >*:nth-child(1){
-width: 30%;
-    }
+.animals-wrapper > *:nth-child(1) {
+  width: 30%;
+}
 
-    .animals-wrapper >*:nth-child(2){
-        width: 70%;
-    }
+.animals-wrapper > *:nth-child(2) {
+  width: 70%;
+}
+
+.animals__info {
+  text-align: center;
+  padding: 20px;
+  font-size: 40px;
+  color: var(--primary-color);
+  font-family: "Lucida Handwriting";
+}

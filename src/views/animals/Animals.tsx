@@ -2,7 +2,6 @@ import { useEffect, useMemo } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
   AnimalType,
-  Pet,
   PetsQueryParams,
 } from "../../services/api/petfinder/pets/pets.types";
 import {
@@ -17,17 +16,16 @@ import { getAnimalType, isValidAnimalType } from "./Animals.helpers";
 import { InfiniteScroll } from "../../components/infinite-scroll/InfiniteScroll";
 import { CardsGrid } from "../../components/cards-grid/CardsGrid";
 import CardSkeleton from "../../components/card-skeleton/CardSkeleton";
-import {
-  useGetPetsQuery,
-  useLazyGetPetsQuery,
-} from "../../slices/pets/pets.api";
+import { useLazyGetPetsQuery } from "../../slices/pets/pets.api";
 import { sendResetInfiniteScrollEvent } from "../../utils/Utils";
+import { useTranslation } from "react-i18next";
 
 export const getDefaultAnimalsFilters = (
   type: AnimalType
 ): PetsQueryParams => ({ type });
 
 const Animals: React.FC = () => {
+  const { t } = useTranslation();
   const params = useParams();
   const dispatch = useAppDispatch();
   const [getPet, { data: petsData, isFetching }] = useLazyGetPetsQuery();
@@ -67,20 +65,24 @@ const Animals: React.FC = () => {
   return (
     <div className={styles["animals-wrapper"]}>
       <FiltersAnimals defaultFilters={defaultFilters!} fetchPets={getPet} />
-      <InfiniteScroll
-        data={petsData?.animals || []}
-        loading={isFetching}
-        pagination={petsData?.pagination}
-        fetchData={getPetData}
-        render={(params) => (
-          <CardsGrid
-            {...params}
-            isLoading={isFetching}
-            skeleton={<CardSkeleton />}
-            skeletonNumber={petsData?.pagination.count_per_page || 20}
-          />
-        )}
-      />
+      {petsData?.animals.length === 0 ? (
+        <h1 className={styles["animals__info"]}>{t("NO_PETS_INFO")}</h1>
+      ) : (
+        <InfiniteScroll
+          data={petsData?.animals || []}
+          loading={isFetching}
+          pagination={petsData?.pagination}
+          fetchData={getPetData}
+          render={(params) => (
+            <CardsGrid
+              {...params}
+              isLoading={isFetching}
+              skeleton={<CardSkeleton />}
+              skeletonNumber={petsData?.pagination.count_per_page || 20}
+            />
+          )}
+        />
+      )}
     </div>
   );
 };
