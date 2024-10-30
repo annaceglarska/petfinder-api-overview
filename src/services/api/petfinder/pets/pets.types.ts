@@ -36,7 +36,6 @@ export interface Pet {
   tags: string[];
   name: string;
   description: string | null;
-  organization_animal_id: string | null;
   photos: Photo[];
   primary_photo_cropped: Photo;
   videos: Video[];

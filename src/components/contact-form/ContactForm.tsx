@@ -5,25 +5,25 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styles from "./ContactForm.module.css";
 import CheckCircleIcon from "@mui/icons-material/CheckCircleOutline";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import { useAppSelector } from "../../app/hooks";
-import { getPet } from "../../slices/pets/pets.slice";
 import { getOrganization } from "../../slices/organizations/organizations.slice";
 import { MessageFormData } from "./ContactForm.types";
 import { StyledButton } from "../../styled/SendMessageButton";
 import messagesApiService from "./../../services/api/backend/message/message.service";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { PetContext } from "../../contexts/PetContext";
 
 export interface ContactFormProps {
   closeModal: () => void;
 }
 
 const ContactForm: React.FC<ContactFormProps> = (props) => {
-  const pet = useAppSelector(getPet);
+  const { petData } = useContext(PetContext);
   const organization = useAppSelector(getOrganization);
   const [hoverFormButton, setHoverFormButton] = useState<boolean>(false);
   const { t } = useTranslation();
@@ -45,7 +45,7 @@ const ContactForm: React.FC<ContactFormProps> = (props) => {
     const dataToSend = {
       ...formData,
       organizationEmail: organization?.email,
-      petId: pet?.id,
+      petId: petData?.animal.id,
     };
     try {
       await messagesApiService.sendMessage(dataToSend);

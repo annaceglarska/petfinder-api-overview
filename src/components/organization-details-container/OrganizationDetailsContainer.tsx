@@ -4,14 +4,19 @@ import { useAppSelector } from "../../app/hooks";
 import { getOrganization } from "../../slices/organizations/organizations.slice";
 import PhotosCarousel from "../photos-carousel/PhotosCarousel";
 import OrganizationDetails from "../organization-details/OrganizationDetails";
-import { getPets } from "../../slices/pets/pets.slice";
 import { CardsGrid } from "../cards-grid/CardsGrid";
 import AdditionalCard from "../additional-card/AdditionalCard";
 import { useTranslation } from "react-i18next";
+import { PetsDTO } from "../../services/api/petfinder/pets/pets.types";
 
-const OrganizationDetailsContainer = () => {
+export interface OrganizationDetailsContainerProps {
+  data: PetsDTO;
+}
+
+const OrganizationDetailsContainer: React.FC<
+  OrganizationDetailsContainerProps
+> = ({ data }) => {
   const organization = useAppSelector(getOrganization);
-  const pets = useAppSelector(getPets);
   const { t } = useTranslation();
 
   return (
@@ -30,13 +35,13 @@ const OrganizationDetailsContainer = () => {
               <p>{organization.mission_statement}</p>
             </div>
           )}
-          {!!pets.length && (
+          {!!data.animals.length && (
             <>
               <h1>{t("OUR_PETS")}</h1>
               <CardsGrid
-                data={pets}
+                data={data.animals}
                 gridCardConfig={{ xl: 4, md: 6, sm: 12 }}
-                additionalCard={<AdditionalCard />}
+                additionalCard={<AdditionalCard pagination={data.pagination} />}
               />
             </>
           )}

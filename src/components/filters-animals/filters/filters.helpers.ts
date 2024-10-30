@@ -2,7 +2,9 @@ import { SelectOption } from "./filters.types";
 import i18next, { NAMESPACE } from "./../../../config/i18next";
 
 export const createDictionary = (characteristics: string[]): SelectOption[] => {
-  return characteristics.map((element) => {
+  const missingTranslation: string[] = []
+
+  const dictionary = characteristics.map((element) => {
 
     const translationDictionary = i18next.getDataByLanguage('en') || {}
     const values = translationDictionary[NAMESPACE]
@@ -12,7 +14,7 @@ export const createDictionary = (characteristics: string[]): SelectOption[] => {
     const translationKey: string | undefined = translation?.[0]
 
     if (!translationKey) {
-      console.info(`Missing translation for phrase ${element}`)
+      missingTranslation.push(element)
     }
 
     return {
@@ -20,4 +22,9 @@ export const createDictionary = (characteristics: string[]): SelectOption[] => {
       value: element.toLowerCase(),
     };
   });
+
+  if (missingTranslation.length)
+    console.info(`Missing translations for phrases`, missingTranslation)
+
+  return dictionary;
 };

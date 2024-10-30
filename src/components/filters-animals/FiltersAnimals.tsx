@@ -20,15 +20,7 @@ import {
 } from "./filters/dictionaries";
 import React, { ChangeEventHandler, useEffect, useMemo, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import {
-  getPetTypesAsync,
-  getPetsAsync,
-} from "../../slices/pets/pets.api-actions";
-import {
-  clearTypes,
-  getTypesOfPets,
-  setPetsQueryParams,
-} from "../../slices/pets/pets.slice";
+import { setPetsQueryParams } from "../../slices/pets/pets.slice";
 import { FilterDictionaries, SelectOption } from "./filters/filters.types";
 import { createDictionary } from "./filters/filters.helpers";
 import { getOrganizationsAsync } from "../../slices/organizations/organizations.api-actions";
@@ -44,7 +36,8 @@ import {
 } from "../../services/api/petfinder/pets/pets.types";
 import styles from "../filters-animals/FiltersAnimals.module.css";
 import { useTranslation } from "react-i18next";
-import { RESET_INFINITE_SCROLL_DATA } from "../infinite-scroll/InfiniteScroll";
+import { useGetPetTypesQuery } from "../../slices/pets/pets.api";
+import { sendResetInfiniteScrollEvent } from "../../utils/Utils";
 
 export interface FormData {
   type: AnimalType | undefined;
@@ -65,10 +58,13 @@ export interface FormData {
 
 export interface FiltersAnimalsProps {
   defaultFilters: PetsQueryParams;
+  fetchPets: () => void;
 }
 
 const FiltersAnimals: React.FC<FiltersAnimalsProps> = (props) => {
   const dispatch = useAppDispatch();
+  const { data: typesOfPets } = useGetPetTypesQuery();
+
   const organizationsByPhrase: Organization[] =
     useAppSelector(getOrganizations);
 
@@ -105,25 +101,24 @@ const FiltersAnimals: React.FC<FiltersAnimalsProps> = (props) => {
   });
 
   useEffect(() => {
-    dispatch(getPetTypesAsync(null));
     return () => {
       dispatch(clearOrganizations());
-      dispatch(clearTypes());
     };
   }, []);
 
-  const typesOfPets = useAppSelector(getTypesOfPets);
-
   const typeDictionary = useMemo<SelectOption[]>(() => {
-    const types = typesOfPets.map(({ name }) => name);
+    if (!typesOfPets) {
+      return [];
+    }
+    const types = typesOfPets.types.map(({ name }) => name);
     return createDictionary(types);
   }, [typesOfPets]);
 
   const petTypeDetails = useMemo<AnimalTypesDetails | undefined>(() => {
-    if (!filterData.type) {
+    if (!filterData.type || !typesOfPets) {
       return undefined;
     }
-    return typesOfPets.find(
+    return typesOfPets.types.find(
       ({ name }) => name.toLowerCase() === filterData.type
     );
   }, [typesOfPets, filterData.type]);
@@ -200,7 +195,6 @@ const FiltersAnimals: React.FC<FiltersAnimalsProps> = (props) => {
     value: string,
     reason: AutocompleteInputChangeReason
   ) => {
-    console.log("handleAutocompleteInputChange", event, value, reason);
     if (reason === "input") {
       dispatch(getOrganizationsAsync({ query: value }));
     }
@@ -212,17 +206,12 @@ const FiltersAnimals: React.FC<FiltersAnimalsProps> = (props) => {
     }
   };
 
-  const sendResetInfiniteScrollEvent = () => {
-    const event = new CustomEvent(RESET_INFINITE_SCROLL_DATA);
-    window.dispatchEvent(event);
-  };
-
   const submitHandler: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
     sendResetInfiniteScrollEvent();
 
     dispatch(setPetsQueryParams(filterData));
-    dispatch(getPetsAsync());
+    props.fetchPets();
   };
 
   return (

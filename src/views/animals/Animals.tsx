@@ -6,15 +6,10 @@ import {
   PetsQueryParams,
 } from "../../services/api/petfinder/pets/pets.types";
 import {
-  clearPets,
   clearPetsFilters,
-  getPets,
   getPetsFilters,
-  getPetsPaginationInfo,
-  isPetsDataPending,
   setPetsQueryParams,
 } from "../../slices/pets/pets.slice";
-import { getPetsAsync } from "../../slices/pets/pets.api-actions";
 import FiltersAnimals from "../../components/filters-animals/FiltersAnimals";
 import styles from "./Animals.module.css";
 import { useParams } from "react-router-dom";
@@ -22,6 +17,11 @@ import { getAnimalType, isValidAnimalType } from "./Animals.helpers";
 import { InfiniteScroll } from "../../components/infinite-scroll/InfiniteScroll";
 import { CardsGrid } from "../../components/cards-grid/CardsGrid";
 import CardSkeleton from "../../components/card-skeleton/CardSkeleton";
+import {
+  useGetPetsQuery,
+  useLazyGetPetsQuery,
+} from "../../slices/pets/pets.api";
+import { sendResetInfiniteScrollEvent } from "../../utils/Utils";
 
 export const getDefaultAnimalsFilters = (
   type: AnimalType
@@ -30,36 +30,34 @@ export const getDefaultAnimalsFilters = (
 const Animals: React.FC = () => {
   const params = useParams();
   const dispatch = useAppDispatch();
+  const [getPet, { data: petsData, isFetching }] = useLazyGetPetsQuery();
 
-  const loading: boolean = useAppSelector(isPetsDataPending);
-  const pagination = useAppSelector(getPetsPaginationInfo);
   const petsFilters = useAppSelector(getPetsFilters);
 
   const isValidType = useMemo<boolean>(() => {
     return isValidAnimalType(params.animalType!);
   }, [params]);
 
-  const defaultFilters = useMemo<PetsQueryParams | undefined>(() => {
+  const defaultFilters = useMemo<PetsQueryParams>(() => {
     const type = getAnimalType(params.animalType!);
     return type ? getDefaultAnimalsFilters(type) : {};
   }, [params]);
 
   useEffect(() => {
-    if (isValidType) {
-      dispatch(setPetsQueryParams(defaultFilters!));
-      dispatch(getPetsAsync());
-    }
+    dispatch(setPetsQueryParams(defaultFilters));
+    getPet();
+    setTimeout(() => {
+      sendResetInfiniteScrollEvent();
+    });
+
     return () => {
-      dispatch(clearPets());
       dispatch(clearPetsFilters());
     };
-  }, [isValidType, defaultFilters]);
-
-  const pets: Pet[] = useAppSelector(getPets);
+  }, [defaultFilters]);
 
   const getPetData = (page: number): void => {
     dispatch(setPetsQueryParams({ ...petsFilters, page }));
-    dispatch(getPetsAsync());
+    getPet();
   };
 
   if (!isValidType) {
@@ -68,18 +66,18 @@ const Animals: React.FC = () => {
 
   return (
     <div className={styles["animals-wrapper"]}>
-      <FiltersAnimals defaultFilters={defaultFilters!} />
+      <FiltersAnimals defaultFilters={defaultFilters!} fetchPets={getPet} />
       <InfiniteScroll
-        data={pets}
-        loading={loading}
-        pagination={pagination}
+        data={petsData?.animals || []}
+        loading={isFetching}
+        pagination={petsData?.pagination}
         fetchData={getPetData}
         render={(params) => (
           <CardsGrid
             {...params}
-            isLoading={loading}
+            isLoading={isFetching}
             skeleton={<CardSkeleton />}
-            skeletonNumber={pagination?.count_per_page || 20}
+            skeletonNumber={petsData?.pagination.count_per_page || 20}
           />
         )}
       />

@@ -1,17 +1,16 @@
-import { useMemo } from "react";
+import { useContext, useMemo } from "react";
 import styles from "./PetAttributes.module.css";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { getDataForPetAttributes } from "./helpers/PetAttributes.helpers";
-import { useAppSelector } from "../../app/hooks";
-import { getPet } from "../../slices/pets/pets.slice";
+import { PetContext } from "../../contexts/PetContext";
 
 export interface PetAttributesProps {}
 
 const PetAttributes: React.FC<PetAttributesProps> = () => {
-  const pet = useAppSelector(getPet);
+  const { petData } = useContext(PetContext);
   const attributes = useMemo(
-    () => (pet ? getDataForPetAttributes(pet) : []),
-    [pet]
+    () => (petData?.animal ? getDataForPetAttributes(petData.animal) : []),
+    [petData?.animal]
   );
   return (
     <>

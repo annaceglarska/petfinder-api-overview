@@ -1,65 +1,46 @@
 import React, { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import {
-  Pagination as PetPagination,
-  Pet,
-} from "../../services/api/petfinder/pets/pets.types";
-import { getPetsAsync } from "../../slices/pets/pets.api-actions";
-import {
-  clearPets,
-  countOfPetsPerPage,
-  getPets,
-  getPetsPaginationInfo,
-  isPetsDataPending,
-  setPetsQueryParams,
-} from "../../slices/pets/pets.slice";
+import { useAppDispatch } from "../../app/hooks";
+import { Pagination as PetPagination } from "../../services/api/petfinder/pets/pets.types";
+
+import { setPetsQueryParams } from "../../slices/pets/pets.slice";
 import { CardsGrid } from "../../components/cards-grid/CardsGrid";
 import { Pagination, PaginationItem, Stack } from "@mui/material";
 import { ArrowLeftIcon, ArrowRightIcon } from "@mui/x-date-pickers";
 import CardSkeleton from "../../components/card-skeleton/CardSkeleton";
+import { useGetPetsQuery } from "../../slices/pets/pets.api";
 
 export const Pets: React.FC = () => {
   const dispatch = useAppDispatch();
-  const isPetsPending = useAppSelector(isPetsDataPending);
-  const petsPaginationInfo = useAppSelector(getPetsPaginationInfo);
-  const numberOfPetsPerPage = useAppSelector(countOfPetsPerPage);
+
   const [paginationData, setPaginationData] = useState<
     PetPagination | undefined
   >();
 
+  const { data, isFetching, refetch } = useGetPetsQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
   useEffect(() => {
-    dispatch(getPetsAsync());
-
-    return () => {
-      dispatch(clearPets());
-    };
-  }, []);
-
-  useEffect(() => {
-    if (petsPaginationInfo) {
-      setPaginationData(petsPaginationInfo);
+    if (data?.pagination) {
+      setPaginationData(data.pagination);
     }
-  }, [petsPaginationInfo]);
-
-  const pets: Pet[] = useAppSelector(getPets);
+  }, [data]);
 
   const onChangeHandler = (e: React.ChangeEvent<unknown>, page: number) => {
-    dispatch(clearPets());
     setPaginationData({
       ...(paginationData as PetPagination),
       current_page: page,
     });
     dispatch(setPetsQueryParams({ page }));
-    dispatch(getPetsAsync());
+    refetch();
   };
 
   return (
     <>
       <CardsGrid
-        data={pets}
-        isLoading={isPetsPending}
+        data={isFetching ? [] : data?.animals || []}
+        isLoading={isFetching}
         skeleton={<CardSkeleton />}
-        skeletonNumber={numberOfPetsPerPage || 20}
+        skeletonNumber={paginationData?.count_per_page || 20}
       />
       <Stack
         spacing={2}

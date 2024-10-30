@@ -1,16 +1,10 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { getPetsAsync } from "../../slices/pets/pets.api-actions";
 import {
-  clearPets,
   clearPetsFilters,
-  getPets,
   getPetsFilters,
-  getPetsPaginationInfo,
-  isPetsDataPending,
   setPetsQueryParams,
 } from "../../slices/pets/pets.slice";
-import { Pet } from "../../services/api/petfinder/pets/pets.types";
 import { CardsGrid } from "../../components/cards-grid/CardsGrid";
 import { useParams } from "react-router-dom";
 import FiltersAnimals from "../../components/filters-animals/FiltersAnimals";
@@ -19,50 +13,52 @@ import { getOrganizationAsync } from "../../slices/organizations/organizations.a
 import OrganizationHeader from "../../components/organization-header/OrganizationHeader";
 import { InfiniteScroll } from "../../components/infinite-scroll/InfiniteScroll";
 import CardSkeleton from "../../components/card-skeleton/CardSkeleton";
+import { useLazyGetPetsQuery } from "../../slices/pets/pets.api";
 
 const PetsInOrganization: React.FC = () => {
   const dispatch = useAppDispatch();
   const params = useParams();
 
+  const [getPets, { data: petsData, isFetching: isPetsDataFetching }] =
+    useLazyGetPetsQuery();
   useEffect(() => {
     if (params.id) {
       dispatch(setPetsQueryParams({ organization: params.id }));
-      dispatch(getPetsAsync());
+      getPets();
       dispatch(getOrganizationAsync(params.id));
     }
 
     return () => {
-      dispatch(clearPets());
       dispatch(clearPetsFilters());
     };
   }, [params]);
 
-  const petsInOrganization: Pet[] = useAppSelector(getPets);
-  const loading: boolean = useAppSelector(isPetsDataPending);
-  const pagination = useAppSelector(getPetsPaginationInfo);
   const petsFilters = useAppSelector(getPetsFilters);
 
   const getPetData = (page: number): void => {
     dispatch(setPetsQueryParams({ ...petsFilters, page }));
-    dispatch(getPetsAsync());
+    getPets();
   };
 
   return (
     <>
       <OrganizationHeader />
       <div className={styles["pets-in-organization__container"]}>
-        <FiltersAnimals defaultFilters={{ organization: params.id }} />
+        <FiltersAnimals
+          defaultFilters={{ organization: params.id }}
+          fetchPets={getPets}
+        />
         <InfiniteScroll
-          data={petsInOrganization}
-          loading={loading}
-          pagination={pagination}
+          data={petsData?.animals || []}
+          loading={isPetsDataFetching}
+          pagination={petsData?.pagination}
           fetchData={getPetData}
           render={(params) => (
             <CardsGrid
               {...params}
-              isLoading={loading}
+              isLoading={isPetsDataFetching}
               skeleton={<CardSkeleton />}
-              skeletonNumber={pagination?.count_per_page}
+              skeletonNumber={petsData?.pagination?.count_per_page}
             />
           )}
         />

@@ -9,7 +9,6 @@ import { IconButton, Modal, Typography } from "@mui/material";
 import { StyledBox } from "../../styled/StyledBox";
 import ContactForm from "../contact-form/ContactForm";
 import CloseIcon from "@mui/icons-material/Close";
-import { t } from "i18next";
 import { useTranslation } from "react-i18next";
 
 export interface OrganizationContactInfoProps {
@@ -60,36 +59,37 @@ const OrganizationContactInfo: React.FC<OrganizationContactInfoProps> = (
               </small>
             </p>
           )}
-          <div className={styles["organization-contact-info__container"]}>
-            <Button
-              variant={hoverPhoneButton ? "contained" : "outlined"}
-              href={isNumberHidden ? undefined : `tel:${organization?.phone}`}
-              size="large"
-              onClick={onClickPhoneButtonHandler}
-              onMouseEnter={() => setHoverPhoneButton(true)}
-              onMouseLeave={() => setHoverPhoneButton(false)}
-            >
-              <PhoneInTalkIcon />
-              {isNumberHidden
-                ? `${organization?.phone.substring(1, 4)} xxx xxx`
-                : organization?.phone}
-            </Button>
-            {Boolean(organization?.email) && (
-              <Button
-                variant={hoverEmailButton ? "contained" : "outlined"}
-                size="large"
-                color="secondary"
-                onMouseEnter={() => setHoverEmailButton(true)}
-                onMouseLeave={() => setHoverEmailButton(false)}
-                onClick={handleModalOpen}
-              >
-                <EmailIcon />
-                {t("ASK_ABOUT_PET")}
-              </Button>
-            )}
-          </div>
+          <Button
+            variant={hoverPhoneButton ? "contained" : "outlined"}
+            href={isNumberHidden ? undefined : `tel:${organization?.phone}`}
+            size="large"
+            onClick={onClickPhoneButtonHandler}
+            onMouseEnter={() => setHoverPhoneButton(true)}
+            onMouseLeave={() => setHoverPhoneButton(false)}
+          >
+            <PhoneInTalkIcon />
+            {isNumberHidden
+              ? `${organization?.phone.substring(1, 4)} xxx xxx`
+              : organization?.phone}
+          </Button>
         </div>
       )}
+      <div className={styles["organization-contact-info__container"]}>
+        {Boolean(organization?.email) && (
+          <Button
+            variant={hoverEmailButton ? "contained" : "outlined"}
+            size="large"
+            color="secondary"
+            onMouseEnter={() => setHoverEmailButton(true)}
+            onMouseLeave={() => setHoverEmailButton(false)}
+            onClick={handleModalOpen}
+          >
+            <EmailIcon />
+            {t("ASK_ABOUT_PET")}
+          </Button>
+        )}
+      </div>
+
       <Modal
         open={isModalOpen}
         onClose={handleModalClose}

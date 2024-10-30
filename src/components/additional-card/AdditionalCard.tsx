@@ -8,31 +8,26 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
-import {
-  countOfPetsPerPage,
-  totalCountOfPets,
-} from "../../slices/pets/pets.slice";
 import logo from "./../../assets/images/petfinder_logo.png";
 import styles from "./AdditionalCard.module.css";
 import { useTranslation } from "react-i18next";
 import { getOrganization } from "../../slices/organizations/organizations.slice";
 import { Organization } from "../../services/api/petfinder/organizations/organizations.type";
+import { Pagination } from "../../services/api/petfinder/pets/pets.types";
 
-const AdditionalCard = () => {
+export interface AdditionalCardProps {
+  pagination: Pagination;
+}
+
+const AdditionalCard: React.FC<AdditionalCardProps> = ({ pagination }) => {
   const { t } = useTranslation();
-  const totalPetsCount: number | undefined = useAppSelector(totalCountOfPets);
   const organization: Organization | null = useAppSelector(getOrganization);
-  const countOfDisplayedPets: number | undefined =
-    useAppSelector(countOfPetsPerPage);
-  const isMorePetsThanInOrganizationDetails: boolean =
-    totalPetsCount && countOfDisplayedPets
-      ? Boolean(totalPetsCount > countOfDisplayedPets)
-      : false;
 
-  const morePetsToDisplayed: number | undefined =
-    countOfDisplayedPets &&
-    totalPetsCount &&
-    totalPetsCount - countOfDisplayedPets;
+  const isMorePetsThanInOrganizationDetails: boolean =
+    pagination.total_count > pagination.count_per_page || false;
+
+  const morePetsToDisplayed =
+    pagination.total_count - pagination.count_per_page;
 
   return (
     <Card className={styles["additional-card-element"]}>

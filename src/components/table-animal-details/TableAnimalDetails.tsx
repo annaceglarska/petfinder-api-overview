@@ -1,99 +1,114 @@
-import { useAppSelector } from "../../app/hooks";
-import { getPet } from "../../slices/pets/pets.slice";
+import { useContext } from "react";
+import { Pet } from "../../services/api/petfinder/pets/pets.types";
 import styles from "./TableAnimalDetails.module.css";
 import { getAddressLabel } from "./helpers/TableAnimalDetails.helpers";
 import { useTranslation } from "react-i18next";
+import { PetContext } from "../../contexts/PetContext";
 
 export interface TableAnimalDetailsProps {}
 
 const TableAnimalDetails: React.FC<TableAnimalDetailsProps> = () => {
-  const pet = useAppSelector(getPet);
   const { t } = useTranslation();
+  const { petData } = useContext(PetContext);
+  const {
+    name,
+    type,
+    species,
+    age,
+    gender,
+    size,
+    coat,
+    tags,
+    description,
+    status_changed_at,
+    published_at,
+    breeds,
+    status,
+    colors,
+    contact,
+  } = petData?.animal || {};
 
   return (
     <>
       <ul className={styles["details__table"]}>
         <li>
           <strong>{t("NAME")}</strong>
-          <span>{pet?.name}</span>
+          <span>{name}</span>
         </li>
         <li>
           <strong>{t("TYPE")}</strong>
-          <span>{pet?.type}</span>
+          <span>{type}</span>
         </li>
         <li>
           <strong>{t("SPECIES")}</strong>
-          <span>{pet?.species}</span>
+          <span>{species}</span>
         </li>
         <li>
           <strong>{t("AGE")}</strong>
-          <span>{pet?.age}</span>
+          <span>{age}</span>
         </li>
         <li>
           <strong>{t("GENDER")}</strong>
-          <span>{pet?.gender}</span>
+          <span>{gender}</span>
         </li>
         <li>
           <strong>{t("SIZE")}</strong>
-          <span>{pet?.size}</span>
+          <span>{size}</span>
         </li>
         <li>
           <strong>{t("COAT")}</strong>
-          <span>{pet?.coat}</span>
+          <span>{coat}</span>
         </li>
         <li>
           <strong>{t("TAGS")}</strong>
-          <span>{pet?.tags.join(", ").toLowerCase()}</span>
+          <span>{tags?.join(", ").toLowerCase()}</span>
         </li>
         <li>
           <strong>{t("DESCRIPTION")}</strong>
-          <span>{pet?.description}</span>
+          <span>{description}</span>
         </li>
         <li>
           <strong>{t("STATUS")}</strong>
-          <span>{pet?.status}</span>
+          <span>{status}</span>
         </li>
         <li>
           <strong>{t("STATUS_CHANGE_AT")}</strong>
           <span>
-            {pet?.status_changed_at &&
-              new Date(pet?.status_changed_at).toLocaleString()}
+            {status_changed_at && new Date(status_changed_at).toLocaleString()}
           </span>
         </li>
         <li>
           <strong>{t("PUBLISHED_AT")}</strong>
-          <span>
-            {pet?.published_at && new Date(pet?.published_at).toLocaleString()}
-          </span>
+          <span>{published_at && new Date(published_at).toLocaleString()}</span>
         </li>
         <li>
           <strong>{t("BREEDS")}</strong>
           <span>
-            {pet?.breeds &&
-              `${pet?.breeds.primary}${
-                pet.breeds.secondary ? `, ${pet.breeds.secondary}` : ""
+            {breeds &&
+              `${breeds.primary}${
+                breeds.secondary ? `, ${breeds.secondary}` : ""
               }`}
           </span>
         </li>
         <li>
           <strong>{t("COLOR")}</strong>
           <span>
-            {pet?.colors &&
-              `${pet?.colors.primary}${
-                pet.colors.secondary ? `, ${pet.colors.secondary}` : ""
-              }${pet.colors.tertiary ? `, ${pet.colors.tertiary}` : ""}`}
+            {colors &&
+              `${colors.primary}${
+                colors.secondary ? `, ${colors.secondary}` : ""
+              }${colors.tertiary ? `, ${colors.tertiary}` : ""}`}
           </span>
         </li>
 
         <li>
           <strong>{t("CONTACT")}</strong>
-          <span>{`${pet?.contact.email} ${
-            pet?.contact.phone ? pet?.contact.phone : ""
+          <span>{`${contact?.email} ${
+            contact?.phone ? contact?.phone : ""
           }`}</span>
         </li>
         <li>
           <strong>{t("ADDRESS")}</strong>
-          <span>{getAddressLabel(pet?.contact.address)}</span>
+          <span>{getAddressLabel(contact?.address)}</span>
         </li>
       </ul>
     </>

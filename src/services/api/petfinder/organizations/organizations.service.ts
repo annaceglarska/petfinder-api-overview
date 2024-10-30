@@ -1,6 +1,7 @@
 import axios from "axios";
 import { OrganizationsDTO, OrganizationQueryParam, OrganizationDTO } from "./organizations.type";
-import { baseUrl } from "../pets/pets.service";
+
+export const baseUrl: string = 'https://api.petfinder.com'
 
 class OrganizationsApiService {
   async getOrganizations(

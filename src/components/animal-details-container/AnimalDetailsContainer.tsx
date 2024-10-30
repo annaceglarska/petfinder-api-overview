@@ -4,24 +4,29 @@ import TableAnimalDetails from "../table-animal-details/TableAnimalDetails";
 import styles from "./AnimalDetailsContainer.module.css";
 import PetAttributes from "../pet-attributes/PetAttributes";
 import ContactPanel from "../contact-panel/ContactPanel";
-import { useAppSelector } from "../../app/hooks";
-import { getPet } from "../../slices/pets/pets.slice";
+import { useContext } from "react";
+import { PetContext } from "../../contexts/PetContext";
 
 export interface FrameAnimalDetailsProps {}
 
 const AnimalDetailsContainer: React.FC<FrameAnimalDetailsProps> = () => {
-  const pet = useAppSelector(getPet);
-
+  const { petData } = useContext(PetContext);
   return (
     <Container maxWidth="lg">
       <div className={styles["animal-details__container"]}>
         <div>
-          {!!(pet?.photos.length || pet?.videos.length) && (
-            <PhotosCarousel photos={pet?.photos} videos={pet?.videos} />
+          {!!(
+            petData?.animal.photos.length || petData?.animal.videos.length
+          ) && (
+            <PhotosCarousel
+              photos={petData?.animal.photos}
+              videos={petData?.animal.videos}
+            />
           )}
-
-          <TableAnimalDetails />
-          <PetAttributes />
+          <div className={styles["animal-details__attributes"]}>
+            <TableAnimalDetails />
+            <PetAttributes />
+          </div>
         </div>
         <div>
           <ContactPanel />
