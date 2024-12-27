@@ -1,6 +1,4 @@
 import Button from "@mui/material/Button";
-import { useAppSelector } from "../../app/hooks";
-import { getOrganization } from "../../slices/organizations/organizations.slice";
 import { useState } from "react";
 import PhoneInTalkIcon from "@mui/icons-material/PhoneInTalk";
 import styles from "./OrganizationContactInfo.module.css";
@@ -10,15 +8,17 @@ import { StyledBox } from "../../styled/StyledBox";
 import ContactForm from "../contact-form/ContactForm";
 import CloseIcon from "@mui/icons-material/Close";
 import { useTranslation } from "react-i18next";
+import { Organization } from "../../services/api/petfinder/organizations/organizations.type";
 
 export interface OrganizationContactInfoProps {
   context: "organization" | "pet";
+  data: Organization | undefined;
 }
 
 const OrganizationContactInfo: React.FC<OrganizationContactInfoProps> = (
   props
 ) => {
-  const organization = useAppSelector(getOrganization);
+  const { phone, email } = props.data || {};
 
   const [isNumberHidden, setIsNumberHidden] = useState<Boolean>(true);
   const [hoverPhoneButton, setHoverPhoneButton] = useState<Boolean>(false);
@@ -43,14 +43,13 @@ const OrganizationContactInfo: React.FC<OrganizationContactInfoProps> = (
 
   return (
     <>
-      {(Boolean(organization?.email) || Boolean(organization?.phone)) &&
-        props.context === "pet" && (
-          <div className={styles["organization-contact-info__container"]}>
-            <p>{t("INTERESTED_IN_ADOPTING")}</p>
-          </div>
-        )}
+      {(Boolean(email) || Boolean(phone)) && props.context === "pet" && (
+        <div className={styles["organization-contact-info__container"]}>
+          <p>{t("INTERESTED_IN_ADOPTING")}</p>
+        </div>
+      )}
 
-      {Boolean(organization?.phone) && (
+      {Boolean(phone) && (
         <div className={styles["organization-contact-info__container"]}>
           {!isNumberHidden && (
             <p>
@@ -61,21 +60,19 @@ const OrganizationContactInfo: React.FC<OrganizationContactInfoProps> = (
           )}
           <Button
             variant={hoverPhoneButton ? "contained" : "outlined"}
-            href={isNumberHidden ? undefined : `tel:${organization?.phone}`}
+            href={isNumberHidden ? undefined : `tel:${phone}`}
             size="large"
             onClick={onClickPhoneButtonHandler}
             onMouseEnter={() => setHoverPhoneButton(true)}
             onMouseLeave={() => setHoverPhoneButton(false)}
           >
             <PhoneInTalkIcon />
-            {isNumberHidden
-              ? `${organization?.phone.substring(1, 4)} xxx xxx`
-              : organization?.phone}
+            {isNumberHidden ? `${phone?.substring(1, 4)} xxx xxx` : phone}
           </Button>
         </div>
       )}
       <div className={styles["organization-contact-info__container"]}>
-        {Boolean(organization?.email) && (
+        {Boolean(email) && (
           <Button
             variant={hoverEmailButton ? "contained" : "outlined"}
             size="large"
@@ -112,7 +109,10 @@ const OrganizationContactInfo: React.FC<OrganizationContactInfoProps> = (
           >
             {t("ASK_ABOUT_PET")}
           </Typography>
-          <ContactForm closeModal={closeModal} />
+          <ContactForm
+            closeModal={closeModal}
+            organizationEmail={props.data?.email}
+          />
         </StyledBox>
       </Modal>
     </>

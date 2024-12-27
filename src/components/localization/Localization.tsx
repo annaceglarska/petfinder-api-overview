@@ -1,6 +1,4 @@
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
-import { useAppSelector } from "../../app/hooks";
-import { getOrganization } from "../../slices/organizations/organizations.slice";
 import { useEffect, useMemo, useState } from "react";
 import { getAddressLabel } from "../table-animal-details/helpers/TableAnimalDetails.helpers";
 import { OutputFormat, fromAddress, setDefaults } from "react-geocode";
@@ -11,9 +9,11 @@ const containerStyle = {
   height: "400px",
 };
 
-const Localization = () => {
-  const organization: Organization | null = useAppSelector(getOrganization);
+export interface LocalizationProps {
+  data: Organization | undefined;
+}
 
+const Localization: React.FC<LocalizationProps> = ({ data: organization }) => {
   const address: string = useMemo(
     () => getAddressLabel(organization?.address),
     [organization]

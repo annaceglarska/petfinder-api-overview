@@ -38,7 +38,9 @@ export const {
     useGetPetTypeQuery,
     useGetPetTypesQuery,
     useGetPetsQuery,
-    useLazyGetPetsQuery
+    useLazyGetPetsQuery,
 } = petsApi
+
+export const { useQueryState: useGetPetByIdQueryState } = petsApi.endpoints.getPetById
 
 export default petsApi

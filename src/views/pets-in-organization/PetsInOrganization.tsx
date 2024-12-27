@@ -9,15 +9,17 @@ import { CardsGrid } from "../../components/cards-grid/CardsGrid";
 import { useParams } from "react-router-dom";
 import FiltersAnimals from "../../components/filters-animals/FiltersAnimals";
 import styles from "./PetsInOrganization.module.css";
-import { getOrganizationAsync } from "../../slices/organizations/organizations.api-actions";
 import OrganizationHeader from "../../components/organization-header/OrganizationHeader";
 import { InfiniteScroll } from "../../components/infinite-scroll/InfiniteScroll";
 import CardSkeleton from "../../components/card-skeleton/CardSkeleton";
 import { useLazyGetPetsQuery } from "../../slices/pets/pets.api";
+import { useLazyGetOrganizationByIdQuery } from "../../slices/organizations/organization.api";
 
 const PetsInOrganization: React.FC = () => {
   const dispatch = useAppDispatch();
   const params = useParams();
+  const [getOrganization, { data: organizationData }] =
+    useLazyGetOrganizationByIdQuery();
 
   const [getPets, { data: petsData, isFetching: isPetsDataFetching }] =
     useLazyGetPetsQuery();
@@ -25,7 +27,7 @@ const PetsInOrganization: React.FC = () => {
     if (params.id) {
       dispatch(setPetsQueryParams({ organization: params.id }));
       getPets();
-      dispatch(getOrganizationAsync(params.id));
+      getOrganization(params.id);
     }
 
     return () => {
@@ -42,7 +44,9 @@ const PetsInOrganization: React.FC = () => {
 
   return (
     <>
-      <OrganizationHeader />
+      <OrganizationHeader
+        organizationName={organizationData?.organization.name}
+      />
       <div className={styles["pets-in-organization__container"]}>
         <FiltersAnimals
           defaultFilters={{ organization: params.id }}

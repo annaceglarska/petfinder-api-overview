@@ -1,18 +1,18 @@
 import React from "react";
-import { useAppSelector } from "../../app/hooks";
-import { getOrganization } from "../../slices/organizations/organizations.slice";
 import styles from "./OrganizationInfo.module.css";
 import { getAddressLabel } from "../table-animal-details/helpers/TableAnimalDetails.helpers";
+import { Organization } from "../../services/api/petfinder/organizations/organizations.type";
 
-const OrganizationInfo: React.FC = () => {
-  const organization = useAppSelector(getOrganization);
+export interface OrganizationInfoProps {
+  data: Organization | undefined;
+}
+
+const OrganizationInfo: React.FC<OrganizationInfoProps> = ({ data }) => {
   return (
     <div className={styles["organization-info__container"]}>
-      <img src={organization?.photos[0]?.medium} />
-      <a href={`/organization/details/${organization?.id}`}>
-        {organization?.name}
-      </a>
-      <p>{getAddressLabel(organization?.address)}</p>
+      <img src={data?.photos[0]?.medium} />
+      <a href={`/organization/details/${data?.id}`}>{data?.name}</a>
+      <p>{getAddressLabel(data?.address)}</p>
     </div>
   );
 };

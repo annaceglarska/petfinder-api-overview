@@ -1,7 +1,5 @@
 import { IconButton } from "@mui/material";
 import FacebookIcon from "@mui/icons-material/Facebook";
-import { useAppSelector } from "../../app/hooks";
-import { getOrganization } from "../../slices/organizations/organizations.slice";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import PinterestIcon from "@mui/icons-material/Pinterest";
 import XIcon from "@mui/icons-material/X";
@@ -10,9 +8,14 @@ import { SocialMedia } from "../../services/api/petfinder/organizations/organiza
 import { useMemo } from "react";
 import styles from "./SocialMedia.module.css";
 import { useTranslation } from "react-i18next";
+import { useGetOrganizationByIdQueryState } from "../../slices/organizations/organization.api";
+import { useParams } from "react-router-dom";
 
-const SocialMediaLinks = () => {
-  const organizationSocialMedia = useAppSelector(getOrganization)?.social_media;
+const SocialMediaLinks: React.FC = () => {
+  const params = useParams();
+
+  const { data: organization } = useGetOrganizationByIdQueryState(params.id!);
+  const organizationSocialMedia = organization?.organization.social_media;
   const { t } = useTranslation();
 
   const socialMediaConfig: Record<keyof SocialMedia, any> = {

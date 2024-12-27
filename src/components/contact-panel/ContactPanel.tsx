@@ -1,27 +1,32 @@
 import { useContext, useEffect } from "react";
-import { useAppDispatch } from "../../app/hooks";
 import Localization from "../localization/Localization";
-import { getOrganizationAsync } from "../../slices/organizations/organizations.api-actions";
 import OrganizationInfo from "../organization-info/OrganizationInfo";
 import OrganizationContactInfo from "../organization-contact-info/OrganizationContactInfo";
 import { PetContext } from "../../contexts/PetContext";
+import { useLazyGetOrganizationByIdQuery } from "../../slices/organizations/organization.api";
 
 export interface ContactPanelProps {}
 
 const ContactPanel: React.FC<ContactPanelProps> = () => {
   const { petData } = useContext(PetContext);
   const organizationId: string | undefined = petData?.animal.organization_id;
-  const dispatch = useAppDispatch();
+  const [getOrganization, { data: organization }] =
+    useLazyGetOrganizationByIdQuery();
 
   useEffect(() => {
-    dispatch(getOrganizationAsync(organizationId));
+    if (organizationId) {
+      getOrganization(organizationId);
+    }
   }, [organizationId]);
 
   return (
     <>
-      <OrganizationInfo />
-      <Localization />
-      <OrganizationContactInfo context={"pet"} />
+      <OrganizationInfo data={organization?.organization} />
+      <Localization data={organization?.organization} />
+      <OrganizationContactInfo
+        context={"pet"}
+        data={organization?.organization}
+      />
     </>
   );
 };

@@ -1,20 +1,23 @@
-import { IconButton } from "@mui/material";
-import { useAppSelector } from "../../app/hooks";
-import { getOrganization } from "../../slices/organizations/organizations.slice";
 import Localization from "../localization/Localization";
 import OrganizationContactInfo from "../organization-contact-info/OrganizationContactInfo";
 import OrganizationOpenHours from "../organization-open-hours/OrganizationOpenHours";
 import { getAddressLabel } from "../table-animal-details/helpers/TableAnimalDetails.helpers";
 import SocialMediaLinks from "../social-media-links/SocialMediaLinks";
+import { useParams } from "react-router-dom";
+import { useGetOrganizationByIdQueryState } from "../../slices/organizations/organization.api";
 
-const OrganizationDetails = () => {
-  const organization = useAppSelector(getOrganization);
+const OrganizationDetails: React.FC = () => {
+  const params = useParams();
+  const { data: organization } = useGetOrganizationByIdQueryState(params.id!);
   return (
     <div>
-      <p>{getAddressLabel(organization?.address)}</p>
+      <p>{getAddressLabel(organization?.organization.address)}</p>
       <OrganizationOpenHours />
-      <Localization />
-      <OrganizationContactInfo context={"organization"} />
+      <Localization data={organization?.organization} />
+      <OrganizationContactInfo
+        context={"organization"}
+        data={organization?.organization}
+      />
       <SocialMediaLinks />
     </div>
   );

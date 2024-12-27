@@ -9,8 +9,6 @@ import React, { useContext, useState } from "react";
 import styles from "./ContactForm.module.css";
 import CheckCircleIcon from "@mui/icons-material/CheckCircleOutline";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
-import { useAppSelector } from "../../app/hooks";
-import { getOrganization } from "../../slices/organizations/organizations.slice";
 import { MessageFormData } from "./ContactForm.types";
 import { StyledButton } from "../../styled/SendMessageButton";
 import messagesApiService from "./../../services/api/backend/message/message.service";
@@ -20,11 +18,11 @@ import { PetContext } from "../../contexts/PetContext";
 
 export interface ContactFormProps {
   closeModal: () => void;
+  organizationEmail: string | undefined;
 }
 
 const ContactForm: React.FC<ContactFormProps> = (props) => {
   const { petData } = useContext(PetContext);
-  const organization = useAppSelector(getOrganization);
   const [hoverFormButton, setHoverFormButton] = useState<boolean>(false);
   const { t } = useTranslation();
   const {
@@ -44,7 +42,7 @@ const ContactForm: React.FC<ContactFormProps> = (props) => {
   const onSubmit: SubmitHandler<MessageFormData> = async (formData) => {
     const dataToSend = {
       ...formData,
-      organizationEmail: organization?.email,
+      organizationEmail: props.organizationEmail,
       petId: petData?.animal.id,
     };
     try {

@@ -1,14 +1,16 @@
-import { useMemo, useState } from "react";
-import { useAppSelector } from "../../app/hooks";
+import { useMemo } from "react";
 import { WorkingHours } from "../../services/api/petfinder/organizations/organizations.type";
-import { getOrganization } from "../../slices/organizations/organizations.slice";
 import styles from "./OrganizationOpenHours.module.css";
 import { changeOpenHoursFormat } from "./helpers/OrganizationOpenHours";
 import { useTranslation } from "react-i18next";
+import { useParams } from "react-router-dom";
+import { useGetOrganizationByIdQueryState } from "../../slices/organizations/organization.api";
 
 const OrganizationOpenHours = () => {
+  const params = useParams();
+  const { data: organization } = useGetOrganizationByIdQueryState(params.id!);
   const organizationHours: WorkingHours | undefined =
-    useAppSelector(getOrganization)?.hours;
+    organization?.organization.hours;
   const { t } = useTranslation();
 
   const openHoursInfo = useMemo(() => {

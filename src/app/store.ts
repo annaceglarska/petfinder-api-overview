@@ -4,6 +4,7 @@ import organizationReducer from "../slices/organizations/organizations.slice";
 import configReducer from "./../slices/config/config.slice";
 import userReducer from "../slices/user/user.slice";
 import petsApi from "./../slices/pets/pets.api"
+import organizationApi from "../slices/organizations/organization.api";
 
 export const store = configureStore({
   reducer: {
@@ -11,11 +12,12 @@ export const store = configureStore({
     organization: organizationReducer,
     config: configReducer,
     user: userReducer,
-    [petsApi.reducerPath]: petsApi.reducer
+    [petsApi.reducerPath]: petsApi.reducer,
+    [organizationApi.reducerPath]: organizationApi.reducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
-      petsApi.middleware
+      petsApi.middleware, organizationApi.middleware
     ),
 });
 

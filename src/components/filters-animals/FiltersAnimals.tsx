@@ -19,16 +19,10 @@ import {
   statusDictionary,
 } from "./filters/dictionaries";
 import React, { ChangeEventHandler, useEffect, useMemo, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { useAppDispatch } from "../../app/hooks";
 import { setPetsQueryParams } from "../../slices/pets/pets.slice";
 import { FilterDictionaries, SelectOption } from "./filters/filters.types";
 import { createDictionary } from "./filters/filters.helpers";
-import { getOrganizationsAsync } from "../../slices/organizations/organizations.api-actions";
-import {
-  clearOrganizations,
-  getOrganizations,
-} from "../../slices/organizations/organizations.slice";
-import { Organization } from "../../services/api/petfinder/organizations/organizations.type";
 import {
   AnimalType,
   AnimalTypesDetails,
@@ -38,6 +32,8 @@ import styles from "../filters-animals/FiltersAnimals.module.css";
 import { useTranslation } from "react-i18next";
 import { useGetPetTypesQuery } from "../../slices/pets/pets.api";
 import { sendResetInfiniteScrollEvent } from "../../utils/Utils";
+import { useGetOrganizationsQuery } from "../../slices/organizations/organization.api";
+import { OrganizationQueryParam } from "../../services/api/petfinder/organizations/organizations.type";
 
 export interface FormData {
   type: AnimalType | undefined;
@@ -63,17 +59,18 @@ export interface FiltersAnimalsProps {
 
 const FiltersAnimals: React.FC<FiltersAnimalsProps> = (props) => {
   const dispatch = useAppDispatch();
+  const [organizationFilters, setOrganizationFilters] =
+    useState<OrganizationQueryParam>({});
   const { data: typesOfPets } = useGetPetTypesQuery();
-
-  const organizationsByPhrase: Organization[] =
-    useAppSelector(getOrganizations);
+  const { data: organizationsByPhrase, refetch: refetchOrganizationsByPhrase } =
+    useGetOrganizationsQuery(organizationFilters);
 
   const { t } = useTranslation();
   const organizationOptions: SelectOption[] = useMemo<SelectOption[]>(() => {
-    if (!organizationsByPhrase) {
+    if (!organizationsByPhrase?.organizations) {
       return [];
     }
-    return organizationsByPhrase.map((organization) => ({
+    return organizationsByPhrase.organizations.map((organization) => ({
       label: organization.name,
       value: organization.id,
     }));
@@ -99,12 +96,6 @@ const FiltersAnimals: React.FC<FiltersAnimalsProps> = (props) => {
     special_needs: undefined,
     organization: undefined,
   });
-
-  useEffect(() => {
-    return () => {
-      dispatch(clearOrganizations());
-    };
-  }, []);
 
   const typeDictionary = useMemo<SelectOption[]>(() => {
     if (!typesOfPets) {
@@ -196,13 +187,13 @@ const FiltersAnimals: React.FC<FiltersAnimalsProps> = (props) => {
     reason: AutocompleteInputChangeReason
   ) => {
     if (reason === "input") {
-      dispatch(getOrganizationsAsync({ query: value }));
+      setOrganizationFilters({ query: value });
     }
   };
 
   const handleAutocompleteOpen = () => {
     if (!filterData.organization) {
-      dispatch(getOrganizationsAsync({}));
+      refetchOrganizationsByPhrase();
     }
   };
 
