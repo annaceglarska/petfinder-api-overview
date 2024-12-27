@@ -1,10 +1,16 @@
 import axios, { AxiosResponse } from "axios";
 import { UserBasicInfoDTO, UserData, UserInfo, UserUpdatedInfoDTO } from "../auth/auth.types";
 
-const DEFAULT_SERVER_BASE_URL = "http://localhost:5000/api/v1/user";
 class UserApiService {
-  private baseUrl: string =
-    process.env.REACT_APP_SERVER_BASE_URL || DEFAULT_SERVER_BASE_URL;
+  constructor() {
+    const url: string | undefined = process.env.REACT_APP_SERVER_BASE_URL;
+    if (!url) {
+      throw new Error("REST API url not defined")
+    }
+    this.baseUrl = url;
+  }
+
+  private baseUrl: string
 
   async editUserData(
     userData: UserData,

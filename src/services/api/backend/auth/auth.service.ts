@@ -3,10 +3,17 @@ import { UserCredential } from "../../../../slices/user/user.types";
 import { TokenInfoDTO, UserInfo, UserInfoDTO } from "./auth.types";
 import TokenService from "../../../token/token";
 
-const DEFAULT_SERVER_BASE_URL = "http://localhost:5000/api/v1/auth";
 class AuthApiService {
-  private baseUrl: string =
-    process.env.REACT_APP_SERVER_BASE_URL || DEFAULT_SERVER_BASE_URL;
+  constructor() {
+    const url: string | undefined = process.env.REACT_APP_SERVER_BASE_URL;
+    if (!url) {
+      throw new Error("REST API url not defined")
+    }
+    this.baseUrl = url;
+  }
+
+  private baseUrl: string
+
 
   async login(userCredential: UserCredential): Promise<UserInfo> {
     try {

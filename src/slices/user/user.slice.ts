@@ -3,8 +3,7 @@ import { UserState } from "./user.types";
 import {
   editUserDataAsync,
   getUserAsync,
-  loginUserAsync,
-  protectedAsync,
+  loginUserAsync
 } from "./user.api-actions";
 import { RootState } from "../../app/store";
 import { UserInfo } from "../../services/api/backend/auth/auth.types";
@@ -52,8 +51,6 @@ export const userSlice = createSlice({
         state.user.status = "failed";
         state.user.error = action.error;
       })
-      .addCase(protectedAsync.fulfilled, () => console.log("Great success"))
-      .addCase(protectedAsync.rejected, () => console.log("Failed."))
       .addCase(editUserDataAsync.fulfilled, (state, action) => {
         state.user.value = {
           token: state.user.value?.token!,
