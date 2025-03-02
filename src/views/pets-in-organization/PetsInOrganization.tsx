@@ -23,6 +23,7 @@ const PetsInOrganization: React.FC = () => {
 
   const [getPets, { data: petsData, isFetching: isPetsDataFetching }] =
     useLazyGetPetsQuery();
+
   useEffect(() => {
     if (params.id) {
       dispatch(setPetsQueryParams({ organization: params.id }));
@@ -48,10 +49,7 @@ const PetsInOrganization: React.FC = () => {
         organizationName={organizationData?.organization.name}
       />
       <div className={styles["pets-in-organization__container"]}>
-        <FiltersAnimals
-          defaultFilters={{ organization: params.id }}
-          fetchPets={getPets}
-        />
+        <FiltersAnimals fetchPets={getPets} />
         <InfiniteScroll
           data={petsData?.animals || []}
           loading={isPetsDataFetching}

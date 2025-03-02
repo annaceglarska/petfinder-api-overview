@@ -5,7 +5,6 @@ import {
   PetsQueryParams,
 } from "../../services/api/petfinder/pets/pets.types";
 import {
-  clearPetsFilters,
   getPetsFilters,
   setPetsQueryParams,
 } from "../../slices/pets/pets.slice";
@@ -42,16 +41,19 @@ const Animals: React.FC = () => {
   }, [params]);
 
   useEffect(() => {
-    dispatch(setPetsQueryParams(defaultFilters));
+    const currentFilters = { ...petsFilters, ...defaultFilters };
+    const isFiltersChange = Object.entries(currentFilters).some(
+      ([key, value]) => value !== petsFilters[key as keyof PetsQueryParams]
+    );
+    if (!isFiltersChange) {
+      return;
+    }
+    dispatch(setPetsQueryParams(currentFilters));
     getPet();
     setTimeout(() => {
       sendResetInfiniteScrollEvent();
     });
-
-    return () => {
-      dispatch(clearPetsFilters());
-    };
-  }, [defaultFilters]);
+  }, [defaultFilters, dispatch, getPet, petsFilters]);
 
   const getPetData = (page: number): void => {
     dispatch(setPetsQueryParams({ ...petsFilters, page }));
@@ -64,7 +66,7 @@ const Animals: React.FC = () => {
 
   return (
     <div className={styles["animals-wrapper"]}>
-      <FiltersAnimals defaultFilters={defaultFilters!} fetchPets={getPet} />
+      <FiltersAnimals fetchPets={getPet} />
       {petsData?.animals.length === 0 ? (
         <h1 className={styles["animals__info"]}>{t("NO_PETS_INFO")}</h1>
       ) : (
