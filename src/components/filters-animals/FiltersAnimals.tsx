@@ -1,6 +1,5 @@
 import {
   Autocomplete,
-  AutocompleteChangeReason,
   AutocompleteInputChangeReason,
   Button,
   Checkbox,
@@ -10,7 +9,6 @@ import {
   MenuItem,
   OutlinedInput,
   Select,
-  SelectChangeEvent,
   TextField,
 } from "@mui/material";
 import {
@@ -18,7 +16,7 @@ import {
   ageDictionary,
   statusDictionary,
 } from "./filters/dictionaries";
-import React, { ChangeEventHandler, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
   getPetsFilters,
@@ -26,11 +24,7 @@ import {
 } from "../../slices/pets/pets.slice";
 import { FilterDictionaries, SelectOption } from "./filters/filters.types";
 import { createDictionary } from "./filters/filters.helpers";
-import {
-  AnimalType,
-  AnimalTypesDetails,
-  PetsQueryParams,
-} from "../../services/api/petfinder/pets/pets.types";
+import { AnimalTypesDetails } from "../../services/api/petfinder/pets/pets.types";
 import styles from "../filters-animals/FiltersAnimals.module.css";
 import { useTranslation } from "react-i18next";
 import { useGetPetTypesQuery } from "../../slices/pets/pets.api";
@@ -39,7 +33,7 @@ import { useGetOrganizationsQuery } from "../../slices/organizations/organizatio
 import { OrganizationQueryParam } from "../../services/api/petfinder/organizations/organizations.type";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { AnimalFilterFormData } from "./FiltersAnimals.types";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 export interface FiltersAnimalsProps {
   fetchPets: () => void;

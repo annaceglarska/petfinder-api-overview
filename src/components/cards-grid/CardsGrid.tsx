@@ -2,7 +2,7 @@ import { Grid, GridProps } from "@mui/material";
 import { CardElement } from "../card-element/CardElement";
 import styles from "./CardsGrid.module.css";
 import { Pet } from "../../services/api/petfinder/pets/pets.types";
-import React, { ReactElement, Ref, forwardRef, useMemo } from "react";
+import React, { JSX, ReactElement, Ref, forwardRef, useMemo } from "react";
 import { Organization } from "../../services/api/petfinder/organizations/organizations.type";
 
 export interface CardsGridProps<T extends Pet[] | Organization[] = Pet[]> {
